@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+
+/*
+ * Paleta extraída do CSS compilado do fbr.kellanova.site (não do tailwind.config.ts dele,
+ * que estava desatualizado em relação ao que realmente foi publicado). Repetida por pedido
+ * do cliente para a campanha Pringles Churrasco — ainda sem Figma próprio.
+ * TODO: revisar/trocar quando o design da nova campanha chegar.
+ */
+@theme {
+  /* === Brand === */
+  --color-brand-primary: #ea002a;
+  --color-brand-primary-dark: #c71729;
+  --color-brand-primary-light: #ff002e;
+  --color-brand-secondary: #fbc521; /* amarelo — CTAs secundários */
+  --color-brand-accent-purple: #652f9e; /* fluxo de prêmio instantâneo (abrir lata) */
+  --color-brand-complementary: #dc1484; /* decorativo (scrollbar, detalhes) */
+  --color-brand-background: #ea002a;
+  --color-brand-surface: #ffffff;
+
+  /* === Neutral palette === */
+  --color-brand-neutral-50: #f5f7fa;
+  --color-brand-neutral-100: #e6e6e6;
+  --color-brand-neutral-200: #cccccc;
+  --color-brand-neutral-300: #b3b3b3;
+  --color-brand-neutral-400: #999999;
+  --color-brand-neutral-500: #666666;
+  --color-brand-neutral-600: #4d4d4d;
+  --color-brand-neutral-700: #333333;
+  --color-brand-neutral-800: #0d0d0d;
+  --color-brand-neutral-900: #000000;
+  --color-brand-neutral-950: #000000;
+
+  /* === Feedback / Red === */
+  --color-feedback-red-50: #feeced;
+  --color-feedback-red-100: #fdd7da;
+  --color-feedback-red-500: #fb2d37;
+  --color-feedback-red-700: #b3141c;
+
+  /* === Feedback / Green === */
+  --color-feedback-green-50: #f1fcf5;
+  --color-feedback-green-500: #00a355;
+  --color-feedback-green-700: #00753d;
+
+  /* === Feedback / Blue === */
+  --color-feedback-blue-50: #ecf3fe;
+  --color-feedback-blue-500: #2c7cfd;
+
+  /* === Feedback / Yellow === */
+  --color-feedback-yellow-50: #fef8ec;
+  --color-feedback-yellow-100: #fdedc9;
+  --color-feedback-yellow-500: #ffa000;
+  --color-feedback-yellow-600: #cc8000;
+  --color-feedback-yellow-700: #996000;
+
+  /* === Layout === */
+  --header-height: 80px;
+
+  /* === Typography === */
+  --font-sans: 'REPLACE_FONT', sans-serif;
+
+  --text-h1: 40px;
+  --text-h1--line-height: 48px;
+  --text-h2: 28px;
+  --text-h2--line-height: 36px;
+  --text-h3: 24px;
+  --text-h3--line-height: 32px;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 26px;
+  --text-body-base: 16px;
+  --text-body-base--line-height: 24px;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 22px;
+  --text-body-xs: 12px;
+  --text-body-xs--line-height: 20px;
+
+  /* === Animações === */
+  /* SSR-safe: CSS puro (não <Transition>) — o fill-mode "both" já vale no
+     primeiro paint, sem salto na hidratação. Usada pela BarraCtaMobile. */
+  --animate-slide-up: slide-up 300ms ease-out both;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+html {
+  /* --promo-banner-height é publicada por LayoutPromotionEndedBanner (0 quando
+     a faixa está fora da tela) — sem isso, âncoras (/#produtos etc.) landam
+     parcialmente escondidas atrás do header + banner quando a promo encerra. */
+  scroll-padding-top: calc(var(--header-height) + var(--promo-banner-height, 0px));
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  color: var(--color-brand-neutral-700);
+  background-color: var(--color-brand-primary);
+}
+
+@utility container {
+  @apply mx-auto px-4;
+}
+
+@utility page-title {
+  @apply text-h2 font-bold uppercase text-white md:text-h1;
+}
+
+@utility faq-list {
+  & ul {
+    @apply list-inside list-disc;
+  }
+}
+
+::-webkit-scrollbar {
+  @apply w-1;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-white;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-(--color-brand-primary);
+}

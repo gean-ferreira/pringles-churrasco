@@ -1,0 +1,6 @@
+export const promotionName = 'Pringles Churrasco'
+export const promotionAltImg = 'Pringles logo'
+export const title = 'Pringles Churrasco'
+export const description = 'Promoção Pringles Churrasco'
+export const url = 'REPLACE_CAMPAIGN_URL'
+export const gtm = 'REPLACE_GTM_ID'

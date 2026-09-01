@@ -48,3 +48,12 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Nuxt
+.nuxt/
+.output/
+dist/
+node_modules/
+
+# Mock (local only)
+/server
+
