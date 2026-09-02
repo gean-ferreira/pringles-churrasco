@@ -16,6 +16,10 @@
   --color-brand-complementary: #dc1484; /* decorativo (scrollbar, detalhes) */
   --color-brand-background: #ea002a;
   --color-brand-surface: #ffffff;
+  /* Figma "Marrom 02" — borda/sombra do estilo "comic" (botões, accordion) e text-shadow dos títulos. */
+  --color-brand-outline: #6f1c11;
+  /* Figma "Green" — CTA secundário e header aberto do accordion; distinto do feedback-green (#00a355). */
+  --color-brand-accent-green: #009f4a;
 
   /* === Neutral palette === */
   --color-brand-neutral-50: #f5f7fa;
@@ -56,14 +60,19 @@
   --header-height: 80px;
 
   /* === Typography === */
-  --font-sans: 'REPLACE_FONT', sans-serif;
+  --font-sans: 'Pinup', sans-serif;
 
   --text-h1: 40px;
   --text-h1--line-height: 48px;
-  --text-h2: 28px;
-  --text-h2--line-height: 36px;
+  /* Título grande do desktop (ex.: faq.vue) — um degrau acima do h1, sem token menor equivalente. */
+  --text-h1-lg: 56px;
+  --text-h1-lg--line-height: 64px;
+  --text-h2: 32px;
+  --text-h2--line-height: 40px;
   --text-h3: 24px;
   --text-h3--line-height: 32px;
+  --text-h4: 20px;
+  --text-h4--line-height: 32px;
   --text-body-lg: 18px;
   --text-body-lg--line-height: 26px;
   --text-body-base: 16px;
@@ -72,6 +81,10 @@
   --text-body-sm--line-height: 22px;
   --text-body-xs: 12px;
   --text-body-xs--line-height: 20px;
+
+  /* === Efeitos "comic" (títulos) === */
+  /* Figma: text-shadow -4px 4px 0 + stroke 1.5px (mobile) / 2.5px (desktop, ver .text-stroke-comic abaixo). */
+  --text-shadow-comic: -4px 4px 0px var(--color-brand-outline);
 
   /* === Animações === */
   /* SSR-safe: CSS puro (não <Transition>) — o fill-mode "both" já vale no
@@ -108,7 +121,16 @@ body {
 }
 
 @utility page-title {
-  @apply text-h2 font-bold uppercase text-white md:text-h1;
+  @apply text-h2 font-bold uppercase text-white text-shadow-comic text-stroke-comic md:text-h1;
+}
+
+/* Contorno "comic" dos títulos — largura muda no breakpoint md (Figma: 1.5px mobile / 2.5px desktop). */
+@utility text-stroke-comic {
+  -webkit-text-stroke: 1.5px var(--color-brand-outline);
+
+  @media (width >= 48rem) {
+    -webkit-text-stroke-width: 2.5px;
+  }
 }
 
 @utility faq-list {
