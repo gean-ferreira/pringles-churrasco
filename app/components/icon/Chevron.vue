@@ -1,5 +1,11 @@
 <template>
-  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 18 18"
+    fill="none"
+    aria-hidden="true"
+  >
     <path
       d="M4.5 7L9 11.5L13.5 7"
       stroke="currentColor"

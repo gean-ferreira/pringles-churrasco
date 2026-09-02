@@ -12,7 +12,10 @@ import { useNotificationModalStore } from '~/stores/modals/notificationModal.sto
 
 definePageMeta({ ssr: false, middleware: 'auth', name: 'Abrir lata' })
 
-useSeoMeta({ title: 'Abrir lata — Pringles Churrasco', robots: 'noindex, nofollow' })
+useSeoMeta({
+  title: 'Abrir lata — Pringles Churrasco',
+  robots: 'noindex, nofollow'
+})
 
 const participacaoStore = useParticipacaoStore()
 const extratoStore = useExtratoStore()
@@ -39,10 +42,19 @@ function openLata() {
     if (reward.value === 'naofoidessavez') {
       notificationModalStore.openModal({
         title: 'Poxa, não foi dessa vez!',
-        description: 'Não se preocupe, você ainda tem chance de ganhar no sorteio final. Confira seu número da sorte no extrato.',
+        description:
+          'Não se preocupe, você ainda tem chance de ganhar no sorteio final. Confira seu número da sorte no extrato.',
         dismissible: false,
         closeIcon: false,
-        actions: [{ label: 'Ver número da sorte', handler: async () => { await navigateTo('/extrato'); notificationModalStore.closeModal() } }]
+        actions: [
+          {
+            label: 'Ver número da sorte',
+            handler: async () => {
+              await navigateTo('/extrato')
+              notificationModalStore.closeModal()
+            }
+          }
+        ]
       })
     }
   })
@@ -67,7 +79,15 @@ async function onCepBlur(event: FocusEvent) {
   const found = await lookup(cep)
   if (!found) return
 
-  addressFormRef.value?.setValues({ rua: found.rua, bairro: found.bairro, cidade: found.cidade, estado: found.estado }, false)
+  addressFormRef.value?.setValues(
+    {
+      rua: found.rua,
+      bairro: found.bairro,
+      cidade: found.cidade,
+      estado: found.estado
+    },
+    false
+  )
   CAMPOS_CEP.forEach((campo) => addressFormRef.value?.validateField(campo))
 }
 
@@ -86,76 +106,174 @@ function onAddressSubmit(values: GenericObject) {
       'Endereco.Complemento': values.complemento?.trim() ?? ''
     }
 
-    await useFetchData('/Endereco/Cadastrar', { method: 'POST', body: toFormData(payload), requiresAuth: true })
+    await useFetchData('/Endereco/Cadastrar', {
+      method: 'POST',
+      body: toFormData(payload),
+      requiresAuth: true
+    })
 
     participacaoStore.invalidate()
     notificationModalStore.openModal({
       title: 'Concluído!',
-      description: 'Seus dados foram enviados com sucesso. Você também está concorrendo ao sorteio final!',
+      description:
+        'Seus dados foram enviados com sucesso. Você também está concorrendo ao sorteio final!',
       dismissible: false,
       closeIcon: false,
-      actions: [{ label: 'Ver número(s) da sorte', handler: async () => { await navigateTo('/extrato'); notificationModalStore.closeModal() } }]
+      actions: [
+        {
+          label: 'Ver número(s) da sorte',
+          handler: async () => {
+            await navigateTo('/extrato')
+            notificationModalStore.closeModal()
+          }
+        }
+      ]
     })
   })
 }
 </script>
 
 <template>
-  <main class="min-h-screen bg-(--color-brand-primary) pb-25 pt-(--header-height)">
+  <main
+    class="min-h-screen bg-(--color-brand-primary) pt-(--header-height) pb-25"
+  >
     <div class="container pt-18">
-      <div class="mx-auto max-w-[540px] rounded-xl bg-white px-6 py-8 text-center">
+      <div
+        class="mx-auto max-w-[540px] rounded-xl bg-white px-6 py-8 text-center"
+      >
         <!-- Reveal -->
         <template v-if="participacaoStore.step !== 4">
           <header class="mb-10">
-            <h1 class="text-h2 font-bold uppercase text-(--color-brand-primary)">
+            <h1
+              class="text-h2 font-bold text-(--color-brand-primary) uppercase"
+            >
               Abra sua Pringles<sup>®</sup> e descubra seu prêmio
             </h1>
           </header>
 
           <div v-if="!reward" class="flex flex-col items-center gap-6">
             <!-- TODO: animação/GIF real de abertura da lata assim que o design chegar. -->
-            <div class="flex h-40 w-40 items-center justify-center rounded-full bg-(--color-brand-accent-purple) text-body-sm text-white">
+            <div
+              class="text-body-sm flex h-40 w-40 items-center justify-center rounded-full bg-(--color-brand-accent-purple) text-white"
+            >
               Lata Pringles
             </div>
-            <AppButton variant="accent" block :loading="opening" @click="openLata">
+            <AppButton
+              variant="accent"
+              block
+              :loading="opening"
+              @click="openLata"
+            >
               {{ opening ? 'Abrindo...' : 'Abrir' }}
             </AppButton>
           </div>
 
-          <div v-else-if="reward !== 'naofoidessavez'" class="flex flex-col items-center gap-6">
-            <h2 class="text-h3 font-bold uppercase text-(--color-brand-accent-purple)">
+          <div
+            v-else-if="reward !== 'naofoidessavez'"
+            class="flex flex-col items-center gap-6"
+          >
+            <h2
+              class="text-h3 font-bold text-(--color-brand-accent-purple) uppercase"
+            >
               Parabéns! Você ganhou {{ reward }}!
             </h2>
-            <AppButton variant="accent" block @click="goToAddress">Resgatar prêmio</AppButton>
+            <AppButton variant="accent" block @click="goToAddress"
+              >Resgatar prêmio</AppButton
+            >
           </div>
         </template>
 
         <!-- Endereço / resgate -->
         <template v-else>
           <header class="mb-10 text-left">
-            <h1 class="text-h2 font-bold uppercase text-(--color-brand-primary)">Informe seus dados de contato</h1>
-            <p class="text-body-base text-(--color-brand-neutral-700)">Estes dados serão utilizados para enviar seu prêmio até você.</p>
+            <h1
+              class="text-h2 font-bold text-(--color-brand-primary) uppercase"
+            >
+              Informe seus dados de contato
+            </h1>
+            <p class="text-body-base text-(--color-brand-neutral-700)">
+              Estes dados serão utilizados para enviar seu prêmio até você.
+            </p>
           </header>
-          <VeeForm ref="addressFormRef" :validation-schema="addressSchema" class="flex flex-col gap-6 text-left" @submit="onAddressSubmit" @invalid-submit="onInvalidSubmit">
+          <VeeForm
+            ref="addressFormRef"
+            :validation-schema="addressSchema"
+            class="flex flex-col gap-6 text-left"
+            @submit="onAddressSubmit"
+            @invalid-submit="onInvalidSubmit"
+          >
             <div class="flex items-end gap-4">
-              <AppInput name="cep" label="CEP" :mask-input="MASK_CEP" placeholder="00000-000" input-mode="numeric" :loading="looking" class="flex-1" is-required @blur="onCepBlur" />
-              <a class="text-body-sm text-(--color-brand-primary) hover:underline" href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" rel="noopener noreferrer">
+              <AppInput
+                name="cep"
+                label="CEP"
+                :mask-input="MASK_CEP"
+                placeholder="00000-000"
+                input-mode="numeric"
+                :loading="looking"
+                class="flex-1"
+                is-required
+                @blur="onCepBlur"
+              />
+              <a
+                class="text-body-sm text-(--color-brand-primary) hover:underline"
+                href="https://buscacepinter.correios.com.br/app/endereco/index.php"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Não sei meu CEP
               </a>
             </div>
             <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
-              <AppInput name="rua" label="Rua / Avenida" :loading="looking" class="md:col-span-3" is-required />
+              <AppInput
+                name="rua"
+                label="Rua / Avenida"
+                :loading="looking"
+                class="md:col-span-3"
+                is-required
+              />
               <AppInput name="numero" label="Número" is-required />
             </div>
-            <AppInput name="complemento" label="Complemento" placeholder="Casa, apartamento, bloco" />
-            <AppInput name="bairro" label="Bairro" :loading="looking" is-required />
+            <AppInput
+              name="complemento"
+              label="Complemento"
+              placeholder="Casa, apartamento, bloco"
+            />
+            <AppInput
+              name="bairro"
+              label="Bairro"
+              :loading="looking"
+              is-required
+            />
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <AppInput name="cidade" label="Cidade" :loading="looking" is-required />
-              <AppSelect name="estado" label="Estado" :options="UF_OPTIONS" :loading="looking" is-required />
+              <AppInput
+                name="cidade"
+                label="Cidade"
+                :loading="looking"
+                is-required
+              />
+              <AppSelect
+                name="estado"
+                label="Estado"
+                :options="UF_OPTIONS"
+                :loading="looking"
+                is-required
+              />
             </div>
-            <AppInput name="celular" label="Celular" :mask-input="MASK_PHONE" input-mode="numeric" is-required />
+            <AppInput
+              name="celular"
+              label="Celular"
+              :mask-input="MASK_PHONE"
+              input-mode="numeric"
+              is-required
+            />
             <AppUpload name="anexo" />
-            <AppButton type="submit" variant="secondary" block :loading="submittingAddress">Enviar</AppButton>
+            <AppButton
+              type="submit"
+              variant="secondary"
+              block
+              :loading="submittingAddress"
+              >Enviar</AppButton
+            >
           </VeeForm>
         </template>
       </div>

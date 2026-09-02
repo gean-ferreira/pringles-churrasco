@@ -20,7 +20,9 @@ useHead({ link: [{ rel: 'canonical', href: `${url}/ganhadores` }] })
     <div class="container py-14">
       <header class="mb-12 text-center">
         <h1 class="page-title mb-2">Ganhadores</h1>
-        <p class="text-body-base text-white">Confira abaixo os ganhadores da promoção</p>
+        <p class="text-body-base text-white">
+          Confira abaixo os ganhadores da promoção
+        </p>
       </header>
       <main class="space-y-4 xl:space-y-10">
         <SectionsWinnersInstantPrize />

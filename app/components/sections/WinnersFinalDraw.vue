@@ -9,7 +9,9 @@ const columns: TableColumn[] = [
   { key: 'premio', label: 'Prêmio' }
 ]
 
-const { status, data: response } = await useFetch<WinnerResponse<FinalDrawWinner>>(
+const { status, data: response } = await useFetch<
+  WinnerResponse<FinalDrawWinner>
+>(
   `${import.meta.env.VITE_BASE_API}/Ganhador/ConsultarGanhadores/SORTEIO_FINAL`,
   { key: 'final-draw-key', lazy: true, server: false }
 )
@@ -17,12 +19,17 @@ const { status, data: response } = await useFetch<WinnerResponse<FinalDrawWinner
 
 <template>
   <ClientOnly>
-    <div v-if="status === 'pending' || status === 'error'" class="h-18 w-full animate-pulse rounded-lg bg-(--color-brand-neutral-100)" />
+    <div
+      v-if="status === 'pending' || status === 'error'"
+      class="h-18 w-full animate-pulse rounded-lg bg-(--color-brand-neutral-100)"
+    />
     <AppTable
       v-else
       title="Sorteio final"
       :columns="columns"
-      :rows="(response?.ganhadores ?? []) as unknown as Record<string, unknown>[]"
+      :rows="
+        (response?.ganhadores ?? []) as unknown as Record<string, unknown>[]
+      "
       empty-text="Ainda não foram apurados os ganhadores do sorteio final."
     />
   </ClientOnly>

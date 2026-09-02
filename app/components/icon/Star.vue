@@ -5,7 +5,13 @@ const filterId = `star-shadow-${useId()}`
 </script>
 
 <template>
-  <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+  <svg
+    width="17"
+    height="17"
+    viewBox="0 0 17 17"
+    fill="none"
+    aria-hidden="true"
+  >
     <g :filter="`url(#${filterId})`">
       <path
         d="M8.53061 0L10.6216 5.65071L16.2723 7.74167L10.6216 9.83262L8.53061 15.4833L6.43965 9.83262L0.78894 7.74167L6.43965 5.65071L8.53061 0Z"
@@ -35,8 +41,17 @@ const filterId = `star-shadow-${useId()}`
           type="matrix"
           values="0 0 0 0 0.435294 0 0 0 0 0.109804 0 0 0 0 0.0666667 0 0 0 1 0"
         />
-        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_9428_5395" />
-        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_9428_5395" result="shape" />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_9428_5395"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_9428_5395"
+          result="shape"
+        />
       </filter>
     </defs>
   </svg>

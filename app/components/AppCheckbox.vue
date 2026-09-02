@@ -34,11 +34,11 @@ const isDisabled = computed(() => props.disabled || props.loading)
         :value="value"
         :unchecked-value="uncheckedValue"
         :disabled="isDisabled"
-        class="sr-only peer"
+        class="peer sr-only"
       />
       <!-- opacity só na caixa: o slot pode ter link clicável mesmo com o campo disabled. -->
       <span
-        class="relative mt-[2px] size-5 shrink-0 rounded-[4px] transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-(--color-brand-primary)"
+        class="relative mt-[2px] size-5 shrink-0 rounded-[4px] transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-(--color-brand-primary) peer-focus-visible:ring-offset-2"
         :class="[
           isChecked
             ? 'bg-(--color-brand-primary)'
@@ -50,7 +50,7 @@ const isDisabled = computed(() => props.disabled || props.loading)
       >
         <svg
           v-show="isChecked"
-          class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           width="11"
           height="8"
           viewBox="0 0 11 8"
@@ -65,11 +65,13 @@ const isDisabled = computed(() => props.disabled || props.loading)
           />
         </svg>
       </span>
-      <span class="text-body-sm font-medium text-(--color-brand-neutral-950)"><slot /></span>
+      <span class="text-body-sm font-medium text-(--color-brand-neutral-950)"
+        ><slot
+      /></span>
     </label>
     <VeeErrorMessage
       :name="name"
-      class="ml-7 text-body-xs font-medium text-(--color-feedback-red-500)"
+      class="text-body-xs ml-7 font-medium text-(--color-feedback-red-500)"
     />
   </div>
 </template>

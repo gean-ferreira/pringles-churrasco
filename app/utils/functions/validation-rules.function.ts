@@ -88,7 +88,8 @@ export function registerValidationRules() {
 
   defineRule('cellphone', (value: string) => {
     const telefone = value.replace(/[^0-9]+/g, '')
-    const re = /^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)?(9\d{4}-?\d{4})$/
+    const re =
+      /^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)?(9\d{4}-?\d{4})$/
     if (!re.test(telefone)) {
       return 'Por favor, insira um número de celular válido'
     }
@@ -96,7 +97,9 @@ export function registerValidationRules() {
   })
 
   defineRule('cep', (value: string) => {
-    return /^\d{5}-?\d{3}$/.test(String(value)) || 'Por favor, insira um CEP válido'
+    return (
+      /^\d{5}-?\d{3}$/.test(String(value)) || 'Por favor, insira um CEP válido'
+    )
   })
 
   defineRule('checkbox', (value: boolean) => {
@@ -107,25 +110,19 @@ export function registerValidationRules() {
     return value === target || 'Dados divergentes'
   })
 
-  defineRule(
-    'min',
-    (value: string, [length, message]: [number, string]) => {
-      if (value && value.length < length) {
-        return message ?? `Este campo deve ter pelo menos ${length} caracteres`
-      }
-      return true
+  defineRule('min', (value: string, [length, message]: [number, string]) => {
+    if (value && value.length < length) {
+      return message ?? `Este campo deve ter pelo menos ${length} caracteres`
     }
-  )
+    return true
+  })
 
-  defineRule(
-    'max',
-    (value: string, [length, message]: [number, string]) => {
-      if (value && value.length > length) {
-        return message ?? `Este campo não deve exceder ${length} caracteres`
-      }
-      return true
+  defineRule('max', (value: string, [length, message]: [number, string]) => {
+    if (value && value.length > length) {
+      return message ?? `Este campo não deve exceder ${length} caracteres`
     }
-  )
+    return true
+  })
 
   defineRule('dateValid', (value: string) => {
     const re =
@@ -143,7 +140,10 @@ export function registerValidationRules() {
   })
 
   defineRule('dateMin', (value: string, [minDateStr = '']: string[]) => {
-    return parseDate(value) >= parseDate(minDateStr) || 'Data fora do período de participação'
+    return (
+      parseDate(value) >= parseDate(minDateStr) ||
+      'Data fora do período de participação'
+    )
   })
 
   defineRule('minAge', (value: string, [minAge = 0]: number[]) => {

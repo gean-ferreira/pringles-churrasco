@@ -9,7 +9,10 @@ export const useExtratoStore = defineStore('extrato', () => {
   const loadedAt = ref<number | null>(null)
   const isLoaded = computed(() => loadedAt.value !== null)
 
-  function setExtrato(data: { participacoes: Participacao[]; numerosSorte: NumeroSorte[] }) {
+  function setExtrato(data: {
+    participacoes: Participacao[]
+    numerosSorte: NumeroSorte[]
+  }) {
     participacoes.value = data.participacoes
     numerosSorte.value = data.numerosSorte
     loadedAt.value = Date.now()

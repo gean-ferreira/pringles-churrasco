@@ -29,7 +29,9 @@ const hasError = computed(() => !!fieldError.value)
 const hasValue = computed(() => !!fieldValue.value)
 const isDisabled = computed(() => props.disabled || props.loading)
 const showStatusIcon = computed(
-  () => props.type !== 'textarea' && (hasValue.value || hasError.value || props.loading)
+  () =>
+    props.type !== 'textarea' &&
+    (hasValue.value || hasError.value || props.loading)
 )
 
 const fieldClass = computed(() => {
@@ -41,8 +43,10 @@ const fieldClass = computed(() => {
   if (isDisabled.value)
     state =
       'bg-(--color-brand-neutral-50) border-(--color-brand-neutral-100) text-(--color-brand-neutral-800) cursor-not-allowed'
-  else if (hasError.value) state = 'bg-(--color-feedback-red-50) border-(--color-feedback-red-500)'
-  else if (hasValue.value) state = 'bg-white border-(--color-feedback-green-500)'
+  else if (hasError.value)
+    state = 'bg-(--color-feedback-red-50) border-(--color-feedback-red-500)'
+  else if (hasValue.value)
+    state = 'bg-white border-(--color-feedback-green-500)'
   else
     state =
       'bg-white border-(--color-brand-neutral-100) hover:border-(--color-brand-neutral-950) focus:border-(--color-brand-neutral-950)'
@@ -56,7 +60,8 @@ const fieldClass = computed(() => {
       :for="name"
       class="text-body-sm font-medium text-(--color-brand-neutral-950)"
     >
-      {{ label }}<span v-if="isRequired" class="text-(--color-feedback-red-500)">*</span>
+      {{ label
+      }}<span v-if="isRequired" class="text-(--color-feedback-red-500)">*</span>
     </label>
     <div class="relative flex items-center">
       <input
@@ -84,13 +89,16 @@ const fieldClass = computed(() => {
       />
       <span
         v-if="showStatusIcon"
-        class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"
+        class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
       >
         <IconSpinner
           v-if="loading"
           class="size-5 text-(--color-brand-neutral-400)"
         />
-        <IconError v-else-if="hasError" class="size-5 text-(--color-feedback-red-500)" />
+        <IconError
+          v-else-if="hasError"
+          class="size-5 text-(--color-feedback-red-500)"
+        />
         <IconCheck v-else class="size-5 text-(--color-feedback-green-500)" />
       </span>
     </div>
@@ -98,7 +106,10 @@ const fieldClass = computed(() => {
       :name="name"
       class="text-body-xs font-medium text-(--color-feedback-red-500)"
     />
-    <span v-if="description" class="text-body-xs text-(--color-brand-neutral-500)">
+    <span
+      v-if="description"
+      class="text-body-xs text-(--color-brand-neutral-500)"
+    >
       {{ description }}
     </span>
   </div>

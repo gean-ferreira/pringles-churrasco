@@ -13,8 +13,14 @@ export const useAuthStore = defineStore('auth', () => {
         ...window.digitalData,
         user: {
           ...window.digitalData?.user,
-          attributes: { ...window.digitalData?.user?.attributes, isLoggedIn: true },
-          profile: { ...window.digitalData?.user?.profile, userType: 'Repeated user' }
+          attributes: {
+            ...window.digitalData?.user?.attributes,
+            isLoggedIn: true
+          },
+          profile: {
+            ...window.digitalData?.user?.profile,
+            userType: 'Repeated user'
+          }
         }
       }
     }
@@ -28,8 +34,15 @@ export const useAuthStore = defineStore('auth', () => {
         ...window.digitalData,
         user: {
           ...window.digitalData?.user,
-          attributes: { ...window.digitalData?.user?.attributes, isLoggedIn: false },
-          profile: { ...window.digitalData?.user?.profile, profileID: '', userType: 'Anonymous' }
+          attributes: {
+            ...window.digitalData?.user?.attributes,
+            isLoggedIn: false
+          },
+          profile: {
+            ...window.digitalData?.user?.profile,
+            profileID: '',
+            userType: 'Anonymous'
+          }
         }
       }
     }

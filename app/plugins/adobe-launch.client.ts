@@ -27,7 +27,8 @@ export default defineNuxtPlugin(() => {
           ...window.digitalData?.user,
           profile: {
             ...window.digitalData?.user?.profile,
-            profileID: jwtDecode<{ ProfileId: string }>(authStore.token).ProfileId
+            profileID: jwtDecode<{ ProfileId: string }>(authStore.token)
+              .ProfileId
           }
         }
       }

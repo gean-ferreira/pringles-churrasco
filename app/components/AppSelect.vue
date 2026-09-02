@@ -35,9 +35,11 @@ const fieldClass = computed(() => {
     state =
       'bg-(--color-brand-neutral-50) border-(--color-brand-neutral-100) text-(--color-brand-neutral-600) cursor-not-allowed'
   else if (hasError.value)
-    state = 'bg-(--color-feedback-red-50) border-(--color-feedback-red-500) text-(--color-brand-neutral-950)'
+    state =
+      'bg-(--color-feedback-red-50) border-(--color-feedback-red-500) text-(--color-brand-neutral-950)'
   else if (hasValue.value)
-    state = 'bg-white border-(--color-feedback-green-500) text-(--color-brand-neutral-950)'
+    state =
+      'bg-white border-(--color-feedback-green-500) text-(--color-brand-neutral-950)'
   else
     state =
       'bg-white border-(--color-brand-neutral-100) text-(--color-brand-neutral-400) hover:border-(--color-brand-neutral-950) focus:border-(--color-brand-neutral-950)'
@@ -51,7 +53,8 @@ const fieldClass = computed(() => {
       :for="name"
       class="text-body-sm font-medium text-(--color-brand-neutral-950)"
     >
-      {{ label }}<span v-if="isRequired" class="text-(--color-feedback-red-500)">*</span>
+      {{ label
+      }}<span v-if="isRequired" class="text-(--color-feedback-red-500)">*</span>
     </label>
     <div class="relative flex items-center">
       <VeeField
@@ -63,13 +66,21 @@ const fieldClass = computed(() => {
         @change="$emit('change', $event)"
       >
         <option value="" disabled>{{ placeholder }}</option>
-        <option v-for="option in options" :key="option.value" :value="option.value">
+        <option
+          v-for="option in options"
+          :key="option.value"
+          :value="option.value"
+        >
           {{ option.label }}
         </option>
       </VeeField>
       <span
-        class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"
-        :class="isDisabled ? 'text-(--color-brand-neutral-400)' : 'text-(--color-brand-neutral-600)'"
+        class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
+        :class="
+          isDisabled
+            ? 'text-(--color-brand-neutral-400)'
+            : 'text-(--color-brand-neutral-600)'
+        "
       >
         <IconSpinner v-if="loading" class="size-[18px]" />
         <IconChevron v-else class="size-[18px]" />
@@ -79,7 +90,10 @@ const fieldClass = computed(() => {
       :name="name"
       class="text-body-xs font-medium text-(--color-feedback-red-500)"
     />
-    <span v-if="description" class="text-body-xs text-(--color-brand-neutral-600)">
+    <span
+      v-if="description"
+      class="text-body-xs text-(--color-brand-neutral-600)"
+    >
       {{ description }}
     </span>
   </div>

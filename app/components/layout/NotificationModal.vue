@@ -23,7 +23,6 @@ async function runAction(index: number) {
     runningIndex.value = null
   }
 }
-
 </script>
 
 <template>
@@ -39,7 +38,13 @@ async function runAction(index: number) {
       <AppButton
         v-for="(action, index) in store.actions"
         :key="action.label"
-        :variant="action.variant === 'ghost' ? 'ghost' : action.variant === 'secondary' ? 'secondary' : 'primary'"
+        :variant="
+          action.variant === 'ghost'
+            ? 'ghost'
+            : action.variant === 'secondary'
+              ? 'secondary'
+              : 'primary'
+        "
         block
         :loading="runningIndex === index"
         :disabled="isLocked && runningIndex !== index"

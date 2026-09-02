@@ -105,7 +105,9 @@ html {
   /* --promo-banner-height é publicada por LayoutPromotionEndedBanner (0 quando
      a faixa está fora da tela) — sem isso, âncoras (/#produtos etc.) landam
      parcialmente escondidas atrás do header + banner quando a promo encerra. */
-  scroll-padding-top: calc(var(--header-height) + var(--promo-banner-height, 0px));
+  scroll-padding-top: calc(
+    var(--header-height) + var(--promo-banner-height, 0px)
+  );
   scroll-behavior: smooth;
 }
 
@@ -121,7 +123,7 @@ body {
 }
 
 @utility page-title {
-  @apply text-h2 font-bold uppercase text-white text-shadow-comic text-stroke-comic md:text-h1;
+  @apply text-h2 text-shadow-comic text-stroke-comic md:text-h1 font-bold text-white uppercase;
 }
 
 /* Contorno "comic" dos títulos — largura muda no breakpoint md (Figma: 1.5px mobile / 2.5px desktop). */

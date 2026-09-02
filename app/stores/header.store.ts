@@ -4,7 +4,8 @@ export const useHeaderStore = defineStore('header', {
     visibleSections: [] as string[]
   }),
   getters: {
-    isSectionVisible: (state) => (sectionId: string) => state.visibleSections.includes(sectionId)
+    isSectionVisible: (state) => (sectionId: string) =>
+      state.visibleSections.includes(sectionId)
   },
   actions: {
     toggleMenu() {
@@ -23,7 +24,8 @@ export const useHeaderStore = defineStore('header', {
       else this.removeVisibleSection(sectionId)
     },
     addVisibleSection(sectionId: string) {
-      if (!this.visibleSections.includes(sectionId)) this.visibleSections.push(sectionId)
+      if (!this.visibleSections.includes(sectionId))
+        this.visibleSections.push(sectionId)
     },
     removeVisibleSection(sectionId: string) {
       const index = this.visibleSections.indexOf(sectionId)

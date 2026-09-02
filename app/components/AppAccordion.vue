@@ -16,20 +16,27 @@ function toggle(index: number) {
       <button
         type="button"
         class="flex w-full cursor-pointer items-center gap-4 border-b-2 border-(--color-brand-outline) p-4 text-left transition-colors"
-        :class="openIndex === index ? 'bg-(--color-brand-accent-green)' : 'bg-white'"
+        :class="
+          openIndex === index ? 'bg-(--color-brand-accent-green)' : 'bg-white'
+        "
         :aria-expanded="openIndex === index"
         @click="toggle(index)"
       >
         <span
-          class="flex-1 text-body-base font-bold"
-          :class="openIndex === index ? 'text-white' : 'text-(--color-brand-outline)'"
+          class="text-body-base flex-1 font-bold"
+          :class="
+            openIndex === index ? 'text-white' : 'text-(--color-brand-outline)'
+          "
         >
           {{ item.question }}
         </span>
         <span
           class="flex size-[34px] shrink-0 items-center justify-center rounded-[10px] border-2 border-(--color-brand-outline) bg-(--color-brand-secondary) drop-shadow-[-1px_3px_0px_var(--color-brand-outline)]"
         >
-          <IconPlus v-if="openIndex !== index" class="size-[18px] text-(--color-brand-outline)" />
+          <IconPlus
+            v-if="openIndex !== index"
+            class="size-[18px] text-(--color-brand-outline)"
+          />
           <IconMinus v-else class="size-[18px] text-(--color-brand-outline)" />
         </span>
       </button>
@@ -41,7 +48,9 @@ function toggle(index: number) {
         :aria-hidden="openIndex !== index"
       >
         <div class="overflow-hidden">
-          <p class="bg-(--color-brand-neutral-50) p-4 text-body-sm text-(--color-brand-neutral-800)">
+          <p
+            class="text-body-sm bg-(--color-brand-neutral-50) p-4 text-(--color-brand-neutral-800)"
+          >
             {{ item.answer }}
           </p>
         </div>

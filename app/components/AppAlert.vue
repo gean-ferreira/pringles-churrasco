@@ -16,7 +16,11 @@ const iconClasses = computed(() =>
 )
 </script>
 <template>
-  <div class="flex items-center gap-2 rounded-lg border px-2 py-3" :class="rootClasses" role="alert">
+  <div
+    class="flex items-center gap-2 rounded-lg border px-2 py-3"
+    :class="rootClasses"
+    role="alert"
+  >
     <IconWarning class="size-6 shrink-0" :class="iconClasses" />
     <p class="text-body-sm text-(--color-brand-neutral-950)"><slot /></p>
   </div>

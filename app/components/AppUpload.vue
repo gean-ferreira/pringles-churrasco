@@ -32,7 +32,9 @@ const fileName = computed(() => {
     >
       <IconUpload class="size-8 text-(--color-brand-neutral-400)" />
       <div class="flex flex-col gap-0.5">
-        <span class="text-body-sm font-semibold text-(--color-brand-neutral-950)">
+        <span
+          class="text-body-sm font-semibold text-(--color-brand-neutral-950)"
+        >
           {{ fileName || 'Arraste e solte um arquivo aqui para upload' }}
         </span>
         <span class="text-body-xs text-(--color-brand-neutral-800)">
@@ -40,7 +42,7 @@ const fileName = computed(() => {
         </span>
       </div>
       <span
-        class="rounded-lg bg-(--color-brand-primary) px-4 py-[10px] text-body-sm font-bold text-white transition-colors group-hover:bg-(--color-brand-primary-dark)"
+        class="text-body-sm rounded-lg bg-(--color-brand-primary) px-4 py-[10px] font-bold text-white transition-colors group-hover:bg-(--color-brand-primary-dark)"
       >
         ou selecione um arquivo
       </span>

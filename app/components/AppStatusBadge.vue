@@ -17,12 +17,14 @@ const badgeClass = computed(() => {
     .toLowerCase()
     .trim()
   const key = Object.keys(statusClass).find((k) => normalized.includes(k))
-  return key ? statusClass[key] : 'bg-(--color-brand-neutral-50) text-(--color-brand-neutral-700)'
+  return key
+    ? statusClass[key]
+    : 'bg-(--color-brand-neutral-50) text-(--color-brand-neutral-700)'
 })
 </script>
 <template>
   <span
-    class="inline-flex items-center rounded px-2 py-0.5 text-body-sm font-medium"
+    class="text-body-sm inline-flex items-center rounded px-2 py-0.5 font-medium"
     :class="badgeClass"
   >
     {{ status }}

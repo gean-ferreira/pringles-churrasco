@@ -12,7 +12,10 @@ onMounted(() => {
   const updateOffset = () => {
     const height = bannerRef.value?.offsetHeight ?? 0
     bannerHeight.value = height
-    document.documentElement.style.setProperty('--promo-banner-height', `${height}px`)
+    document.documentElement.style.setProperty(
+      '--promo-banner-height',
+      `${height}px`
+    )
   }
 
   const resizeObserver = new ResizeObserver(updateOffset)
@@ -46,7 +49,7 @@ onMounted(() => {
       role="alert"
       class="fixed inset-x-0 top-(--header-height) z-30 bg-(--color-feedback-red-500) px-4 py-4 text-center"
     >
-      <p class="text-body-lg font-bold uppercase text-white">
+      <p class="text-body-lg font-bold text-white uppercase">
         O período de participação foi encerrado.
       </p>
     </div>

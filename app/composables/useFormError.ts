@@ -4,7 +4,10 @@ export const useFormError = () => {
       const alertElement = document.querySelector('[role="alert"]')
       if (!alertElement) return
       const offset = alertElement.getBoundingClientRect().top + window.scrollY
-      window.scrollTo({ top: offset - window.innerHeight / 2, behavior: 'smooth' })
+      window.scrollTo({
+        top: offset - window.innerHeight / 2,
+        behavior: 'smooth'
+      })
       const errorField = alertElement
         .closest('[data-field]')
         ?.querySelector<HTMLElement>('input, textarea, select')

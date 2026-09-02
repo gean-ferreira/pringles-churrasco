@@ -10,7 +10,10 @@ interface AuthResponse {
 // Login e cadastro fazem POST e mandam o usuário para /verificacao com
 // resposta e query idênticas — concentra esse shape e o redirect num lugar só.
 export function useVerificationHandoff() {
-  async function goToVerification(res: AuthResponse, action: VerificationAction) {
+  async function goToVerification(
+    res: AuthResponse,
+    action: VerificationAction
+  ) {
     await navigateTo({
       path: '/verificacao',
       query: {

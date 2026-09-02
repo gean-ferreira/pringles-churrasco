@@ -27,7 +27,8 @@ export const useOneTrustConsent = () => {
     if (!hasConsent) {
       notificationModalStore.openModal({
         title: 'Atenção!',
-        description: 'Para continuar, aceite os cookies obrigatórios para liberação.',
+        description:
+          'Para continuar, aceite os cookies obrigatórios para liberação.',
         actions: [{ label: 'Fechar' }]
       })
       return false

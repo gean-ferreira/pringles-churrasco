@@ -18,9 +18,14 @@ export function useUserPrefill() {
     return { ...user, dt_nascimento: formatDate(user.dt_nascimento) }
   }
 
-  async function prefill(formRef: Ref<typeof Form | null>, mapInitialValues: InitialValuesMapper) {
+  async function prefill(
+    formRef: Ref<typeof Form | null>,
+    mapInitialValues: InitialValuesMapper
+  ) {
     if (userStore.user) {
-      formRef.value?.resetForm({ values: mapInitialValues(normalizeUser(userStore.user)) })
+      formRef.value?.resetForm({
+        values: mapInitialValues(normalizeUser(userStore.user))
+      })
       return
     }
 
@@ -33,7 +38,9 @@ export function useUserPrefill() {
         requiresAuth: true
       })
       userStore.setUser(res.data)
-      formRef.value?.resetForm({ values: mapInitialValues(normalizeUser(res.data)) })
+      formRef.value?.resetForm({
+        values: mapInitialValues(normalizeUser(res.data))
+      })
     } catch {
       // erro já tratado pelo interceptor
     } finally {

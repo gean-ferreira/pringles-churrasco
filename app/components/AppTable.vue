@@ -12,13 +12,17 @@ const props = withDefaults(
   { variant: 'default', emptyText: 'Nenhum registro encontrado.' }
 )
 
-const showHeader = computed(() => props.rows.length > 0 || props.variant === 'highlight')
+const showHeader = computed(
+  () => props.rows.length > 0 || props.variant === 'highlight'
+)
 </script>
 <template>
-  <div class="overflow-hidden rounded-lg border border-(--color-brand-neutral-100)">
+  <div
+    class="overflow-hidden rounded-lg border border-(--color-brand-neutral-100)"
+  >
     <div
       v-if="title"
-      class="bg-(--color-brand-primary) px-4 py-4 text-center text-body-lg font-bold uppercase text-white"
+      class="text-body-lg bg-(--color-brand-primary) px-4 py-4 text-center font-bold text-white uppercase"
     >
       {{ title }}
     </div>
@@ -27,13 +31,15 @@ const showHeader = computed(() => props.rows.length > 0 || props.variant === 'hi
            table-fixed ignora o conteúdo e a célula não corta overflow, então
            texto maior que a coluna vazava por trás da próxima. min-w mantém
            o scroll horizontal em vez de cortar/sobrepor texto. -->
-      <table class="w-full min-w-[520px] table-auto border-collapse md:min-w-0 md:table-fixed">
+      <table
+        class="w-full min-w-[520px] table-auto border-collapse md:min-w-0 md:table-fixed"
+      >
         <thead v-if="showHeader">
           <tr>
             <th
               v-for="col in columns"
               :key="col.key"
-              class="sticky top-0 z-10 whitespace-nowrap text-body-sm"
+              class="text-body-sm sticky top-0 z-10 whitespace-nowrap"
             >
               {{ col.label }}
             </th>
@@ -44,10 +50,18 @@ const showHeader = computed(() => props.rows.length > 0 || props.variant === 'hi
             <td
               v-for="col in columns"
               :key="col.key"
-              class="whitespace-nowrap border-t border-(--color-brand-neutral-100)"
+              class="border-t border-(--color-brand-neutral-100) whitespace-nowrap"
             >
-              <slot :name="`cell-${col.key}`" :row="row" :value="row[col.key]" :index="index">
-                <AppStatusBadge v-if="col.type === 'status'" :status="String(row[col.key])" />
+              <slot
+                :name="`cell-${col.key}`"
+                :row="row"
+                :value="row[col.key]"
+                :index="index"
+              >
+                <AppStatusBadge
+                  v-if="col.type === 'status'"
+                  :status="String(row[col.key])"
+                />
                 <template v-else>{{ row[col.key] }}</template>
               </slot>
             </td>
@@ -55,7 +69,7 @@ const showHeader = computed(() => props.rows.length > 0 || props.variant === 'hi
           <tr v-if="!rows.length">
             <td
               :colspan="columns.length"
-              class="bg-white text-center text-body-lg font-bold uppercase text-(--color-brand-primary)"
+              class="text-body-lg bg-white text-center font-bold text-(--color-brand-primary) uppercase"
             >
               {{ emptyText }}
             </td>

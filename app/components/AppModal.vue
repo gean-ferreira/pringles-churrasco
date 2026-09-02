@@ -71,20 +71,28 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
               <IconClose class="size-[18px]" />
             </button>
             <div class="flex flex-col gap-6">
-              <div v-if="title || description" class="flex flex-col gap-2 text-center">
-                <h2 v-if="title" class="text-h2 font-bold text-(--color-brand-primary)">
+              <div
+                v-if="title || description"
+                class="flex flex-col gap-2 text-center"
+              >
+                <h2
+                  v-if="title"
+                  class="text-h2 font-bold text-(--color-brand-primary)"
+                >
                   {{ title }}
                 </h2>
                 <!-- description só recebe texto fixo do código, nunca input do usuário. -->
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <p
                   v-if="description"
-                  class="whitespace-pre-line text-body-base text-(--color-brand-neutral-600)"
+                  class="text-body-base whitespace-pre-line text-(--color-brand-neutral-600)"
                   v-html="description"
                 />
               </div>
               <slot />
-              <div v-if="$slots.actions" class="flex flex-col gap-2"><slot name="actions" /></div>
+              <div v-if="$slots.actions" class="flex flex-col gap-2">
+                <slot name="actions" />
+              </div>
             </div>
           </div>
         </Transition>
