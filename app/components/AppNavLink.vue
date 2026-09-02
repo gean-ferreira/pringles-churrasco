@@ -29,7 +29,8 @@ const ariaCurrent = computed(() => {
     :target="external ? '_blank' : undefined"
     :rel="external ? 'noopener noreferrer' : undefined"
     :aria-current="ariaCurrent"
-    class="text-body-base font-medium transition-colors"
+    class="text-body-sm font-bold uppercase transition-colors hover:text-(--color-brand-secondary)"
     :class="isActive ? 'text-(--color-brand-secondary)' : 'text-white'"
-  ><slot /></NuxtLink>
+    ><slot
+  /></NuxtLink>
 </template>
