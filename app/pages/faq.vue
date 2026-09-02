@@ -20,14 +20,34 @@ const items = FAQ_ITEMS.map((item) => ({ question: item.pergunta, answer: item.r
 </script>
 
 <template>
-  <section class="min-h-screen bg-(--color-brand-primary)">
-    <div class="container py-14">
-      <header class="mb-12">
-        <h1 class="page-title text-center">Dúvidas Frequentes</h1>
+  <section class="relative overflow-hidden bg-(--color-brand-secondary) py-14 md:py-24">
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 bg-repeat opacity-5 bg-[url('/images/bg-pattern.png')] [background-size:1920px_1003px]"
+    />
+    <div class="container relative flex flex-col items-center gap-14">
+      <header class="flex items-center gap-3 md:gap-6">
+        <IconStar class="size-4 shrink-0 text-white md:size-8" />
+        <h1
+          class="text-h1 text-center uppercase text-white text-shadow-comic text-stroke-comic md:text-h1-lg"
+        >
+          Dúvidas frequentes
+        </h1>
+        <IconStar class="size-4 shrink-0 text-white md:size-8" />
       </header>
-      <main class="mx-auto max-w-5xl">
+
+      <main class="w-full max-w-[1008px]">
         <AppAccordion :items="items" />
       </main>
+
+      <div class="flex w-full flex-col items-center gap-8">
+        <h2
+          class="text-h3 text-center uppercase text-white text-shadow-comic text-stroke-comic md:text-h2"
+        >
+          Ainda está com dúvidas?
+        </h2>
+        <AppButton to="/fale-conosco" variant="success" block class="max-w-[384px]">Fale conosco</AppButton>
+      </div>
     </div>
   </section>
 </template>

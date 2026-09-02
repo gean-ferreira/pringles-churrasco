@@ -7,35 +7,45 @@ function toggle(index: number) {
 }
 </script>
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2">
     <div
       v-for="(item, index) in items"
       :key="index"
-      class="overflow-hidden rounded-xl bg-(--color-brand-primary)"
+      class="overflow-hidden rounded-xl border-2 border-(--color-brand-outline) bg-(--color-brand-neutral-50) drop-shadow-[-1px_3px_0px_var(--color-brand-outline)]"
     >
       <button
         type="button"
-        class="flex w-full cursor-pointer items-center justify-between gap-4 px-6 py-6 text-left"
+        class="flex w-full cursor-pointer items-center gap-4 border-b-2 border-(--color-brand-outline) p-4 text-left transition-colors"
+        :class="openIndex === index ? 'bg-(--color-brand-accent-green)' : 'bg-white'"
+        :aria-expanded="openIndex === index"
         @click="toggle(index)"
       >
-        <span class="text-body-base font-semibold text-white">{{ item.question }}</span>
-        <IconChevron
-          class="size-5 shrink-0 text-white transition-transform duration-300"
-          :class="openIndex === index ? 'rotate-180' : ''"
-        />
+        <span
+          class="flex-1 text-body-base font-bold"
+          :class="openIndex === index ? 'text-white' : 'text-(--color-brand-outline)'"
+        >
+          {{ item.question }}
+        </span>
+        <span
+          class="flex size-[34px] shrink-0 items-center justify-center rounded-[10px] border-2 border-(--color-brand-outline) bg-(--color-brand-secondary) drop-shadow-[-1px_3px_0px_var(--color-brand-outline)]"
+        >
+          <IconPlus v-if="openIndex !== index" class="size-[18px] text-(--color-brand-outline)" />
+          <IconMinus v-else class="size-[18px] text-(--color-brand-outline)" />
+        </span>
       </button>
-      <Transition
-        enter-active-class="transition-all duration-200 ease-out overflow-hidden"
-        enter-from-class="max-h-0 opacity-0"
-        enter-to-class="max-h-[400px] opacity-100"
-        leave-active-class="transition-all duration-200 ease-in overflow-hidden"
-        leave-from-class="max-h-[400px] opacity-100"
-        leave-to-class="max-h-0 opacity-0"
+      <!-- grid-rows 0fr->1fr acompanha a altura real do texto — um max-height fixo (chutado)
+           descasava do conteúdo e fazia a caixa "pular" de tamanho ao abrir/fechar. -->
+      <div
+        class="grid transition-[grid-template-rows] duration-200 ease-in-out"
+        :class="openIndex === index ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+        :aria-hidden="openIndex !== index"
       >
-        <div v-if="openIndex === index" class="px-6 pb-6 text-body-base font-normal text-white">
-          {{ item.answer }}
+        <div class="overflow-hidden">
+          <p class="bg-(--color-brand-neutral-50) p-4 text-body-sm text-(--color-brand-neutral-800)">
+            {{ item.answer }}
+          </p>
         </div>
-      </Transition>
+      </div>
     </div>
   </div>
 </template>
