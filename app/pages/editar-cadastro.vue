@@ -6,11 +6,6 @@ import { onlyDigits } from '~/utils/functions/sanitize.function'
 import { formatToISO } from '~/utils/functions/date.function'
 import { toFormData } from '~/utils/functions/formData.function'
 import { UF_OPTIONS } from '~/utils/ufOptions'
-import {
-  LINK_REGULAMENTO_INSTANTANEO,
-  LINK_REGULAMENTO_FINAL,
-  LINK_POLITICA_PRIVACIDADE
-} from '~/utils/links'
 import { useUserPrefill } from '~/composables/useUserPrefill'
 import { useUserStore } from '~/stores/user.store'
 import { useNotificationModalStore } from '~/stores/modals/notificationModal.store'
@@ -159,40 +154,7 @@ onMounted(() => {
               is-required
             />
           </div>
-          <div class="flex flex-col gap-4">
-            <AppCheckbox
-              name="aceite_Regulamento"
-              disabled
-              :loading="prefilling"
-            >
-              Li e aceito o regulamento da
-              <a
-                :href="LINK_REGULAMENTO_INSTANTANEO"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="font-medium text-(--color-brand-primary) hover:underline"
-                >Premiação Instantânea</a
-              >
-              e do
-              <a
-                :href="LINK_REGULAMENTO_FINAL"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="font-medium text-(--color-brand-primary) hover:underline"
-                >Sorteio Final</a
-              >.
-            </AppCheckbox>
-            <AppCheckbox name="aceite_Politica" disabled :loading="prefilling">
-              Li e entendi o
-              <a
-                :href="LINK_POLITICA_PRIVACIDADE"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="font-medium text-(--color-brand-primary) hover:underline"
-                >Aviso de Privacidade</a
-              >.
-            </AppCheckbox>
-          </div>
+          <FormsConsentCheckboxes disabled :loading="prefilling" />
           <AppButton
             type="submit"
             variant="secondary"
