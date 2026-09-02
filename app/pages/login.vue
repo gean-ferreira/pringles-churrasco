@@ -21,14 +21,10 @@ const { loading: submitting, run } = useAsyncSubmit()
 const notificationModalStore = useNotificationModalStore()
 const { isPromotionFinished } = usePromotionStatus()
 const { goToVerification } = useVerificationHandoff()
-const { requireConsent } = useOneTrustConsent()
+const { requireConsentIfProd } = useOneTrustConsent()
 
 function onSubmit(values: GenericObject) {
-  if (
-    import.meta.env.VITE_SITE_ENV === 'production' &&
-    !requireConsent(['C0003'])
-  )
-    return
+  if (!requireConsentIfProd(['C0003'])) return
 
   run(async () => {
     const payload = { Cpf: onlyDigits(values.cpf) }

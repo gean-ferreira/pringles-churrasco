@@ -37,5 +37,12 @@ export const useOneTrustConsent = () => {
     return true
   }
 
-  return { requireConsent }
+  // Em ambiente de desenvolvimento/staging o OneTrust nem sempre está
+  // configurado, então o gate de consentimento só é exigido em produção.
+  const requireConsentIfProd = (groups: OneTrustGroup[]) => {
+    if (import.meta.env.VITE_SITE_ENV !== 'production') return true
+    return requireConsent(groups)
+  }
+
+  return { requireConsent, requireConsentIfProd }
 }

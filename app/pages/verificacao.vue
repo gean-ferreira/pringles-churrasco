@@ -19,7 +19,7 @@ const RESEND_SECONDS = 90
 const route = useRoute()
 const authStore = useAuthStore()
 const notificationModalStore = useNotificationModalStore()
-const { requireConsent } = useOneTrustConsent()
+const { requireConsentIfProd } = useOneTrustConsent()
 
 const email = route.query.email as string | undefined
 const token = route.query.token
@@ -48,11 +48,7 @@ const { loading: submitting, run: runSubmit } = useAsyncSubmit()
 const { loading: resending, run: runResend } = useAsyncSubmit()
 
 function onSubmit(values: GenericObject) {
-  if (
-    import.meta.env.VITE_SITE_ENV === 'production' &&
-    !requireConsent(['C0003'])
-  )
-    return
+  if (!requireConsentIfProd(['C0003'])) return
 
   runSubmit(async () => {
     const payload = { Token: token, Codigo: values.codigo }
