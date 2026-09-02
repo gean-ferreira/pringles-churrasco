@@ -18,7 +18,7 @@ import { PRODUCTS_DATA } from '~/utils/datas/products.data'
           Então fique atento no lacre da embalagem e boa sorte!
         </p>
       </header>
-      <div class="mx-auto grid max-w-[1216px] grid-cols-2 gap-4 md:grid-cols-4">
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
         <div
           v-for="product in PRODUCTS_DATA"
           :key="product.title"

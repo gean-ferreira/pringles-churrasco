@@ -29,9 +29,7 @@ const steps = [
       <h2 class="page-title mb-10 text-center xl:mb-14">
         Como participar da promoção
       </h2>
-      <div
-        class="mx-auto grid max-w-[1216px] grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4"
-      >
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
         <div
           v-for="step in steps"
           :key="step.title"

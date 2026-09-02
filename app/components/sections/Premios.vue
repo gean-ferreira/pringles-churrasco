@@ -26,7 +26,7 @@ function closePrizeModal() {
         São mais de 100 itens toda semana!
       </h2>
       <div
-        class="mx-auto mb-12 grid max-w-[1216px] grid-cols-1 place-items-center gap-y-10 md:grid-cols-2 md:gap-x-10 xl:mb-25 xl:grid-cols-4 xl:gap-8"
+        class="mb-12 grid grid-cols-1 place-items-center gap-y-10 md:grid-cols-2 md:gap-x-10 xl:mb-25 xl:grid-cols-4 xl:gap-8"
       >
         <div
           v-for="item in PRIZES_DATA"

@@ -30,7 +30,7 @@ const variantClasses: Record<Variant, string> = {
     'border border-(--color-brand-neutral-200) text-(--color-brand-neutral-600) hover:bg-(--color-brand-neutral-50)'
 }
 const sizeClasses: Record<Size, string> = {
-  lg: 'px-6 py-4 text-body-base',
+  lg: 'px-4 py-4 text-body-base xl:py-3.5',
   md: 'px-4 py-[10px] text-body-sm',
   sm: 'px-4 py-2 text-body-xs'
 }

@@ -36,7 +36,9 @@ async function handleLogout() {
   <header
     class="fixed inset-x-0 top-0 z-50 h-(--header-height) bg-(--color-brand-primary)"
   >
-    <div class="container flex h-full items-center justify-between">
+    <div
+      class="container flex h-full items-start justify-between xl:justify-start xl:gap-14"
+    >
       <NuxtLink to="/" class="z-50 pt-4" @click="header.closeMenu">
         <NuxtImg
           src="/logo-pringles.png"
@@ -48,7 +50,7 @@ async function handleLogout() {
 
       <button
         type="button"
-        class="flex items-center justify-center rounded-xl border-2 border-(--color-brand-outline) bg-(--color-brand-secondary) p-3 text-(--color-brand-outline) drop-shadow-[-1px_3px_0px_var(--color-brand-outline)] xl:hidden"
+        class="flex items-center justify-center self-center rounded-xl border-2 border-(--color-brand-outline) bg-(--color-brand-secondary) p-3 text-(--color-brand-outline) drop-shadow-[-1px_3px_0px_var(--color-brand-outline)] xl:hidden"
         :aria-expanded="header.isOpen"
         aria-label="Abrir menu"
         @click="header.toggleMenu"
@@ -58,7 +60,7 @@ async function handleLogout() {
       </button>
 
       <nav
-        class="fixed top-(--header-height) left-0 z-40 w-full overflow-y-auto bg-(--color-brand-primary-dark) transition-all duration-300 ease-in-out xl:static xl:h-auto xl:w-auto xl:overflow-visible xl:bg-transparent"
+        class="fixed top-(--header-height) left-0 z-40 w-full overflow-y-auto bg-(--color-brand-primary-dark) transition-all duration-300 ease-in-out xl:static xl:h-auto xl:flex-1 xl:self-center xl:overflow-visible xl:bg-transparent"
         :class="
           header.isOpen
             ? 'h-[calc(100vh-var(--header-height))]'
@@ -128,7 +130,11 @@ async function handleLogout() {
               class="h-px w-[260px] bg-(--color-brand-primary-light) xl:hidden"
             />
 
-            <li v-if="!authStore.isAuthenticated" @click="header.closeMenu">
+            <li
+              v-if="!authStore.isAuthenticated"
+              class="xl:ml-auto"
+              @click="header.closeMenu"
+            >
               <AppNavLink to="/login">Login</AppNavLink>
             </li>
             <li
@@ -137,10 +143,14 @@ async function handleLogout() {
               @click="header.closeMenu"
             >
               <AppButton to="/cadastro" variant="secondary"
-                >Participe</AppButton
+                >Participe já</AppButton
               >
             </li>
-            <li v-if="authStore.isAuthenticated" @click="header.closeMenu">
+            <li
+              v-if="authStore.isAuthenticated"
+              class="xl:ml-auto"
+              @click="header.closeMenu"
+            >
               <AppNavLink to="/editar-cadastro">Meu perfil</AppNavLink>
             </li>
             <li v-if="authStore.isAuthenticated">
