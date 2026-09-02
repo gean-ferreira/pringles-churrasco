@@ -10,9 +10,10 @@ import { PRODUCTS_DATA } from '~/utils/datas/products.data'
     <div class="container py-14 xl:py-25">
       <header class="mb-10 xl:mb-12">
         <h2 class="page-title mb-6 text-center">Produtos participantes</h2>
-        <p class="text-center text-body-lg text-white">
+        <p class="text-body-lg text-center text-white">
           <strong class="block text-(--color-brand-secondary)">
-            Atenção: todos os produtos que possuem o código estão participando da promoção.
+            Atenção: todos os produtos que possuem o código estão participando
+            da promoção.
           </strong>
           Então fique atento no lacre da embalagem e boa sorte!
         </p>
@@ -23,12 +24,25 @@ import { PRODUCTS_DATA } from '~/utils/datas/products.data'
           :key="product.title"
           class="flex h-[220px] flex-col items-center justify-end gap-2 rounded-xl bg-white p-4"
         >
-          <div class="flex flex-1 items-center justify-center text-body-xs text-(--color-brand-neutral-400)">
+          <div
+            class="text-body-xs flex flex-1 items-center justify-center text-(--color-brand-neutral-400)"
+          >
             {{ product.title }}
           </div>
-          <h3 class="text-center text-body-sm font-medium text-(--color-brand-neutral-700)">{{ product.title }}</h3>
+          <h3
+            class="text-body-sm text-center font-medium text-(--color-brand-neutral-700)"
+          >
+            {{ product.title }}
+          </h3>
         </div>
       </div>
+      <AppButton
+        to="/novos-sabores"
+        variant="secondary"
+        class="mx-auto mt-10 max-w-[294px]"
+      >
+        Conheça os novos sabores
+      </AppButton>
     </div>
   </section>
 </template>

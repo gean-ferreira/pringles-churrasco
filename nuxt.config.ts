@@ -47,6 +47,7 @@ export default defineNuxtConfig({
     '/faq': { prerender: true },
     '/ganhadores': { prerender: true },
     '/regulamento': { prerender: true },
+    '/novos-sabores': { prerender: true },
     '/login': { prerender: true },
     '/cadastro': { prerender: true },
     '/verificacao': { ssr: false },
@@ -57,7 +58,13 @@ export default defineNuxtConfig({
     '/abrir-lata': { ssr: false }
   },
   sitemap: {
-    exclude: ['/verificacao', '/extrato', '/editar-cadastro', '/cadastro-nota', '/abrir-lata']
+    exclude: [
+      '/verificacao',
+      '/extrato',
+      '/editar-cadastro',
+      '/cadastro-nota',
+      '/abrir-lata'
+    ]
   },
   site: {
     url: url,
