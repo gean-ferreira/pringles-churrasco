@@ -24,7 +24,7 @@ const items = FAQ_ITEMS.map((item) => ({
 
 <template>
   <section
-    class="relative overflow-hidden bg-(--color-brand-secondary) py-14 md:py-24"
+    class="relative overflow-hidden bg-(--color-brand-secondary) py-14 md:py-25"
   >
     <div
       aria-hidden="true"
