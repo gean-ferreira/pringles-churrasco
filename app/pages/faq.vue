@@ -26,10 +26,7 @@ const items = FAQ_ITEMS.map((item) => ({
   <section
     class="relative overflow-hidden bg-(--color-brand-secondary) py-14 md:py-25"
   >
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-0 bg-[url('/images/bg-pattern.png')] [background-size:1920px_1003px] bg-repeat opacity-5"
-    />
+    <AppBgPattern />
     <div class="relative container flex flex-col items-center gap-14">
       <header class="flex items-center gap-3 md:gap-6">
         <IconStar class="size-4 shrink-0 text-white md:size-8" />

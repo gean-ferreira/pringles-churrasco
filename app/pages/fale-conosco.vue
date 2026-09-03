@@ -66,10 +66,7 @@ onMounted(() => {
   <section
     class="relative overflow-hidden bg-(--color-brand-secondary) py-14 md:py-25"
   >
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-0 bg-[url('/images/bg-pattern.png')] [background-size:1920px_1003px] bg-repeat opacity-5"
-    />
+    <AppBgPattern />
     <div
       aria-hidden="true"
       class="pointer-events-none absolute -bottom-1/8 left-1/8 hidden h-[521px] w-[269px] xl:block xl:bg-[url('/images/fale-conosco-garfo.png')] xl:bg-contain xl:bg-no-repeat"

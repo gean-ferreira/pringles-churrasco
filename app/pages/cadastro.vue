@@ -62,10 +62,7 @@ function onSubmit(values: GenericObject) {
   <section
     class="relative overflow-hidden bg-(--color-brand-accent-green) py-14 md:py-25"
   >
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-0 bg-[url('/images/bg-pattern.png')] [background-size:1920px_1003px] bg-repeat opacity-5"
-    />
+    <AppBgPattern />
     <div class="relative container flex justify-center">
       <div class="w-full max-w-[800px]">
         <AppComicCard>
