@@ -62,17 +62,17 @@
   /* === Typography === */
   --font-sans: 'Pinup', sans-serif;
 
-  --text-h1: 40px;
-  --text-h1--line-height: 48px;
   /* Título grande do desktop (ex.: faq.vue) — um degrau acima do h1, sem token menor equivalente. */
   --text-h1-lg: 56px;
   --text-h1-lg--line-height: 64px;
+  --text-h1: 40px;
+  --text-h1--line-height: 48px;
   --text-h2: 32px;
   --text-h2--line-height: 40px;
   --text-h3: 24px;
   --text-h3--line-height: 32px;
   --text-h4: 20px;
-  --text-h4--line-height: 32px;
+  --text-h4--line-height: 28px;
   --text-body-lg: 18px;
   --text-body-lg--line-height: 26px;
   --text-body-base: 16px;
@@ -82,14 +82,23 @@
   --text-body-xs: 12px;
   --text-body-xs--line-height: 20px;
 
+  /* página de erro */
+  --text-display: 110px;
+  --text-display--line-height: 118px;
+  --text-display-lg: 200px;
+  --text-display-lg--line-height: 208px;
+
   /* === Efeitos "comic" (títulos) === */
-  /* Figma: text-shadow -4px 4px 0 + stroke 1.5px (mobile) / 2.5px (desktop, ver .text-stroke-comic abaixo). */
   --text-shadow-comic: -4px 4px 0px var(--color-brand-outline);
+  /* sombra do "404" no desktop */
+  --text-shadow-comic-lg: -16px 16px 0px var(--color-brand-outline);
 
   /* === Animações === */
   /* SSR-safe: CSS puro (não <Transition>) — o fill-mode "both" já vale no
      primeiro paint, sem salto na hidratação. Usada pela BarraCtaMobile. */
   --animate-slide-up: slide-up 300ms ease-out both;
+  /* loop AppInfiniteMarquee */
+  --animate-marquee: marquee 30s linear infinite;
 }
 
 @keyframes slide-up {
@@ -98,6 +107,15 @@
   }
   to {
     transform: translateY(0);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
@@ -132,6 +150,15 @@ body {
 
   @media (width >= 48rem) {
     -webkit-text-stroke-width: 2.5px;
+  }
+}
+
+/* Sombra do AppInfiniteMarquee */
+@utility text-shadow-comic-marquee {
+  text-shadow: -2px 1px 0px var(--color-brand-outline);
+
+  @media (width >= 48rem) {
+    text-shadow: -4px 2px 0px var(--color-brand-outline);
   }
 }
 

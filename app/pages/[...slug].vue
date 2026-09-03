@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ name: 'NotFound' })
 
-createError({ statusCode: 404 })
+throw createError({ statusCode: 404, statusMessage: 'Not Found' })
 </script>
 
 <template><div /></template>
