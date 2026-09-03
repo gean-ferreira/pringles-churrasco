@@ -63,70 +63,96 @@ onMounted(() => {
 </script>
 
 <template>
-  <main
-    class="min-h-screen bg-(--color-brand-primary) pt-(--header-height) pb-25"
+  <section
+    class="relative overflow-hidden bg-(--color-brand-secondary) py-14 md:py-25"
   >
-    <div class="container pt-18">
-      <div class="mx-auto max-w-[720px] rounded-xl bg-white px-6 py-8">
-        <header class="mb-10 text-center">
-          <h1 class="text-h2 font-bold text-(--color-brand-primary) uppercase">
-            Fale conosco
-          </h1>
-          <p class="text-body-base text-(--color-brand-neutral-700)">
-            Preencha o formulário e deixe sua mensagem.
-          </p>
-        </header>
-        <VeeForm
-          ref="formRef"
-          v-slot="{ values }"
-          :validation-schema="contactSchema"
-          class="flex flex-col gap-6"
-          @submit="onSubmit"
-          @invalid-submit="onInvalidSubmit"
-        >
-          <AppInput
-            name="nome"
-            label="Nome"
-            placeholder="Insira seu nome completo"
-            :loading="prefilling"
-            is-required
-          />
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <AppInput
-              name="email"
-              label="E-mail"
-              type="email"
-              placeholder="email@exemplo.com.br"
-              :loading="prefilling"
-              is-required
-            />
-            <AppInput
-              name="telefone"
-              label="Celular"
-              :mask-input="MASK_PHONE"
-              placeholder="(DDD) + Celular"
-              input-mode="numeric"
-              :loading="prefilling"
-              is-required
-            />
-          </div>
-          <AppInput
-            name="mensagem"
-            label="Mensagem"
-            type="textarea"
-            placeholder="Escreva sua mensagem"
-            :description="`${values.mensagem?.length || 0} de 500 caracteres`"
-            is-required
-          />
-          <AppButton
-            type="submit"
-            variant="secondary"
-            block
-            :loading="submitting"
-            >Enviar mensagem</AppButton
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 bg-[url('/images/bg-pattern.png')] [background-size:1920px_1003px] bg-repeat opacity-5"
+    />
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute -bottom-1/8 left-1/8 hidden h-[521px] w-[269px] xl:block xl:bg-[url('/images/fale-conosco-garfo.png')] xl:bg-contain xl:bg-no-repeat"
+    />
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute right-1/8 -bottom-1/8 hidden h-[521px] w-[269px] -scale-y-100 rotate-180 xl:block xl:bg-[url('/images/fale-conosco-garfo.png')] xl:bg-contain xl:bg-no-repeat"
+    />
+
+    <div class="relative container flex justify-center">
+      <div
+        class="w-full max-w-[792px] rounded-xl border-4 border-(--color-brand-outline) bg-white p-6 drop-shadow-[-8px_8px_0px_var(--color-brand-outline)] md:p-10"
+      >
+        <div class="flex flex-col gap-10">
+          <header class="flex flex-col items-center gap-2 text-center">
+            <h1
+              class="text-h3 text-shadow-comic text-stroke-comic md:text-h2 font-bold text-(--color-brand-secondary) uppercase"
+            >
+              Fale conosco
+            </h1>
+            <p class="text-body-base text-(--color-brand-neutral-800)">
+              Preencha o formulário e deixe sua mensagem.<br
+                class="hidden md:block"
+              />
+              Todos os campos são de preenchimento obrigatório.
+            </p>
+          </header>
+
+          <VeeForm
+            ref="formRef"
+            v-slot="{ values }"
+            :validation-schema="contactSchema"
+            class="flex flex-col gap-10"
+            @submit="onSubmit"
+            @invalid-submit="onInvalidSubmit"
           >
-        </VeeForm>
+            <div class="flex flex-col gap-6">
+              <AppInput
+                name="nome"
+                label="Nome"
+                placeholder="Insira seu nome completo"
+                :loading="prefilling"
+                is-required
+              />
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <AppInput
+                  name="email"
+                  label="E-mail"
+                  type="email"
+                  placeholder="email@exemplo.com.br"
+                  :loading="prefilling"
+                  is-required
+                />
+                <AppInput
+                  name="telefone"
+                  label="Celular"
+                  :mask-input="MASK_PHONE"
+                  placeholder="(DDD) + Celular"
+                  input-mode="numeric"
+                  :loading="prefilling"
+                  is-required
+                />
+              </div>
+              <AppInput
+                name="mensagem"
+                label="Mensagem"
+                type="textarea"
+                placeholder="Escreva sua mensagem"
+                :description="`${values.mensagem?.length || 0} de 500 caracteres`"
+                is-required
+              />
+              <AppLgpdNotice purpose="atender à sua demanda" />
+            </div>
+            <AppButton
+              type="submit"
+              variant="secondary"
+              block
+              :loading="submitting"
+              >Enviar mensagem</AppButton
+            >
+          </VeeForm>
+        </div>
       </div>
     </div>
-  </main>
+  </section>
 </template>
