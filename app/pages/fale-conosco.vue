@@ -80,23 +80,15 @@ onMounted(() => {
     />
 
     <div class="relative container flex justify-center">
-      <div
-        class="w-full max-w-[792px] rounded-xl border-4 border-(--color-brand-outline) bg-white p-6 drop-shadow-[-8px_8px_0px_var(--color-brand-outline)] md:p-10"
-      >
-        <div class="flex flex-col gap-10">
-          <header class="flex flex-col items-center gap-2 text-center">
-            <h1
-              class="text-h3 text-shadow-comic text-stroke-comic md:text-h2 font-bold text-(--color-brand-secondary) uppercase"
-            >
-              Fale conosco
-            </h1>
-            <p class="text-body-base text-(--color-brand-neutral-800)">
-              Preencha o formulário e deixe sua mensagem.<br
-                class="hidden md:block"
-              />
-              Todos os campos são de preenchimento obrigatório.
-            </p>
-          </header>
+      <div class="w-full max-w-[792px]">
+        <AppComicCard>
+          <template #title>Fale conosco</template>
+          <template #description>
+            Preencha o formulário e deixe sua mensagem.<br
+              class="hidden md:block"
+            />
+            Todos os campos são de preenchimento obrigatório.
+          </template>
 
           <VeeForm
             ref="formRef"
@@ -151,7 +143,7 @@ onMounted(() => {
               >Enviar mensagem</AppButton
             >
           </VeeForm>
-        </div>
+        </AppComicCard>
       </div>
     </div>
   </section>
