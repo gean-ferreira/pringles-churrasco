@@ -48,52 +48,32 @@ const fieldClass = computed(() => {
 </script>
 <template>
   <div class="flex flex-col gap-1" data-field>
-    <label
-      v-if="label"
-      :for="name"
-      class="text-body-sm font-medium text-(--color-brand-neutral-950)"
-    >
+    <label v-if="label" :for="name" class="text-body-sm font-medium text-(--color-brand-neutral-950)">
       {{ label
       }}<span v-if="isRequired" class="text-(--color-feedback-red-500)">*</span>
     </label>
     <div class="relative flex items-center">
-      <VeeField
-        :id="name"
-        :name="name"
-        as="select"
-        :class="fieldClass"
-        :disabled="isDisabled"
-        @change="$emit('change', $event)"
-      >
+      <VeeField :id="name" :name="name" as="select" :class="fieldClass" :disabled="isDisabled"
+        @change="$emit('change', $event)">
         <option value="" disabled>{{ placeholder }}</option>
-        <option
-          v-for="option in options"
-          :key="option.value"
-          :value="option.value"
-        >
+        <option v-for="option in options" :key="option.value" :value="option.value">
           {{ option.label }}
         </option>
       </VeeField>
-      <span
-        class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
-        :class="
-          isDisabled
-            ? 'text-(--color-brand-neutral-400)'
-            : 'text-(--color-brand-neutral-600)'
-        "
-      >
+      <span class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2" :class="isDisabled
+          ? 'text-(--color-brand-neutral-400)'
+          : 'text-(--color-brand-neutral-600)'
+        ">
         <IconSpinner v-if="loading" class="size-[18px]" />
         <IconChevron v-else class="size-[18px]" />
       </span>
     </div>
-    <VeeErrorMessage
-      :name="name"
-      class="text-body-xs font-medium text-(--color-feedback-red-500)"
-    />
-    <span
-      v-if="description"
-      class="text-body-xs text-(--color-brand-neutral-600)"
-    >
+    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="-translate-y-1 opacity-0"
+      enter-to-class="translate-y-0 opacity-100" leave-active-class="transition duration-100 ease-in"
+      leave-from-class="translate-y-0 opacity-100" leave-to-class="-translate-y-1 opacity-0">
+      <VeeErrorMessage :name="name" class="text-body-xs font-medium text-(--color-feedback-red-500)" />
+    </Transition>
+    <span v-if="description" class="text-body-xs text-(--color-brand-neutral-600)">
       {{ description }}
     </span>
   </div>

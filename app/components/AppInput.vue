@@ -55,61 +55,32 @@ const fieldClass = computed(() => {
 </script>
 <template>
   <div class="flex flex-col gap-1" data-field>
-    <label
-      v-if="label"
-      :for="name"
-      class="text-body-sm font-medium text-(--color-brand-neutral-950)"
-    >
-      {{ label
-      }}<span v-if="isRequired" class="text-(--color-feedback-red-500)">*</span>
-    </label>
+    <div v-if="label" class="flex items-center justify-between gap-2">
+      <label :for="name" class="text-body-sm font-medium text-(--color-brand-neutral-950)">
+        {{ label
+        }}<span v-if="isRequired" class="text-(--color-feedback-red-500)">*</span>
+      </label>
+      <span v-if="type === 'textarea' && description" class="text-body-xs text-(--color-brand-neutral-800)">
+        {{ description }}
+      </span>
+    </div>
     <div class="relative flex items-center">
-      <input
-        v-if="displayValue !== undefined"
-        :id="name"
-        :value="displayValue"
-        readonly
-        :class="fieldClass"
-      />
-      <VeeField
-        v-else
-        :id="name"
-        v-maska
-        :name="name"
-        :type="type"
-        :placeholder="placeholder"
-        :inputmode="inputMode"
-        :class="fieldClass"
-        :as="type === 'textarea' ? 'textarea' : 'input'"
-        :rows="type === 'textarea' ? 4 : undefined"
-        :disabled="isDisabled"
-        :readonly="readonly"
-        :data-maska="maskInput"
-        validate-on-input
-      />
-      <span
-        v-if="showStatusIcon"
-        class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"
-      >
-        <IconSpinner
-          v-if="loading"
-          class="size-5 text-(--color-brand-neutral-400)"
-        />
-        <IconError
-          v-else-if="hasError"
-          class="size-5 text-(--color-feedback-red-500)"
-        />
+      <input v-if="displayValue !== undefined" :id="name" :value="displayValue" readonly :class="fieldClass" />
+      <VeeField v-else :id="name" v-maska :name="name" :type="type" :placeholder="placeholder" :inputmode="inputMode"
+        :class="fieldClass" :as="type === 'textarea' ? 'textarea' : 'input'" :rows="type === 'textarea' ? 4 : undefined"
+        :disabled="isDisabled" :readonly="readonly" :data-maska="maskInput" validate-on-input />
+      <span v-if="showStatusIcon" class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
+        <IconSpinner v-if="loading" class="size-5 text-(--color-brand-neutral-400)" />
+        <IconError v-else-if="hasError" class="size-5 text-(--color-feedback-red-500)" />
         <IconCheck v-else class="size-5 text-(--color-feedback-green-500)" />
       </span>
     </div>
-    <VeeErrorMessage
-      :name="name"
-      class="text-body-xs font-medium text-(--color-feedback-red-500)"
-    />
-    <span
-      v-if="description"
-      class="text-body-xs text-(--color-brand-neutral-500)"
-    >
+    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="-translate-y-1 opacity-0"
+      enter-to-class="translate-y-0 opacity-100" leave-active-class="transition duration-100 ease-in"
+      leave-from-class="translate-y-0 opacity-100" leave-to-class="-translate-y-1 opacity-0">
+      <VeeErrorMessage :name="name" class="text-body-xs font-medium text-(--color-feedback-red-500)" />
+    </Transition>
+    <span v-if="description && type !== 'textarea'" class="text-body-xs text-(--color-brand-neutral-500)">
       {{ description }}
     </span>
   </div>
