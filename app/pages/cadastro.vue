@@ -59,95 +59,99 @@ function onSubmit(values: GenericObject) {
 </script>
 
 <template>
-  <main
-    class="min-h-screen bg-(--color-brand-primary) pt-(--header-height) pb-25"
+  <section
+    class="relative overflow-hidden bg-(--color-brand-accent-green) py-14 md:py-25"
   >
-    <div class="container pt-18">
-      <div class="mx-auto max-w-[720px] rounded-xl bg-white px-6 py-8">
-        <header class="mb-10 text-center">
-          <h1 class="text-h2 font-bold text-(--color-brand-primary) uppercase">
-            Cadastre-se
-          </h1>
-          <p class="text-body-base text-(--color-brand-neutral-700)">
-            Preencha seus dados para participar
-          </p>
-        </header>
-        <VeeForm
-          :validation-schema="registerSchema"
-          class="flex flex-col gap-6"
-          @submit="onSubmit"
-          @invalid-submit="onInvalidSubmit"
-        >
-          <AppInput
-            name="cpf"
-            label="CPF"
-            :mask-input="MASK_CPF"
-            placeholder="000.000.000-00"
-            input-mode="numeric"
-            is-required
-          />
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 bg-[url('/images/bg-pattern.png')] [background-size:1920px_1003px] bg-repeat opacity-5"
+    />
+    <div class="relative container flex justify-center">
+      <div class="w-full max-w-[800px]">
+        <AppComicCard>
+          <template #title>Faça o seu cadastro</template>
+          <template #description>
+            Todos os campos do formulário são de preenchimento obrigatório.
+          </template>
+          <VeeForm
+            :validation-schema="registerSchema"
+            class="flex flex-col gap-6"
+            @submit="onSubmit"
+            @invalid-submit="onInvalidSubmit"
+          >
             <AppInput
-              name="nome"
-              label="Nome"
-              placeholder="Insira seu nome"
-              is-required
-            />
-            <AppInput
-              name="sobrenome"
-              label="Sobrenome"
-              placeholder="Insira seu sobrenome"
-              is-required
-            />
-          </div>
-          <AppInput
-            name="telefone"
-            label="Celular"
-            :mask-input="MASK_PHONE"
-            placeholder="(DDD) + Celular"
-            input-mode="numeric"
-            is-required
-          />
-          <AppInput
-            name="email"
-            label="E-mail"
-            type="email"
-            placeholder="email@exemplo.com.br"
-            is-required
-          />
-          <AppInput
-            name="confirmEmail"
-            label="Confirme seu e-mail"
-            type="email"
-            placeholder="email@exemplo.com.br"
-            is-required
-          />
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <AppInput
-              name="dt_nascimento"
-              label="Data de nascimento"
-              :mask-input="MASK_DATE"
-              placeholder="dd/mm/aaaa"
+              name="cpf"
+              label="CPF"
+              :mask-input="MASK_CPF"
+              placeholder="000.000.000-00"
               input-mode="numeric"
               is-required
             />
-            <AppSelect
-              name="estado"
-              label="Estado"
-              :options="UF_OPTIONS"
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <AppInput
+                name="nome"
+                label="Nome"
+                placeholder="Insira seu nome"
+                is-required
+              />
+              <AppInput
+                name="sobrenome"
+                label="Sobrenome"
+                placeholder="Insira seu sobrenome"
+                is-required
+              />
+            </div>
+            <AppInput
+              name="telefone"
+              label="Celular"
+              :mask-input="MASK_PHONE"
+              placeholder="(DDD) + Celular"
+              input-mode="numeric"
               is-required
             />
-          </div>
-          <FormsConsentCheckboxes show-newsletter />
-          <AppButton
-            type="submit"
-            variant="secondary"
-            block
-            :loading="submitting"
-            >Cadastrar</AppButton
-          >
-        </VeeForm>
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <AppInput
+                name="email"
+                label="E-mail"
+                type="email"
+                placeholder="email@exemplo.com.br"
+                is-required
+              />
+              <AppInput
+                name="confirmEmail"
+                label="Confirme seu e-mail"
+                type="email"
+                placeholder="email@exemplo.com.br"
+                is-required
+              />
+            </div>
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <AppInput
+                name="dt_nascimento"
+                label="Data de nascimento"
+                :mask-input="MASK_DATE"
+                placeholder="dd/mm/aaaa"
+                input-mode="numeric"
+                is-required
+              />
+              <AppSelect
+                name="estado"
+                label="Estado"
+                :options="UF_OPTIONS"
+                is-required
+              />
+            </div>
+            <FormsConsentCheckboxes show-newsletter />
+            <AppButton
+              type="submit"
+              variant="secondary"
+              block
+              :loading="submitting"
+              >Cadastrar</AppButton
+            >
+          </VeeForm>
+        </AppComicCard>
       </div>
     </div>
-  </main>
+  </section>
 </template>
