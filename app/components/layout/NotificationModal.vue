@@ -41,9 +41,9 @@ async function runAction(index: number) {
         :variant="
           action.variant === 'ghost'
             ? 'ghost'
-            : action.variant === 'secondary'
-              ? 'secondary'
-              : 'primary'
+            : action.variant === 'primary'
+              ? 'primary'
+              : 'secondary'
         "
         block
         :loading="runningIndex === index"
