@@ -70,7 +70,7 @@ async function handleLogout() {
         :inert="isMobile && !header.isOpen"
       >
         <ul
-          class="flex flex-col items-center gap-12 px-4 py-12 xl:flex-row xl:gap-6 xl:px-0 xl:py-0"
+          class="flex flex-col items-center gap-12 px-4 py-12 xl:flex-row xl:gap-4 xl:px-0 xl:py-0"
         >
           <ClientOnly>
             <li

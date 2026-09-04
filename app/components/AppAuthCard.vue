@@ -21,7 +21,7 @@
       <div
         class="container flex flex-1 items-center justify-center py-14 xl:justify-end xl:py-25"
       >
-        <div class="w-full max-w-[488px]">
+        <div class="w-full max-w-[500px]">
           <AppComicCard>
             <template v-if="$slots.title" #title>
               <slot name="title" />

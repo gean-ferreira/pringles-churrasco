@@ -96,15 +96,13 @@ function onResend() {
   <AppAuthCard>
     <template #title>Código de verificação</template>
     <template #description>
-      Enviamos um código de verificação de 6 dígitos para o e-mail{{
-        email ? ':' : '.'
-      }}
+      Enviamos um código para o e-mail: {{ email ? ':' : '.' }}
       <span
         v-if="email"
         :title="email"
         class="font-medium text-(--color-brand-primary)"
         >{{ email }}</span
-      >.
+      >. Após receber o código, volte para cadastrar o seu Pin Code.
     </template>
     <VeeForm
       :validation-schema="codeVerificationSchema"
