@@ -93,68 +93,54 @@ function onResend() {
 </script>
 
 <template>
-  <main
-    class="min-h-screen bg-(--color-brand-primary) pt-(--header-height) pb-25"
-  >
-    <div class="container pt-18">
-      <div class="mx-auto max-w-[540px] rounded-xl bg-white px-6 py-8">
-        <header class="mb-10 text-center">
-          <h1 class="text-h2 font-bold text-(--color-brand-primary) uppercase">
-            Insira o código de verificação
-          </h1>
-          <p class="text-body-base text-(--color-brand-neutral-700)">
-            Enviamos um código de verificação de 6 dígitos para o e-mail{{
-              email ? ':' : '.'
-            }}
-            <span
-              v-if="email"
-              :title="email"
-              class="font-medium text-(--color-brand-primary)"
-              >{{ email }}</span
-            >.
-          </p>
-        </header>
-        <VeeForm
-          :validation-schema="codeVerificationSchema"
-          class="flex flex-col gap-6"
-          @submit="onSubmit"
-          @invalid-submit="onInvalidSubmit"
+  <AppAuthCard>
+    <template #title>Código de verificação</template>
+    <template #description>
+      Enviamos um código de verificação de 6 dígitos para o e-mail{{
+        email ? ':' : '.'
+      }}
+      <span
+        v-if="email"
+        :title="email"
+        class="font-medium text-(--color-brand-primary)"
+        >{{ email }}</span
+      >.
+    </template>
+    <VeeForm
+      :validation-schema="codeVerificationSchema"
+      class="flex flex-col gap-6"
+      @submit="onSubmit"
+      @invalid-submit="onInvalidSubmit"
+    >
+      <AppInput
+        name="codigo"
+        label="Código de verificação"
+        :mask-input="MASK_CODE"
+        placeholder="000000"
+        input-mode="numeric"
+        is-required
+      />
+      <AppButton type="submit" variant="secondary" block :loading="submitting"
+        >Validar código</AppButton
+      >
+      <div class="text-center">
+        <button
+          type="button"
+          class="text-body-sm text-(--color-brand-neutral-700) uppercase"
+          :class="
+            countdown.canResend.value
+              ? 'cursor-pointer hover:underline'
+              : 'pointer-events-none opacity-50'
+          "
+          :disabled="!countdown.canResend.value || resending"
+          @click="onResend"
         >
-          <AppInput
-            name="codigo"
-            label="Código de verificação"
-            :mask-input="MASK_CODE"
-            placeholder="000000"
-            input-mode="numeric"
-            is-required
-          />
-          <AppButton
-            type="submit"
-            variant="secondary"
-            block
-            :loading="submitting"
-            >Validar código</AppButton
-          >
-          <div class="text-center">
-            <button
-              type="button"
-              class="text-body-sm text-(--color-brand-neutral-700) uppercase"
-              :class="
-                countdown.canResend.value
-                  ? 'cursor-pointer hover:underline'
-                  : 'pointer-events-none opacity-50'
-              "
-              :disabled="!countdown.canResend.value || resending"
-              @click="onResend"
-            >
-              Reenviar código
-              <span v-if="!countdown.canResend.value">{{
-                countdown.label.value
-              }}</span>
-            </button>
-          </div>
-        </VeeForm>
+          Reenviar código
+          <span v-if="!countdown.canResend.value">{{
+            countdown.label.value
+          }}</span>
+        </button>
       </div>
-    </div>
-  </main>
+    </VeeForm>
+  </AppAuthCard>
 </template>
