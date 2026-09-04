@@ -141,10 +141,10 @@ body {
 }
 
 @utility page-title {
-  @apply text-h2 text-shadow-comic text-stroke-comic md:text-h1 font-bold text-white uppercase;
+  @apply text-h2 text-shadow-comic text-stroke-comic xl:text-h1 font-bold text-white uppercase;
 }
 
-/* Contorno "comic" dos títulos — largura muda no breakpoint md (Figma: 1.5px mobile / 2.5px desktop). */
+/* Contorno "comic" dos títulos */
 @utility text-stroke-comic {
   -webkit-text-stroke: 1.5px var(--color-brand-outline);
 

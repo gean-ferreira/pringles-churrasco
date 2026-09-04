@@ -25,9 +25,9 @@ function toggleCookiePolicy() {
 
 <template>
   <footer class="bg-(--color-brand-primary)">
-    <div class="container py-14 text-center lg:text-left">
+    <div class="container py-14 text-center xl:text-left">
       <div
-        class="mb-8 flex flex-col items-center gap-8 text-center lg:flex-row lg:gap-16"
+        class="mb-8 flex flex-col items-center gap-8 text-center xl:flex-row xl:gap-16"
       >
         <NuxtImg
           src="/logo-pringles-footer.png"
@@ -36,8 +36,8 @@ function toggleCookiePolicy() {
           height="36"
           class="shrink-0"
         />
-        <nav class="lg:mr-auto">
-          <ul class="flex flex-col gap-4 lg:flex-row">
+        <nav class="xl:mr-auto">
+          <ul class="flex flex-col gap-4 xl:flex-row">
             <li v-for="item in footerNavigation" :key="item.label">
               <AppNavLink :to="item.path" :active="false">
                 {{ item.label }}
@@ -72,7 +72,7 @@ function toggleCookiePolicy() {
               rel="noopener noreferrer"
               :aria-label="item.name"
               :title="item.name"
-              class="flex size-10 items-center justify-center rounded-lg bg-white transition-colors hover:bg-(--color-brand-secondary)"
+              class="flex size-10 items-center justify-center rounded-xl bg-white transition-colors hover:bg-(--color-brand-secondary)"
             >
               <component :is="socialIcons[item.icon]" class="size-full" />
             </a>

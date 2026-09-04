@@ -25,7 +25,7 @@ const steps = [
 
 <template>
   <section id="como-participar" class="bg-(--color-brand-primary-dark)">
-    <div class="container py-14 lg:py-18">
+    <div class="container py-14 xl:py-18">
       <h2 class="page-title mb-10 text-center xl:mb-14">
         Como participar da promoção
       </h2>
