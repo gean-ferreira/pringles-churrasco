@@ -1,65 +1,27 @@
 <script setup lang="ts">
-import type { Form, GenericObject } from 'vee-validate'
-import { registerEditSchema } from '~/schemas/registerEdit'
+import type { Form } from 'vee-validate'
+import type { VerificationMascaras } from '~/types/verification'
 import { MASK_CPF, MASK_PHONE, MASK_DATE } from '~/utils/masks'
-import { onlyDigits } from '~/utils/functions/sanitize.function'
-import { formatToISO } from '~/utils/functions/date.function'
-import { toFormData } from '~/utils/functions/formData.function'
 import { UF_OPTIONS } from '~/utils/ufOptions'
 import { useUserPrefill } from '~/composables/useUserPrefill'
 import { useUserStore } from '~/stores/user.store'
+import { useFetchData } from '~/composables/useFetchData'
+import { useAsyncSubmit } from '~/composables/useAsyncSubmit'
+import { useLogout } from '~/composables/useLogout'
 import { useNotificationModalStore } from '~/stores/modals/notificationModal.store'
 
-definePageMeta({ middleware: 'auth', name: 'Editar Cadastro' })
+definePageMeta({ middleware: 'auth', name: 'Meu Perfil' })
 
 useSeoMeta({
-  title: 'Editar Cadastro — Pringles Churrasco',
+  title: 'Meu Perfil — Pringles Churrasco',
   robots: 'noindex, nofollow'
 })
 
-const { onInvalidSubmit } = useFormError()
-const { loading: submitting, run } = useAsyncSubmit()
 const { prefilling, prefill } = useUserPrefill()
 const userStore = useUserStore()
+const { logout } = useLogout()
 const notificationModalStore = useNotificationModalStore()
 const formRef = ref<typeof Form | null>(null)
-const isDeleteModalOpen = ref(false)
-
-function onSubmit(values: GenericObject) {
-  run(async () => {
-    const payload = {
-      Telefone: onlyDigits(values.telefone),
-      Dt_nascimento: formatToISO(values.dt_nascimento),
-      Estado: values.estado
-    }
-
-    await useFetchData('/Usuario/Editar', {
-      method: 'POST',
-      body: toFormData(payload),
-      requiresAuth: true
-    })
-
-    if (userStore.user) {
-      userStore.setUser({
-        ...userStore.user,
-        telefone: onlyDigits(values.telefone),
-        dt_nascimento: values.dt_nascimento,
-        estado: values.estado
-      })
-    }
-
-    notificationModalStore.openModal({
-      title: 'Tudo certo!',
-      description: 'Alteração cadastral realizada com sucesso.',
-      actions: [
-        {
-          label: 'Fechar',
-          handler: () => window.scrollTo({ top: 0, behavior: 'smooth' })
-        }
-      ]
-    })
-  })
-}
 
 onMounted(() => {
   prefill(formRef, (user) => ({
@@ -71,109 +33,199 @@ onMounted(() => {
     dt_nascimento: user.dt_nascimento,
     estado: user.estado,
     aceite_Regulamento: user.aceite_Regulamento,
-    aceite_Politica: user.aceite_Politica
+    aceite_Politica: user.aceite_Politica,
+    aceite_Novidades: user.aceite_Novidades
   }))
 })
+
+// Página não tem submit: "aceite_Novidades" é o único campo editável, então só
+// observamos essa mudança em vez de esperar um botão salvar.
+watch(
+  () => formRef.value?.values.aceite_Novidades,
+  (value, oldValue) => {
+    if (oldValue === undefined || value === undefined) return
+    // TODO: endpoint de atualização do aceite de novidades ainda não definido
+    // (decisão de rota pendente) — por ora só reflete no store local.
+    if (userStore.user) {
+      userStore.setUser({
+        ...userStore.user,
+        aceite_Novidades: value as boolean
+      })
+    }
+  }
+)
+
+const isDeleteModalOpen = ref(false)
+const deleteVerification = ref<VerificationMascaras | null>(null)
+const { loading: generatingCode, run: runGenerateCode } = useAsyncSubmit()
+
+function onRequestDelete() {
+  runGenerateCode(async () => {
+    // TODO: confirmar rota real com o backend — endpoint ainda não existe no
+    // projeto, seguindo a convenção /Usuario/* e o contrato de VerificationMascaras.
+    const res = await useFetchData<VerificationMascaras>(
+      '/Usuario/GerarCodigoExclusao',
+      { method: 'POST', requiresAuth: true }
+    )
+    deleteVerification.value = res
+    isDeleteModalOpen.value = true
+  })
+}
+
+async function onAccountDeleted() {
+  // Desloga e sai da rota autenticada ANTES do aviso: a conta já não existe no
+  // back, então a sessão não pode sobreviver a um F5 ou ao fechar a modal.
+  await logout()
+
+  notificationModalStore.openModal({
+    title: 'Conta excluída!',
+    description:
+      'Todos os seus dados foram excluídos<br class="hidden xl:block" /> da nossa base e você não está<br class="hidden xl:block" /> mais participando da promoção.',
+    actions: [{ label: 'OK' }]
+  })
+}
 </script>
 
 <template>
   <section
-    class="min-h-screen bg-(--color-brand-primary) pt-(--header-height) pb-25"
+    class="relative overflow-hidden bg-(--color-brand-accent-green) pt-(--header-height) pb-14 md:pb-25"
   >
-    <div class="container pt-18">
-      <div class="mx-auto max-w-[720px] rounded-xl bg-white px-6 py-8">
-        <header class="mb-12">
-          <h1 class="text-h2 font-bold text-(--color-brand-primary) uppercase">
-            Dados cadastrais
-          </h1>
-          <p class="text-body-base text-(--color-brand-neutral-700)">
-            Mantenha seu cadastro atualizado.
+    <AppBgPattern />
+    <div class="relative container flex flex-col items-center gap-8 pt-14">
+      <div class="w-full max-w-[800px]">
+        <AppComicCard>
+          <template #title>Dados cadastrais</template>
+          <template #description> Mantenha seu cadastro atualizado. </template>
+
+          <VeeForm ref="formRef" class="flex flex-col gap-8">
+            <div class="flex flex-col gap-6">
+              <AppInput
+                name="cpf"
+                label="CPF"
+                :mask-input="MASK_CPF"
+                disabled
+                :loading="prefilling"
+                is-required
+              />
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <AppInput
+                  name="nome"
+                  label="Nome"
+                  disabled
+                  :loading="prefilling"
+                  is-required
+                />
+                <AppInput
+                  name="sobrenome"
+                  label="Sobrenome"
+                  disabled
+                  :loading="prefilling"
+                  is-required
+                />
+              </div>
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <AppInput
+                  name="dt_nascimento"
+                  label="Data de nascimento"
+                  :mask-input="MASK_DATE"
+                  disabled
+                  :loading="prefilling"
+                  is-required
+                />
+                <AppInput
+                  name="email"
+                  label="E-mail"
+                  type="email"
+                  disabled
+                  :loading="prefilling"
+                  is-required
+                />
+              </div>
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <AppInput
+                  name="telefone"
+                  label="Celular"
+                  :mask-input="MASK_PHONE"
+                  disabled
+                  :loading="prefilling"
+                  is-required
+                />
+                <AppSelect
+                  name="estado"
+                  label="Estado"
+                  :options="UF_OPTIONS"
+                  disabled
+                  :loading="prefilling"
+                  is-required
+                />
+              </div>
+            </div>
+
+            <FormsConsentCheckboxes
+              disabled
+              :loading="prefilling"
+              show-newsletter
+            />
+
+            <AppLgpdNotice purpose="atender à sua demanda" />
+          </VeeForm>
+        </AppComicCard>
+      </div>
+
+      <div
+        class="flex w-full max-w-[800px] flex-col items-center gap-8 rounded-xl border-4 border-(--color-brand-outline) bg-white p-6 text-center drop-shadow-[-8px_8px_0px_var(--color-brand-outline)] xl:p-10"
+      >
+        <div class="flex flex-col items-center gap-2">
+          <h2
+            class="text-h4 text-shadow-comic text-stroke-comic font-bold text-(--color-brand-secondary) uppercase"
+          >
+            Alteração cadastral
+          </h2>
+          <p class="text-body-sm text-(--color-brand-neutral-800)">
+            Caso deseje realizar alguma alteração, entre em contato com nosso
+            time.
           </p>
-        </header>
-        <VeeForm
-          ref="formRef"
-          :validation-schema="registerEditSchema"
-          class="flex flex-col gap-6"
-          @submit="onSubmit"
-          @invalid-submit="onInvalidSubmit"
-        >
-          <AppInput
-            name="cpf"
-            label="CPF"
-            :mask-input="MASK_CPF"
-            disabled
-            :loading="prefilling"
-            is-required
-          />
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <AppInput
-              name="nome"
-              label="Nome"
-              disabled
-              :loading="prefilling"
-              is-required
-            />
-            <AppInput
-              name="sobrenome"
-              label="Sobrenome"
-              disabled
-              :loading="prefilling"
-              is-required
-            />
-          </div>
-          <AppInput
-            name="telefone"
-            label="Celular"
-            :mask-input="MASK_PHONE"
-            input-mode="numeric"
-            :loading="prefilling"
-            is-required
-          />
-          <AppInput
-            name="email"
-            label="E-mail"
-            type="email"
-            disabled
-            :loading="prefilling"
-            is-required
-          />
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <AppInput
-              name="dt_nascimento"
-              label="Data de nascimento"
-              :mask-input="MASK_DATE"
-              input-mode="numeric"
-              :loading="prefilling"
-              is-required
-            />
-            <AppSelect
-              name="estado"
-              label="Estado"
-              :options="UF_OPTIONS"
-              :loading="prefilling"
-              is-required
-            />
-          </div>
-          <FormsConsentCheckboxes disabled :loading="prefilling" />
-          <AppButton
-            type="submit"
-            variant="secondary"
-            block
-            :loading="submitting"
-            >Salvar alterações</AppButton
-          >
-        </VeeForm>
-        <div class="mt-14 text-center">
-          <button
-            type="button"
-            class="text-body-sm text-(--color-brand-primary) hover:underline"
-            @click="isDeleteModalOpen = true"
-          >
-            Excluir minha conta
-          </button>
         </div>
+        <AppButton
+          to="/fale-conosco"
+          variant="secondary"
+          class="w-full max-w-[380px]"
+        >
+          Fale conosco
+        </AppButton>
+      </div>
+
+      <div
+        class="flex w-full max-w-[800px] flex-col items-center gap-8 rounded-xl border-4 border-(--color-brand-outline) bg-white p-6 text-center drop-shadow-[-8px_8px_0px_var(--color-brand-outline)] xl:p-10"
+      >
+        <div class="flex flex-col items-center gap-2">
+          <h2
+            class="text-h4 text-shadow-comic text-stroke-comic font-bold text-(--color-brand-secondary) uppercase"
+          >
+            Deseja excluir sua conta?
+          </h2>
+          <p class="text-body-sm text-(--color-brand-neutral-800)">
+            A exclusão da conta é permanente e encerra sua participação na
+            campanha. Para participar novamente, será necessário um novo
+            cadastro.
+          </p>
+        </div>
+        <button
+          type="button"
+          class="text-body-base cursor-pointer font-bold text-(--color-brand-primary) uppercase hover:underline disabled:cursor-not-allowed disabled:opacity-60"
+          :disabled="!userStore.user || generatingCode"
+          @click="onRequestDelete"
+        >
+          {{ generatingCode ? 'Enviando código...' : 'Excluir minha conta' }}
+        </button>
       </div>
     </div>
-    <EditarCadastroDeleteAccountModal v-model:open="isDeleteModalOpen" />
+
+    <EditarCadastroDeleteAccountModal
+      v-model:open="isDeleteModalOpen"
+      :mask="deleteVerification?.mascara ?? ''"
+      :token="deleteVerification?.token ?? ''"
+      @deleted="onAccountDeleted"
+    />
   </section>
 </template>

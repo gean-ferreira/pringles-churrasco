@@ -1,37 +1,37 @@
 <script setup lang="ts">
-import { useLogout } from '~/composables/useLogout'
-import { useNotificationModalStore } from '~/stores/modals/notificationModal.store'
+import type { GenericObject } from 'vee-validate'
+import { codeVerificationSchema } from '~/schemas/codeVerification'
+import { MASK_CODE } from '~/utils/masks'
+import { useFetchData } from '~/composables/useFetchData'
+import { useAsyncSubmit } from '~/composables/useAsyncSubmit'
+import { toFormData } from '~/utils/functions/formData.function'
 
-const props = defineProps<{ open: boolean }>()
-const emit = defineEmits<{ 'update:open': [value: boolean] }>()
+const props = defineProps<{ open: boolean; mask: string; token: string }>()
+const emit = defineEmits<{ 'update:open': [value: boolean]; deleted: [] }>()
 
-const { logout } = useLogout()
-const notificationModalStore = useNotificationModalStore()
-const deleting = ref(false)
+const { onInvalidSubmit } = useFormError()
+const { loading: deleting, run } = useAsyncSubmit()
 
 function close() {
   emit('update:open', false)
 }
 
-async function handleDelete() {
-  deleting.value = true
-  try {
+function onSubmit(values: GenericObject) {
+  run(async () => {
+    const payload = { Codigo: values.codigo, Token: props.token }
+
+    // TODO: confirmar com o backend método/rota — hoje /Usuario/ExcluirConta
+    // é GET e sem verificação de código; o Figma exige o passo de código antes
+    // da exclusão, então assumimos DELETE + payload até confirmação.
     await useFetchData('/Usuario/ExcluirConta', {
-      method: 'GET',
-      requiresAuth: true
+      method: 'DELETE',
+      requiresAuth: true,
+      body: toFormData(payload)
     })
-    // Ação destrutiva: desloga (limpa stores + sai da rota autenticada) ANTES
-    // do aviso — a conta já não existe no back, ver SKILL.md 3.13.
-    await logout()
-    notificationModalStore.openModal({
-      title: 'Conta excluída!',
-      description:
-        'Todos os seus dados foram excluídos da nossa base e você não está mais participando da promoção.',
-      actions: [{ label: 'OK' }]
-    })
-  } finally {
-    deleting.value = false
-  }
+
+    close()
+    emit('deleted')
+  })
 }
 </script>
 
@@ -39,25 +39,44 @@ async function handleDelete() {
   <AppModal
     :open="props.open"
     title="Tem certeza?"
+    :description="`Enviamos um código de verificação para o e-mail ${props.mask}.`"
     :dismissible="!deleting"
     @update:open="close"
   >
-    <p class="text-body-base text-center text-(--color-brand-neutral-700)">
-      Ao excluir o seu perfil você deixará de participar da promoção e todas as
-      suas informações serão deletadas da nossa base definitivamente.
-    </p>
-    <template #actions>
-      <AppButton
-        variant="ghost"
-        block
-        :loading="deleting"
-        @click="handleDelete"
-      >
-        {{ deleting ? 'Excluindo...' : 'Sim, excluir meu cadastro' }}
-      </AppButton>
-      <AppButton variant="secondary" block :disabled="deleting" @click="close"
-        >Continuar na promoção</AppButton
-      >
-    </template>
+    <VeeForm
+      :validation-schema="codeVerificationSchema"
+      class="flex flex-col gap-6"
+      @submit="onSubmit"
+      @invalid-submit="onInvalidSubmit"
+    >
+      <AppInput
+        name="codigo"
+        label="Código de verificação (enviado ao e-mail)"
+        :mask-input="MASK_CODE"
+        placeholder="000000"
+        input-mode="numeric"
+        is-required
+      />
+
+      <div class="flex flex-col items-center gap-6">
+        <AppButton
+          type="button"
+          variant="secondary"
+          block
+          :disabled="deleting"
+          @click="close"
+        >
+          Continuar na promoção
+        </AppButton>
+
+        <button
+          type="submit"
+          class="text-body-sm cursor-pointer text-(--color-brand-primary) hover:underline disabled:cursor-not-allowed disabled:opacity-60"
+          :disabled="deleting"
+        >
+          {{ deleting ? 'Excluindo...' : 'Sim, excluir meu cadastro' }}
+        </button>
+      </div>
+    </VeeForm>
   </AppModal>
 </template>
