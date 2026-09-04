@@ -56,7 +56,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
         >
           <div
             v-if="open"
-            class="relative flex w-full flex-col gap-2 rounded-lg bg-white p-6 shadow-xl"
+            class="relative flex w-full flex-col gap-2 rounded-lg bg-white p-6 shadow-xl xl:p-10"
             :style="{ maxWidth }"
             role="dialog"
             aria-modal="true"
@@ -75,17 +75,16 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
                 v-if="title || description"
                 class="flex flex-col gap-2 text-center"
               >
+                <!-- eslint-disable-next-line vue/no-v-html -->
                 <h2
                   v-if="title"
-                  class="text-h2 font-bold text-(--color-brand-primary)"
-                >
-                  {{ title }}
-                </h2>
-                <!-- description só recebe texto fixo do código, nunca input do usuário. -->
+                  class="text-h3 text-shadow-comic text-stroke-comic xl:text-h2 font-bold text-(--color-brand-secondary) uppercase"
+                  v-html="title"
+                />
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <p
                   v-if="description"
-                  class="text-body-base whitespace-pre-line text-(--color-brand-neutral-600)"
+                  class="text-body-sm whitespace-pre-line text-(--color-brand-neutral-800)"
                   v-html="description"
                 />
               </div>
