@@ -38,7 +38,8 @@ function onSubmit(values: GenericObject) {
     await useFetchData('/FaleConosco/Enviar', { method: 'POST', body: payload })
 
     notificationModalStore.openModal({
-      title: 'Mensagem enviada com sucesso!',
+      title:
+        'sua Mensagem foi<br class="hidden xl:block"> enviada com sucesso!',
       description: 'Agora é só aguardar, em breve retornaremos o contato.',
       actions: [
         {
@@ -46,6 +47,7 @@ function onSubmit(values: GenericObject) {
           handler: () => {
             window.scrollTo({ top: 0, behavior: 'smooth' })
             formRef.value?.resetForm()
+            notificationModalStore.closeModal()
           }
         }
       ]
@@ -67,17 +69,17 @@ onMounted(() => {
     class="relative overflow-hidden bg-(--color-brand-secondary) py-14 md:py-25"
   >
     <AppBgPattern />
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute -bottom-1/8 left-1/8 hidden h-[521px] w-[269px] xl:block xl:bg-[url('/images/fale-conosco-garfo.png')] xl:bg-contain xl:bg-no-repeat"
-    />
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute right-1/8 -bottom-1/8 hidden h-[521px] w-[269px] -scale-y-100 rotate-180 xl:block xl:bg-[url('/images/fale-conosco-garfo.png')] xl:bg-contain xl:bg-no-repeat"
-    />
 
     <div class="relative container flex justify-center">
-      <div class="w-full max-w-[792px]">
+      <div class="relative w-full max-w-[792px]">
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute -bottom-1/3 -left-1/3 hidden h-[521px] w-[269px] xl:block xl:bg-[url('/images/fale-conosco-garfo.png')] xl:bg-contain xl:bg-no-repeat"
+        />
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute -right-1/3 -bottom-1/3 hidden h-[521px] w-[269px] -scale-y-100 rotate-180 xl:block xl:bg-[url('/images/fale-conosco-garfo.png')] xl:bg-contain xl:bg-no-repeat"
+        />
         <AppComicCard>
           <template #title>Fale conosco</template>
           <template #description>
