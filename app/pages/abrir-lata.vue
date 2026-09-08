@@ -114,14 +114,14 @@ function onAddressSubmit(values: GenericObject) {
 
     participacaoStore.invalidate()
     notificationModalStore.openModal({
-      title: 'Concluído!',
+      title: 'Sua nota foi enviada com sucesso!',
       description:
-        'Seus dados foram enviados com sucesso. Você também está concorrendo ao sorteio final!',
+        'Agora sua nota passará por <span class="font-bold text-(--color-brand-primary)">moderação e em até XX dias</span> você receberá um e-mail de atualização da validação da nota.',
       dismissible: false,
       closeIcon: false,
       actions: [
         {
-          label: 'Ver número(s) da sorte',
+          label: 'Ir para extrato',
           handler: async () => {
             await navigateTo('/extrato')
             notificationModalStore.closeModal()

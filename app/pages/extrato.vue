@@ -65,9 +65,7 @@ onMounted(async () => {
         </h1>
       </header>
 
-      <main
-        class="flex w-full flex-col gap-8 pb-14 xl:gap-10 xl:pb-25"
-      >
+      <main class="flex w-full flex-col gap-8 pb-14 xl:gap-10 xl:pb-25">
         <div
           v-if="isLoading"
           class="h-18 w-full animate-pulse rounded-lg bg-(--color-brand-neutral-100)"
@@ -109,25 +107,10 @@ onMounted(async () => {
 
     <AppInfiniteMarquee />
 
-    <AppModal
+    <ExtratoReprovacaoModal
       :open="isDetailsOpen"
-      title="Detalhes do status"
-      @close="closeDetails"
-    >
-      <template v-if="selected">
-        <img
-          v-if="selected.imagemUrl"
-          :src="selected.imagemUrl"
-          alt="Imagem do cupom"
-          class="max-h-[450px] w-full rounded object-contain"
-        />
-        <p class="text-body-base text-(--color-brand-neutral-700)">
-          Cupom rejeitado pela moderação
-        </p>
-        <p class="text-body-base text-(--color-brand-neutral-700)">
-          <span class="font-bold">Motivo:</span> {{ selected.motivo ?? '-' }}
-        </p>
-      </template>
-    </AppModal>
+      :participacao="selected"
+      @update:open="closeDetails"
+    />
   </section>
 </template>

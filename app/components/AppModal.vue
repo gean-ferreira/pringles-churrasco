@@ -56,7 +56,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
         >
           <div
             v-if="open"
-            class="relative flex w-full flex-col gap-2 rounded-lg bg-white p-6 shadow-xl xl:p-10"
+            class="comic-chrome-lg relative flex w-full flex-col gap-2 rounded-xl bg-white p-6 xl:p-10"
             :style="{ maxWidth }"
             role="dialog"
             aria-modal="true"
@@ -64,11 +64,11 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
             <button
               v-if="closeIcon"
               type="button"
-              class="cursor-pointer self-end text-(--color-brand-neutral-600) transition-colors hover:text-(--color-brand-neutral-950)"
+              class="comic-chrome-sm absolute -top-7 -right-[9px] flex size-12 cursor-pointer items-center justify-center rounded-xl bg-(--color-brand-secondary) text-(--color-brand-outline) transition-all hover:brightness-95 active:brightness-90"
               aria-label="Fechar"
               @click="close"
             >
-              <IconClose class="size-[18px]" />
+              <IconClose class="size-6" />
             </button>
             <div class="flex flex-col gap-6">
               <div
