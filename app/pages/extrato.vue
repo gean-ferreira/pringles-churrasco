@@ -28,8 +28,7 @@ const participacaoColumns: TableColumn[] = [
   { key: 'dataCadastro', label: 'Data' },
   { key: 'pincode', label: 'Pin Code' },
   { key: 'premio', label: 'Prêmio' },
-  { key: 'status', label: 'Status', type: 'status' },
-  { key: '_action', label: '' }
+  { key: 'status', label: 'Status', type: 'status' }
 ]
 
 onMounted(async () => {
@@ -54,39 +53,61 @@ onMounted(async () => {
 
 <template>
   <section
-    class="min-h-screen bg-(--color-brand-primary) pt-(--header-height) pb-25"
+    class="relative overflow-hidden bg-(--color-brand-accent-green) pt-14 md:pt-25"
   >
-    <div class="container pt-18">
-      <header class="mb-12 text-center">
-        <h1 class="page-title">Meu extrato</h1>
+    <AppBgPattern />
+    <div class="relative container flex flex-col items-center gap-10">
+      <header class="flex flex-col items-center gap-2 text-center">
+        <h1
+          class="text-h2 text-shadow-comic text-stroke-comic xl:text-h1 text-(--color-brand-secondary) uppercase"
+        >
+          Meu extrato
+        </h1>
       </header>
-      <main class="space-y-4 xl:space-y-10">
+
+      <main
+        class="flex w-full flex-col gap-8 pb-14 xl:gap-10 xl:pb-25"
+      >
         <div
           v-if="isLoading"
-          class="h-18 w-full animate-pulse rounded-lg bg-(--color-brand-primary-dark)"
+          class="h-18 w-full animate-pulse rounded-lg bg-(--color-brand-neutral-100)"
         />
         <AppTable
           v-else
+          variant="highlight"
           title="Premiação Instantânea"
           :columns="participacaoColumns"
           :rows="
             extratoStore.participacoes as unknown as Record<string, unknown>[]
           "
-          empty-text="Você ainda não possui premiação instantânea aprovada/cadastrada."
+          empty-text="Você ainda não possui nota<br/> cadastrada nessa promoção."
         >
-          <template #cell-_action="{ row }">
-            <button
-              v-if="row.status === 'REPROVADO'"
-              type="button"
-              class="text-body-sm text-(--color-brand-primary) uppercase hover:underline"
-              @click="openDetails(row as unknown as Participacao)"
-            >
-              Ver detalhes
-            </button>
+          <template #cell-status="{ row }">
+            <div class="flex items-center gap-3">
+              <AppStatusBadge :status="String(row.status)" />
+              <button
+                v-if="row.status === 'REPROVADO'"
+                type="button"
+                class="text-body-sm text-(--color-brand-primary) uppercase hover:underline"
+                @click="openDetails(row as unknown as Participacao)"
+              >
+                Ver detalhes
+              </button>
+            </div>
           </template>
         </AppTable>
+
+        <AppButton
+          to="/cadastro-nota"
+          variant="secondary"
+          class="w-full max-w-[382px] self-center"
+        >
+          Cadastrar PIN Code
+        </AppButton>
       </main>
     </div>
+
+    <AppInfiniteMarquee />
 
     <AppModal
       :open="isDetailsOpen"
