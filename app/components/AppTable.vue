@@ -15,31 +15,60 @@ const props = withDefaults(
 const showHeader = computed(
   () => props.rows.length > 0 || props.variant === 'highlight'
 )
+const isHighlight = computed(() => props.variant === 'highlight')
 </script>
 <template>
   <div
-    class="overflow-hidden rounded-lg border border-(--color-brand-neutral-100)"
+    class="overflow-hidden"
+    :class="
+      isHighlight
+        ? 'rounded-2xl border-4 border-(--color-brand-outline) shadow-[-8px_8px_0px_0px_var(--color-brand-outline)]'
+        : 'rounded-lg border border-(--color-brand-neutral-100)'
+    "
   >
     <div
       v-if="title"
-      class="text-body-lg bg-(--color-brand-primary) px-4 py-4 text-center font-bold text-white uppercase"
+      class="text-center font-bold uppercase"
+      :class="
+        isHighlight
+          ? 'text-h4 border-b-4 border-(--color-brand-outline) bg-(--color-brand-secondary) px-2 py-4 text-(--color-brand-outline)'
+          : 'text-body-lg bg-(--color-brand-primary) px-4 py-4 text-white'
+      "
     >
       {{ title }}
     </div>
     <div class="max-h-[377px] overflow-auto">
-      <!-- table-fixed (largura igual) só a partir do md. No mobile, table-auto:
-           table-fixed ignora o conteúdo e a célula não corta overflow, então
-           texto maior que a coluna vazava por trás da próxima. min-w mantém
-           o scroll horizontal em vez de cortar/sobrepor texto. -->
+      <!-- Variante default: table-fixed (largura igual) só a partir do md. No
+           mobile, table-auto — table-fixed ignora o conteúdo e a célula não
+           corta overflow, então texto maior que a coluna vazava por trás da
+           próxima. Variante highlight (Figma Ganhadores): table-fixed em toda
+           largura, colunas de largura igual já no mobile. min-w mantém o
+           scroll horizontal em vez de cortar/sobrepor texto nos dois casos.
+           overflow-hidden/text-ellipsis no th/td: com table-fixed, texto nowrap
+           maior que a coluna não é contido pela célula (overflow: visible é o
+           padrão em <td>) — sem isso, ele vaza por cima do fundo da seção em
+           vez de ficar truncado dentro do card. -->
       <table
-        class="w-full min-w-[520px] table-auto border-collapse md:min-w-0 md:table-fixed"
+        class="w-full min-w-[520px] border-collapse"
+        :class="
+          isHighlight ? 'table-fixed' : 'table-auto md:min-w-0 md:table-fixed'
+        "
       >
         <thead v-if="showHeader">
           <tr>
             <th
-              v-for="col in columns"
+              v-for="(col, index) in columns"
               :key="col.key"
-              class="text-body-sm sticky top-0 z-10 whitespace-nowrap"
+              class="text-body-sm sticky top-0 z-10 overflow-hidden text-ellipsis whitespace-nowrap"
+              :class="
+                isHighlight
+                  ? [
+                      'bg-(--color-brand-neutral-50) px-6 py-3 text-left font-bold text-(--color-brand-neutral-800)',
+                      index < columns.length - 1 &&
+                        'border-r border-(--color-brand-neutral-100)'
+                    ]
+                  : ''
+              "
             >
               {{ col.label }}
             </th>
@@ -48,9 +77,18 @@ const showHeader = computed(
         <tbody>
           <tr v-for="(row, index) in rows" :key="index" class="bg-white">
             <td
-              v-for="col in columns"
+              v-for="(col, colIndex) in columns"
               :key="col.key"
-              class="border-t border-(--color-brand-neutral-100) whitespace-nowrap"
+              class="overflow-hidden border-t border-(--color-brand-neutral-100) text-ellipsis whitespace-nowrap"
+              :class="
+                isHighlight
+                  ? [
+                      'text-body-sm px-6 py-3.5 text-(--color-brand-neutral-800)',
+                      colIndex < columns.length - 1 &&
+                        'border-r border-(--color-brand-neutral-100)'
+                    ]
+                  : ''
+              "
             >
               <slot
                 :name="`cell-${col.key}`"
@@ -70,6 +108,7 @@ const showHeader = computed(
             <td
               :colspan="columns.length"
               class="text-body-lg bg-white text-center font-bold text-(--color-brand-primary) uppercase"
+              :class="isHighlight ? 'py-6' : ''"
             >
               {{ emptyText }}
             </td>

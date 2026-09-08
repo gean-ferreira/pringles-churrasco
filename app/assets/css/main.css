@@ -168,14 +168,17 @@ body {
   }
 }
 
+/* w-1 controla a espessura da barra vertical; h-1 a da horizontal — sem o
+   h-1 a barra horizontal (ex.: scroll do AppTable no mobile) caía no tamanho
+   padrão do navegador, bem mais grossa que a vertical. */
 ::-webkit-scrollbar {
-  @apply w-1;
+  @apply h-1 w-1;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-white;
+  @apply rounded-full bg-white;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-(--color-brand-primary);
+  @apply rounded-full bg-(--color-brand-primary);
 }
