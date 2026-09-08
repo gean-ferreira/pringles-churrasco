@@ -32,11 +32,110 @@ const participacaoColumns: TableColumn[] = [
   { key: '_action', label: '' }
 ]
 
-const numeroSorteColumns: TableColumn[] = [
-  { key: 'dataCadastro', label: 'Data' },
-  { key: 'pincode', label: 'Pin Code' },
-  { key: 'numeroSorte', label: 'Número da sorte' }
+// TEMP-MOCK: só em dev e só enquanto a extratoStore não tem participações —
+// valida o scroll do AppTable (max-h-[377px]) com lista longa. Nunca entra em produção.
+const MOCK_PARTICIPACOES: Participacao[] = [
+  {
+    dataCadastro: '01/09/2026',
+    pincode: '0804074',
+    status: 'APROVADO',
+    premio: 'Kit churrasco Pringles'
+  },
+  {
+    dataCadastro: '02/09/2026',
+    pincode: '5825684',
+    status: 'EM ANÁLISE',
+    premio: 'Squeeze Pringles'
+  },
+  {
+    dataCadastro: '03/09/2026',
+    pincode: '4471932',
+    status: 'REPROVADO',
+    premio: 'Vale-compras R$ 100',
+    motivo: 'Cupom ilegível'
+  },
+  {
+    dataCadastro: '04/09/2026',
+    pincode: '3390281',
+    status: 'APROVADO',
+    premio: 'Kit churrasco Pringles'
+  },
+  {
+    dataCadastro: '05/09/2026',
+    pincode: '9012384',
+    status: 'EM ANÁLISE',
+    premio: 'Squeeze Pringles'
+  },
+  {
+    dataCadastro: '06/09/2026',
+    pincode: '1128374',
+    status: 'REPROVADO',
+    premio: 'Vale-compras R$ 100',
+    motivo: 'Nota fiscal fora do período da promoção'
+  },
+  {
+    dataCadastro: '07/09/2026',
+    pincode: '6653921',
+    status: 'APROVADO',
+    premio: 'Kit churrasco Pringles'
+  },
+  {
+    dataCadastro: '08/09/2026',
+    pincode: '2287461',
+    status: 'EM ANÁLISE',
+    premio: 'Squeeze Pringles'
+  },
+  {
+    dataCadastro: '09/09/2026',
+    pincode: '7743210',
+    status: 'APROVADO',
+    premio: 'Vale-compras R$ 100'
+  },
+  {
+    dataCadastro: '10/09/2026',
+    pincode: '8801234',
+    status: 'REPROVADO',
+    premio: 'Kit churrasco Pringles',
+    motivo: 'Produto não participante'
+  },
+  {
+    dataCadastro: '11/09/2026',
+    pincode: '3345678',
+    status: 'APROVADO',
+    premio: 'Squeeze Pringles'
+  },
+  {
+    dataCadastro: '12/09/2026',
+    pincode: '5567891',
+    status: 'EM ANÁLISE',
+    premio: 'Vale-compras R$ 100'
+  },
+  {
+    dataCadastro: '13/09/2026',
+    pincode: '9987654',
+    status: 'APROVADO',
+    premio: 'Kit churrasco Pringles'
+  },
+  {
+    dataCadastro: '14/09/2026',
+    pincode: '4432109',
+    status: 'REPROVADO',
+    premio: 'Squeeze Pringles',
+    motivo: 'Cupom duplicado'
+  },
+  {
+    dataCadastro: '15/09/2026',
+    pincode: '6678904',
+    status: 'APROVADO',
+    premio: 'Vale-compras R$ 100'
+  }
 ]
+
+const participacoesRows = computed(() =>
+  import.meta.dev && extratoStore.participacoes.length === 0
+    ? MOCK_PARTICIPACOES
+    : extratoStore.participacoes
+)
 
 onMounted(async () => {
   if (extratoStore.isLoaded) {
@@ -75,9 +174,7 @@ onMounted(async () => {
           v-else
           title="Premiação Instantânea"
           :columns="participacaoColumns"
-          :rows="
-            extratoStore.participacoes as unknown as Record<string, unknown>[]
-          "
+          :rows="participacoesRows as unknown as Record<string, unknown>[]"
           empty-text="Você ainda não possui premiação instantânea aprovada/cadastrada."
         >
           <template #cell-_action="{ row }">
@@ -91,20 +188,6 @@ onMounted(async () => {
             </button>
           </template>
         </AppTable>
-
-        <div
-          v-if="isLoading"
-          class="h-18 w-full animate-pulse rounded-lg bg-(--color-brand-primary-dark)"
-        />
-        <AppTable
-          v-else
-          title="Meus números da sorte"
-          :columns="numeroSorteColumns"
-          :rows="
-            extratoStore.numerosSorte as unknown as Record<string, unknown>[]
-          "
-          empty-text="Você ainda não possui números da sorte aprovados/cadastrados."
-        />
       </main>
     </div>
 
