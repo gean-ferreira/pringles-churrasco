@@ -50,7 +50,7 @@ async function handleLogout() {
 
       <button
         type="button"
-        class="flex items-center justify-center self-center rounded-xl border-2 border-(--color-brand-outline) bg-(--color-brand-secondary) p-3 text-(--color-brand-outline) drop-shadow-[-1px_3px_0px_var(--color-brand-outline)] xl:hidden"
+        class="comic-chrome-sm flex items-center justify-center self-center rounded-xl bg-(--color-brand-secondary) p-3 text-(--color-brand-outline) xl:hidden"
         :aria-expanded="header.isOpen"
         aria-label="Abrir menu"
         @click="header.toggleMenu"

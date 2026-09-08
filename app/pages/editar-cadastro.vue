@@ -173,7 +173,7 @@ async function onAccountDeleted() {
       </div>
 
       <div
-        class="flex w-full max-w-[800px] flex-col items-center gap-8 rounded-xl border-4 border-(--color-brand-outline) bg-white p-6 text-center drop-shadow-[-8px_8px_0px_var(--color-brand-outline)] xl:p-10"
+        class="comic-chrome-lg flex w-full max-w-[800px] flex-col items-center gap-8 rounded-xl bg-white p-6 text-center xl:p-10"
       >
         <div class="flex flex-col items-center gap-2">
           <h2
@@ -196,7 +196,7 @@ async function onAccountDeleted() {
       </div>
 
       <div
-        class="flex w-full max-w-[800px] flex-col items-center gap-8 rounded-xl border-4 border-(--color-brand-outline) bg-white p-6 text-center drop-shadow-[-8px_8px_0px_var(--color-brand-outline)] xl:p-10"
+        class="comic-chrome-lg flex w-full max-w-[800px] flex-col items-center gap-8 rounded-xl bg-white p-6 text-center xl:p-10"
       >
         <div class="flex flex-col items-center gap-2">
           <h2

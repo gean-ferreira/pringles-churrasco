@@ -16,8 +16,7 @@ const props = withDefaults(
 
 const isDisabled = computed(() => props.disabled || props.loading)
 // Borda + sombra deslocada "comic" (Figma: Type=Primary/Secondary/Destructive) — comum a toda variante colorida.
-const comicChrome =
-  'border-2 border-(--color-brand-outline) drop-shadow-[-1px_3px_0px_var(--color-brand-outline)]'
+const comicChrome = 'comic-chrome-sm'
 const variantClasses: Record<Variant, string> = {
   // Figma "Destructive": vermelho + texto branco.
   primary: `bg-(--color-brand-primary) text-white ${comicChrome} hover:brightness-95 active:brightness-90`,

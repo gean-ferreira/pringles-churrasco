@@ -162,6 +162,14 @@ body {
   }
 }
 
+@utility comic-chrome-sm {
+  @apply border-2 border-(--color-brand-outline) shadow-[-1px_3px_0px_0px_var(--color-brand-outline)];
+}
+
+@utility comic-chrome-lg {
+  @apply border-4 border-(--color-brand-outline) shadow-[-8px_8px_0px_0px_var(--color-brand-outline)];
+}
+
 @utility faq-list {
   & ul {
     @apply list-inside list-disc;

@@ -22,7 +22,7 @@ const isHighlight = computed(() => props.variant === 'highlight')
     class="overflow-hidden"
     :class="
       isHighlight
-        ? 'rounded-2xl border-4 border-(--color-brand-outline) shadow-[-8px_8px_0px_0px_var(--color-brand-outline)]'
+        ? 'comic-chrome-lg rounded-2xl'
         : 'rounded-lg border border-(--color-brand-neutral-100)'
     "
   >
@@ -94,7 +94,7 @@ const isHighlight = computed(() => props.variant === 'highlight')
           <tr v-if="!rows.length">
             <td
               :colspan="columns.length"
-              class="text-body-lg bg-white px-6 py-14 text-center font-bold text-(--color-brand-primary-dark) uppercase"
+              class="text-body-lg bg-white px-6 py-14 text-center font-bold text-(--color-brand-outline) uppercase"
               v-html="emptyText"
             />
           </tr>

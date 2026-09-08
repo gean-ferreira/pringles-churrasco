@@ -11,7 +11,7 @@ function toggle(index: number) {
     <div
       v-for="(item, index) in items"
       :key="index"
-      class="overflow-hidden rounded-xl border-2 border-(--color-brand-outline) bg-(--color-brand-neutral-50) drop-shadow-[-1px_3px_0px_var(--color-brand-outline)]"
+      class="comic-chrome-sm overflow-hidden rounded-xl bg-(--color-brand-neutral-50)"
     >
       <button
         type="button"
@@ -31,7 +31,7 @@ function toggle(index: number) {
           {{ item.question }}
         </span>
         <span
-          class="flex size-[34px] shrink-0 items-center justify-center rounded-[10px] border-2 border-(--color-brand-outline) bg-(--color-brand-secondary) drop-shadow-[-1px_3px_0px_var(--color-brand-outline)]"
+          class="comic-chrome-sm flex size-[34px] shrink-0 items-center justify-center rounded-[10px] bg-(--color-brand-secondary)"
         >
           <IconPlus
             v-if="openIndex !== index"
@@ -40,8 +40,6 @@ function toggle(index: number) {
           <IconMinus v-else class="size-[18px] text-(--color-brand-outline)" />
         </span>
       </button>
-      <!-- grid-rows 0fr->1fr acompanha a altura real do texto — um max-height fixo (chutado)
-           descasava do conteúdo e fazia a caixa "pular" de tamanho ao abrir/fechar. -->
       <div
         class="grid transition-[grid-template-rows] duration-200 ease-in-out"
         :class="openIndex === index ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
