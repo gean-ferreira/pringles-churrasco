@@ -38,21 +38,8 @@ const isHighlight = computed(() => props.variant === 'highlight')
       {{ title }}
     </div>
     <div class="max-h-[377px] overflow-auto">
-      <!-- Variante default: table-fixed (largura igual) só a partir do md. No
-           mobile, table-auto — table-fixed ignora o conteúdo e a célula não
-           corta overflow, então texto maior que a coluna vazava por trás da
-           próxima. Variante highlight (Figma Ganhadores): table-fixed em toda
-           largura, colunas de largura igual já no mobile. min-w mantém o
-           scroll horizontal em vez de cortar/sobrepor texto nos dois casos.
-           overflow-hidden/text-ellipsis no th/td: com table-fixed, texto nowrap
-           maior que a coluna não é contido pela célula (overflow: visible é o
-           padrão em <td>) — sem isso, ele vaza por cima do fundo da seção em
-           vez de ficar truncado dentro do card. -->
       <table
-        class="w-full min-w-[520px] border-collapse"
-        :class="
-          isHighlight ? 'table-fixed' : 'table-auto md:min-w-0 md:table-fixed'
-        "
+        class="w-full min-w-[520px] table-auto border-collapse md:min-w-0 md:table-fixed"
       >
         <thead v-if="showHeader">
           <tr>
@@ -107,11 +94,9 @@ const isHighlight = computed(() => props.variant === 'highlight')
           <tr v-if="!rows.length">
             <td
               :colspan="columns.length"
-              class="text-body-lg bg-white text-center font-bold text-(--color-brand-primary) uppercase"
-              :class="isHighlight ? 'py-6' : ''"
-            >
-              {{ emptyText }}
-            </td>
+              class="text-body-lg bg-white px-6 py-14 text-center font-bold text-(--color-brand-primary-dark) uppercase"
+              v-html="emptyText"
+            />
           </tr>
         </tbody>
       </table>
