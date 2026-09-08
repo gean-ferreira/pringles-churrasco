@@ -7,10 +7,3 @@ export interface InstantPrizeWinner {
   pincode: string
   premio: string
 }
-
-export interface FinalDrawWinner {
-  nome: string
-  local: string
-  numeroSorteado: string
-  premio: string
-}
