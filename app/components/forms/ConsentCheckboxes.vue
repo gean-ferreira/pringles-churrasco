@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  LINK_REGULAMENTO_INSTANTANEO,
-  LINK_REGULAMENTO_FINAL,
-  LINK_POLITICA_PRIVACIDADE
-} from '~/utils/links'
+import { LINK_REGULAMENTO, LINK_POLITICA_PRIVACIDADE } from '~/utils/links'
 
 withDefaults(
   defineProps<{
@@ -22,21 +18,13 @@ withDefaults(
       :disabled="disabled"
       :loading="loading"
     >
-      Li e aceito o regulamento da
+      Li e aceito o
       <a
-        :href="LINK_REGULAMENTO_INSTANTANEO"
+        :href="LINK_REGULAMENTO"
         target="_blank"
         rel="noopener noreferrer"
         class="font-medium text-(--color-brand-primary) hover:underline"
-        >Premiação Instantânea</a
-      >
-      e do
-      <a
-        :href="LINK_REGULAMENTO_FINAL"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="font-medium text-(--color-brand-primary) hover:underline"
-        >Sorteio Final</a
+        >Regulamento</a
       >.
     </AppCheckbox>
     <AppCheckbox name="aceite_Politica" :disabled="disabled" :loading="loading">

@@ -39,7 +39,7 @@ function toggleCookiePolicy() {
         <nav class="xl:mr-auto">
           <ul class="flex flex-col gap-4 xl:flex-row">
             <li v-for="item in footerNavigation" :key="item.label">
-              <AppNavLink :to="item.path" :active="false">
+              <AppNavLink :to="item.path" :external="item.external" :active="false">
                 {{ item.label }}
               </AppNavLink>
             </li>

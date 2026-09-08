@@ -46,7 +46,6 @@ export default defineNuxtConfig({
     '/': { prerender: true },
     '/faq': { prerender: true },
     '/ganhadores': { prerender: true },
-    '/regulamento': { prerender: true },
     '/novos-sabores': { prerender: true },
     '/login': { prerender: true },
     '/cadastro': { prerender: true },
