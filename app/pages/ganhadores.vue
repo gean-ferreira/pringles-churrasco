@@ -16,18 +16,29 @@ useHead({ link: [{ rel: 'canonical', href: `${url}/ganhadores` }] })
 </script>
 
 <template>
-  <section class="min-h-screen bg-(--color-brand-primary)">
-    <div class="container py-14">
-      <header class="mb-12 text-center">
-        <h1 class="page-title mb-2">Ganhadores</h1>
-        <p class="text-body-base text-white">
+  <section
+    class="relative overflow-hidden bg-(--color-brand-accent-green) pt-14 md:pt-25"
+  >
+    <AppBgPattern />
+    <div class="relative container flex flex-col items-center gap-10">
+      <header class="flex flex-col items-center gap-2 text-center">
+        <h1
+          class="text-h2 text-shadow-comic text-stroke-comic xl:text-h1 text-(--color-brand-secondary) uppercase"
+        >
+          Ganhadores
+        </h1>
+        <p class="text-body-base font-bold text-white">
           Confira abaixo os ganhadores da promoção
         </p>
       </header>
-      <main class="space-y-4 xl:space-y-10">
+
+      <main
+        class="flex w-full max-w-[1216px] flex-col gap-8 pb-14 xl:gap-10 xl:pb-25"
+      >
         <SectionsWinnersInstantPrize />
-        <SectionsWinnersFinalDraw />
       </main>
     </div>
+
+    <AppInfiniteMarquee />
   </section>
 </template>
