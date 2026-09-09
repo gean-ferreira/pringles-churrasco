@@ -62,7 +62,8 @@
   /* === Typography === */
   --font-sans: 'Pinup', sans-serif;
 
-  /* Título grande do desktop (ex.: faq.vue) — um degrau acima do h1, sem token menor equivalente. */
+  --text-h1-xl: 64px;
+  --text-h1-xl--line-height: 72px;
   --text-h1-lg: 56px;
   --text-h1-lg--line-height: 64px;
   --text-h1: 40px;
@@ -99,6 +100,12 @@
   --animate-slide-up: slide-up 300ms ease-out both;
   /* loop AppInfiniteMarquee */
   --animate-marquee: marquee 30s linear infinite;
+  /* Figma (get_motion_context, nós 9874:32133/32153/32173): lata do card de
+     novos-sabores "flutua" em loop infinito — timings originais aproximados. */
+  --animate-can-bob: can-bob 3s ease-in-out infinite;
+  /* Figma (nós 9874:32188/32193): garfos decorativos balançam em loop infinito. */
+  --animate-fork-wobble-left: fork-wobble-left 3s ease-in-out infinite;
+  --animate-fork-wobble-right: fork-wobble-right 3s ease-in-out infinite;
 }
 
 @keyframes slide-up {
@@ -116,6 +123,51 @@
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes can-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  23% {
+    transform: translateY(-18px);
+  }
+  47% {
+    transform: translateY(0);
+  }
+  70% {
+    transform: translateY(-18px);
+  }
+  93% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fork-wobble-left {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  47% {
+    transform: rotate(9deg);
+  }
+  98% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes fork-wobble-right {
+  0%,
+  100% {
+    transform: scaleY(-1) rotate(180deg);
+  }
+  47% {
+    transform: scaleY(-1) rotate(189deg);
+  }
+  98% {
+    transform: scaleY(-1) rotate(180deg);
   }
 }
 
@@ -168,6 +220,13 @@ body {
 
 @utility comic-chrome-lg {
   @apply border-4 border-(--color-brand-outline) shadow-[-8px_8px_0px_0px_var(--color-brand-outline)];
+}
+
+/* Stacking cards (novos-sabores) — cada card gruda abaixo do header/banner fixos
+   e o próximo, com z-index maior, cobre o anterior ao alcançar o mesmo top. */
+@utility stack-card {
+  position: sticky;
+  top: calc(var(--header-height) + var(--promo-banner-height, 0px) + 16px);
 }
 
 @utility faq-list {
