@@ -62,6 +62,8 @@
   /* === Typography === */
   --font-sans: 'Pinup', sans-serif;
 
+  --text-h1-2xl: 70px;
+  --text-h1-2xl--line-height: 78px;
   --text-h1-xl: 64px;
   --text-h1-xl--line-height: 72px;
   --text-h1-lg: 56px;
@@ -106,6 +108,56 @@
   /* Figma (nós 9874:32188/32193): garfos decorativos balançam em loop infinito. */
   --animate-fork-wobble-left: fork-wobble-left 3s ease-in-out infinite;
   --animate-fork-wobble-right: fork-wobble-right 3s ease-in-out infinite;
+  /* Figma (nó 9874:28307, dentro do frame 9874:28420): tampa+lata balançando
+     enquanto o prêmio é apurado, em StepResultado.vue. */
+  --animate-lata-shake:
+    lata-shake-rotate 2.25s linear infinite,
+    lata-shake-translate 2.25s linear infinite;
+  /* Mesmo balanço, só que roda 3x e para — usado depois que a requisição do
+     prêmio termina, antes de assentar. */
+  --animate-lata-shake-settle:
+    lata-shake-rotate 2.25s linear 3,
+    lata-shake-translate 2.25s linear 3;
+  /* Figma (nó 9874:32082): tampa arremessada pra fora depois que a lata
+     assenta — roda uma vez só (sem infinite). `forwards` trava no último
+     frame (girada + deslocada); sem isso, ao terminar ela volta pro estado
+     sem animação (posição original em cima da lata). Valores de translate
+     ajustados no mobile (lata renderiza menor) — desktop usa os valores
+     originais do Figma. */
+  --animate-tampa-pop:
+    tampa-pop-rotate 12s linear forwards,
+    tampa-pop-translate-mobile 12s linear forwards;
+  --animate-tampa-pop-desktop:
+    tampa-pop-rotate 12s linear forwards,
+    tampa-pop-translate-desktop 12s linear forwards;
+  /* Figma (nó 9874:28480): ticket do prêmio aparecendo com bounce, na mesma
+     timeline de 12s da tampa (dispara junto com --animate-tampa-pop). */
+  --animate-ticket-pop:
+    ticket-pop-opacity 12s linear,
+    ticket-pop-translate 12s linear,
+    ticket-pop-scale 12s linear;
+  /* Figma (nó 9874:28457): "Parabéns!! Você ganhou." aparecendo com bounce,
+     na mesma timeline de 12s da tampa/ticket. */
+  --animate-parabens-pop:
+    parabens-pop-opacity 12s linear,
+    parabens-pop-translate 12s linear,
+    parabens-pop-scale 12s linear;
+  /* Figma (nó 9874:28464): brilho surgindo atrás da tampa, na mesma timeline
+     de 12s da tampa/ticket/parabéns. */
+  --animate-brilho-pop: brilho-pop-opacity 12s linear;
+  /* Figma (nó 9874:28437): sunburst de fundo atrás de tudo, entra com fade,
+     gira um pouco e cresce na mesma timeline de 12s. `forwards` porque o
+     estado final (girado + escala 1.05) difere do estado sem animação. */
+  --animate-bg-brilho-pop:
+    bg-brilho-pop-opacity 12s linear forwards,
+    bg-brilho-pop-rotate 12s linear forwards,
+    bg-brilho-pop-scale 12s linear forwards;
+}
+
+@property --rotate-transform {
+  syntax: '<angle>';
+  initial-value: 0rad;
+  inherits: false;
 }
 
 @keyframes slide-up {
@@ -171,6 +223,615 @@
   }
 }
 
+@keyframes lata-shake-rotate {
+  0% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: 0rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  3.111% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: 0.035rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  6.222% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: -0.052rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  9.333% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: 0.035rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  12.444% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: -0.017rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  15.556% {
+    --rotate-transform: 0rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  24.444% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: 0rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  27.556% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: 0.157rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  30.222% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: -0.209rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  32.889% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: 0.227rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  35.556% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: -0.227rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  38.222% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: 0.209rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  40.889% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: -0.192rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  43.556% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: 0.157rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  46.222% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    --rotate-transform: -0.122rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  48.889% {
+    animation-timing-function: ease-out;
+    --rotate-transform: 0.087rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  51.556% {
+    animation-timing-function: ease-out;
+    --rotate-transform: -0.052rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  54.222% {
+    animation-timing-function: ease-out;
+    --rotate-transform: 0.026rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  56.889% {
+    --rotate-transform: 0rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  100% {
+    --rotate-transform: 0rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+}
+
+@keyframes lata-shake-translate {
+  0% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: 0px 0px;
+  }
+  3.111% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: 8.271px 0.144px;
+  }
+  6.222% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: -12.404px 0.325px;
+  }
+  9.333% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: 8.271px 0.144px;
+  }
+  12.444% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: -4.136px 0.036px;
+  }
+  15.556% {
+    translate: 0px 0px;
+  }
+  24.444% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: 0px 0px;
+  }
+  27.556% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: 37.075px 2.918px;
+  }
+  30.222% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: -49.275px 5.179px;
+  }
+  32.889% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: 53.313px 6.074px;
+  }
+  35.556% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: -53.313px 6.074px;
+  }
+  38.222% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: 49.275px 5.179px;
+  }
+  40.889% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: -45.222px 4.354px;
+  }
+  43.556% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: 37.075px 2.918px;
+  }
+  46.222% {
+    animation-timing-function: cubic-bezier(0, 0, 0.25, 1);
+    translate: -28.883px 1.767px;
+  }
+  48.889% {
+    animation-timing-function: ease-out;
+    translate: 20.656px 0.902px;
+  }
+  51.556% {
+    animation-timing-function: ease-out;
+    translate: -12.404px 0.325px;
+  }
+  54.222% {
+    animation-timing-function: ease-out;
+    translate: 6.204px 0.081px;
+  }
+  56.889% {
+    translate: 0px 0px;
+  }
+  100% {
+    translate: 0px 0px;
+  }
+}
+
+@keyframes tampa-pop-rotate {
+  0% {
+    animation-timing-function: ease;
+    --rotate-transform: 0rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  6.667% {
+    --rotate-transform: 0.262rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  100% {
+    --rotate-transform: 0.262rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+}
+
+@keyframes tampa-pop-translate-mobile {
+  0% {
+    animation-timing-function: ease;
+    translate: 0px 0px;
+  }
+  6.667% {
+    animation-timing-function: ease-in-out;
+    translate: 0px -328.646px;
+  }
+  11.667% {
+    animation-timing-function: ease-in-out;
+    translate: 0px -335.088px;
+  }
+  16.667% {
+    animation-timing-function: ease-in-out;
+    translate: 0px -322.203px;
+  }
+  21.667% {
+    animation-timing-function: ease-in-out;
+    translate: 0px -335.088px;
+  }
+  25% {
+    translate: 0px -328.646px;
+  }
+  100% {
+    translate: 0px -328.646px;
+  }
+}
+
+@keyframes tampa-pop-translate-desktop {
+  0% {
+    animation-timing-function: ease;
+    translate: 0px 0px;
+  }
+  6.667% {
+    animation-timing-function: ease-in-out;
+    translate: 0px -557.291px;
+  }
+  11.667% {
+    animation-timing-function: ease-in-out;
+    translate: 0px -570.176px;
+  }
+  16.667% {
+    animation-timing-function: ease-in-out;
+    translate: 0px -544.405px;
+  }
+  21.667% {
+    animation-timing-function: ease-in-out;
+    translate: 0px -570.176px;
+  }
+  25% {
+    translate: 0px -557.291px;
+  }
+  100% {
+    translate: 0px -557.291px;
+  }
+}
+
+@keyframes ticket-pop-opacity {
+  0% {
+    opacity: 0;
+  }
+  3.333% {
+    animation-timing-function: ease-out;
+    opacity: 0;
+  }
+  6.667% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes ticket-pop-translate {
+  0% {
+    animation-timing-function: cubic-bezier(0.45, 1.45, 0.8, 1);
+    translate: 0px 64.427px;
+  }
+  10.833% {
+    translate: 0px 0px;
+  }
+  100% {
+    translate: 0px 0px;
+  }
+}
+
+@keyframes ticket-pop-scale {
+  0% {
+    animation-timing-function: linear(
+      0,
+      0.0985,
+      0.342,
+      0.6483,
+      0.9442,
+      1.1767,
+      1.3179,
+      1.364,
+      1.3302,
+      1.2427,
+      1.1314,
+      1.0233,
+      0.9377,
+      0.8853,
+      0.8675,
+      0.8791,
+      0.9105,
+      0.9509,
+      0.9904,
+      1.0219,
+      1.0414,
+      1.0482,
+      1.0443,
+      1.033,
+      1.0183,
+      1.0039,
+      0.9923,
+      0.9851,
+      0.9825,
+      0.9838,
+      0.9878,
+      0.9932,
+      0.9984,
+      1.0027,
+      1.0054,
+      1.0064,
+      1.0059,
+      1.0045,
+      1.0025,
+      1.0006,
+      0.9991,
+      0.9981,
+      0.9977,
+      0.9978,
+      0.9983,
+      0.9991,
+      0.9998,
+      1.0003,
+      1.0007,
+      1.0008,
+      1.0008
+    );
+    scale: 0 0;
+  }
+  11.667% {
+    scale: 1 1;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+@keyframes parabens-pop-opacity {
+  0% {
+    opacity: 0;
+  }
+  1.667% {
+    animation-timing-function: ease-out;
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes parabens-pop-translate {
+  0% {
+    translate: 0px 48.32px;
+  }
+  7.5% {
+    animation-timing-function: linear(
+      0,
+      0.0985,
+      0.342,
+      0.6483,
+      0.9442,
+      1.1767,
+      1.3179,
+      1.364,
+      1.3302,
+      1.2427,
+      1.1314,
+      1.0233,
+      0.9377,
+      0.8853,
+      0.8675,
+      0.8791,
+      0.9105,
+      0.9509,
+      0.9904,
+      1.0219,
+      1.0414,
+      1.0482,
+      1.0443,
+      1.033,
+      1.0183,
+      1.0039,
+      0.9923,
+      0.9851,
+      0.9825,
+      0.9838,
+      0.9878,
+      0.9932,
+      0.9984,
+      1.0027,
+      1.0054,
+      1.0064,
+      1.0059,
+      1.0045,
+      1.0025,
+      1.0006,
+      0.9991,
+      0.9981,
+      0.9977,
+      0.9978,
+      0.9983,
+      0.9991,
+      0.9998,
+      1.0003,
+      1.0007,
+      1.0008,
+      1.0008
+    );
+    translate: 0px 48.32px;
+  }
+  13.333% {
+    translate: 0px 0px;
+  }
+  100% {
+    translate: 0px 0px;
+  }
+}
+
+@keyframes parabens-pop-scale {
+  0% {
+    scale: 0 0;
+  }
+  7.5% {
+    animation-timing-function: linear(
+      0,
+      0.0985,
+      0.342,
+      0.6483,
+      0.9442,
+      1.1767,
+      1.3179,
+      1.364,
+      1.3302,
+      1.2427,
+      1.1314,
+      1.0233,
+      0.9377,
+      0.8853,
+      0.8675,
+      0.8791,
+      0.9105,
+      0.9509,
+      0.9904,
+      1.0219,
+      1.0414,
+      1.0482,
+      1.0443,
+      1.033,
+      1.0183,
+      1.0039,
+      0.9923,
+      0.9851,
+      0.9825,
+      0.9838,
+      0.9878,
+      0.9932,
+      0.9984,
+      1.0027,
+      1.0054,
+      1.0064,
+      1.0059,
+      1.0045,
+      1.0025,
+      1.0006,
+      0.9991,
+      0.9981,
+      0.9977,
+      0.9978,
+      0.9983,
+      0.9991,
+      0.9998,
+      1.0003,
+      1.0007,
+      1.0008,
+      1.0008
+    );
+    scale: 0 0;
+  }
+  15% {
+    scale: 1 1;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+@keyframes brilho-pop-opacity {
+  0% {
+    opacity: 0;
+  }
+  2.5% {
+    animation-timing-function: ease-out;
+    opacity: 0;
+  }
+  5.833% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes bg-brilho-pop-opacity {
+  0% {
+    animation-timing-function: ease-out;
+    opacity: 0;
+  }
+  3.333% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes bg-brilho-pop-rotate {
+  0% {
+    --rotate-transform: 0rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  25% {
+    --rotate-transform: 0.262rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+  100% {
+    --rotate-transform: 0.262rad;
+    transform: rotate(var(--rotate-transform, 0rad));
+  }
+}
+
+@keyframes bg-brilho-pop-scale {
+  0% {
+    animation-timing-function: linear(
+      0,
+      0.0188,
+      0.0679,
+      0.1374,
+      0.2195,
+      0.308,
+      0.3978,
+      0.4856,
+      0.5686,
+      0.6452,
+      0.7142,
+      0.7753,
+      0.8283,
+      0.8735,
+      0.9113,
+      0.9423,
+      0.9671,
+      0.9866,
+      1.0014,
+      1.0123,
+      1.0198,
+      1.0247,
+      1.0274,
+      1.0283,
+      1.0281,
+      1.0268,
+      1.025,
+      1.0227,
+      1.0202,
+      1.0177,
+      1.0152,
+      1.0128,
+      1.0106,
+      1.0085,
+      1.0068,
+      1.0052,
+      1.0039,
+      1.0028,
+      1.0018,
+      1.0011,
+      1.0005,
+      1,
+      0.9997,
+      0.9995,
+      0.9993,
+      0.9992,
+      0.9992,
+      0.9992,
+      0.9992,
+      0.9993,
+      0.9993
+    );
+    scale: 0.8 0.8;
+  }
+  12.5% {
+    scale: 1.05 1.05;
+  }
+  100% {
+    scale: 1.05 1.05;
+  }
+}
+
 html {
   /* --promo-banner-height é publicada por LayoutPromotionEndedBanner (0 quando
      a faixa está fora da tela) — sem isso, âncoras (/#produtos etc.) landam
@@ -220,6 +881,17 @@ body {
 
 @utility comic-chrome-lg {
   @apply border-4 border-(--color-brand-outline) shadow-[-8px_8px_0px_0px_var(--color-brand-outline)];
+}
+
+/* Sunburst decorativo dos cards do cadastro-nota. A imagem é cinza: a cor vem
+   do fundo do pai, e o hard-light só deixa o padrão aparecer por cima dela. */
+@utility card-pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url('/images/cadastro-nota-card-pattern.jpg') center / cover;
+  opacity: 0.2;
+  mix-blend-mode: hard-light;
 }
 
 /* Stacking cards (novos-sabores) — cada card gruda abaixo do header/banner fixos
