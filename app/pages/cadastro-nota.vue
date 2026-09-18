@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import type { GenericObject } from 'vee-validate'
-import { pincodeSchema } from '~/schemas/pincode'
-import { MASK_NFE_CODE } from '~/utils/masks'
-import { toFormData } from '~/utils/functions/formData.function'
 import { useParticipacaoStore } from '~/stores/participacao.store'
 import { useNotificationModalStore } from '~/stores/modals/notificationModal.store'
 
@@ -16,34 +12,33 @@ useSeoMeta({
   robots: 'noindex, nofollow'
 })
 
-const { onInvalidSubmit } = useFormError()
-const { loading: submitting, run } = useAsyncSubmit()
 const { loading: checkingPending, run: runCheckPending } = useAsyncSubmit()
 const participacaoStore = useParticipacaoStore()
 const notificationModalStore = useNotificationModalStore()
 
-function onSubmit(values: GenericObject) {
-  run(async () => {
-    const payload = { pincode: values.codigo }
+// Indicador de step só tem 3 posições (Vote / Cadastre seu PIN / Resultado)
+// — o resgate (endereço + nota) é uma sub-etapa de "Resultado".
+const indicatorStep = computed<1 | 2 | 3>(() =>
+  participacaoStore.step >= 3 ? 3 : (participacaoStore.step as 1 | 2)
+)
 
-    const res = await useFetchData<{ mensagem: string }>(
-      '/Pincode/ValidarPincode',
-      {
-        method: 'POST',
-        body: toFormData(payload),
-        requiresAuth: true
-      }
-    )
-
-    participacaoStore.setIdParticipacao(Number(res.mensagem))
-    participacaoStore.setStep(2)
-    await navigateTo('/abrir-lata')
-  })
-}
-
-// Retoma um fluxo pendente (ex.: usuário registrou o código mas fechou a aba
-// antes de abrir a lata ou preencher o endereço) — mesma checagem do kellanova.
+// Entrar na página sempre volta pro início do wizard (votação) — o único
+// jeito de pular pra frente é a checagem de pendência, disparada só depois
+// de votar (ver onVoted).
 onMounted(() => {
+  participacaoStore.setStep(1)
+})
+
+watch(
+  () => participacaoStore.step,
+  () => window.scrollTo({ top: 0 })
+)
+
+// Só depois de votar checamos se há um fluxo pendente (ex.: usuário já
+// cadastrou o código mas fechou a aba antes de abrir a lata ou preencher o
+// endereço) — nesse caso pulamos o step de código e vamos direto pro step
+// onde ele parou.
+function onVoted() {
   runCheckPending(async () => {
     const res = await useFetchData<{
       idParticipacao: number
@@ -53,73 +48,62 @@ onMounted(() => {
       requiresAuth: true
     })
 
-    const step = Number(res.mensagem)
-    if (!res.idParticipacao || !step || step <= 1) return
+    const backendStep = Number(res.mensagem)
+    if (!res.idParticipacao || !backendStep || backendStep <= 1) {
+      participacaoStore.setStep(2)
+      return
+    }
 
     participacaoStore.setIdParticipacao(res.idParticipacao)
-    participacaoStore.setStep(step)
+    // 2 = abrir lata pendente (wizard step 3) | 3 = endereço pendente (wizard step 4)
+    participacaoStore.setStep(backendStep === 2 ? 3 : 4)
     notificationModalStore.openModal({
-      title: step === 2 ? 'Abra sua lata' : 'Preencha seu endereço',
+      title: backendStep === 2 ? 'Abra sua lata' : 'Preencha seu endereço',
       description:
-        step === 2
+        backendStep === 2
           ? 'Parece que você ainda não usou sua chance de abrir a lata.'
           : 'Parece que você ainda não preencheu seu endereço.',
       actions: [
         {
           label: 'Continuar',
-          handler: async () => {
-            await navigateTo('/abrir-lata')
-          }
+          handler: () => notificationModalStore.closeModal()
         }
       ]
     })
   })
-})
+}
 </script>
 
 <template>
-  <main
-    class="min-h-screen bg-(--color-brand-primary) pt-(--header-height) pb-25"
-  >
-    <div class="container pt-18">
-      <div class="mx-auto max-w-[540px] rounded-xl bg-white px-6 py-8">
-        <header class="mb-10 text-center">
-          <h1 class="text-h2 font-bold text-(--color-brand-primary) uppercase">
-            Cadastre seu código
-          </h1>
-          <p class="text-body-base text-(--color-brand-neutral-700)">
-            Cadastre o código encontrado na embalagem da sua Pringles<sup
-              >®</sup
-            >
-          </p>
-        </header>
-        <VeeForm
-          :validation-schema="pincodeSchema"
-          class="flex flex-col gap-6"
-          @submit="onSubmit"
-          @invalid-submit="onInvalidSubmit"
-        >
-          <AppInput
-            name="codigo"
-            label="Código"
-            :mask-input="MASK_NFE_CODE"
-            placeholder="Insira o código"
-            input-mode="numeric"
-            :disabled="checkingPending"
-            :loading="checkingPending"
-            is-required
-          />
-          <AppButton
-            type="submit"
-            variant="secondary"
-            block
-            :loading="submitting"
-            :disabled="checkingPending"
-          >
-            Cadastrar
-          </AppButton>
-        </VeeForm>
+  <div>
+    <CadastroNotaStepIndicator :current-step="indicatorStep" />
+
+    <section
+      class="relative overflow-hidden bg-(--color-brand-secondary) pt-14 md:pt-25"
+    >
+      <AppBgPattern />
+      <div class="relative container flex justify-center">
+        <CadastroNotaStepVotacao
+          v-if="participacaoStore.step === 1"
+          :disabled="checkingPending"
+          @voted="onVoted"
+        />
+        <CadastroNotaStepCodigo
+          v-else-if="participacaoStore.step === 2"
+          @registered="participacaoStore.setStep(3)"
+        />
+        <CadastroNotaStepResultado v-else-if="participacaoStore.step === 3" />
+        <div v-else class="w-full max-w-[540px]">
+          <AppComicCard>
+            <template #title>Informe seus dados de contato</template>
+            <template #description>
+              Estes dados serão utilizados para enviar seu prêmio até você.
+            </template>
+
+            <CadastroNotaStepResgate />
+          </AppComicCard>
+        </div>
       </div>
-    </div>
-  </main>
+    </section>
+  </div>
 </template>

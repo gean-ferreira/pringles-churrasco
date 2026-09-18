@@ -1,5 +1,6 @@
-// Estado de sessão do fluxo de cadastro de nota + abertura de lata (prêmio
-// instantâneo) — ver app/pages/cadastro-nota.vue e app/pages/abrir-lata.vue.
+// Estado de sessão do wizard de prêmio instantâneo (app/pages/cadastro-nota.vue):
+// 1 = votação, 2 = cadastro do código, 3 = resultado/reveal, 4 = resgate
+// (endereço + nota fiscal, só quando premiado).
 export const useParticipacaoStore = defineStore('participacao', {
   state: () => ({
     idParticipacao: null as number | null,

@@ -1,0 +1,97 @@
+<script setup lang="ts">
+import type { GenericObject } from 'vee-validate'
+import { pincodeSchema } from '~/schemas/pincode'
+import { MASK_NFE_CODE } from '~/utils/masks'
+import { toFormData } from '~/utils/functions/formData.function'
+import { useParticipacaoStore } from '~/stores/participacao.store'
+
+const emit = defineEmits<{ registered: [] }>()
+
+const { onInvalidSubmit } = useFormError()
+const { loading: submitting, run } = useAsyncSubmit()
+const participacaoStore = useParticipacaoStore()
+
+function onSubmit(values: GenericObject) {
+  run(async () => {
+    const payload = { pincode: values.codigo }
+
+    const res = await useFetchData<{ mensagem: string }>(
+      '/Pincode/ValidarPincode',
+      {
+        method: 'POST',
+        body: toFormData(payload),
+        requiresAuth: true
+      }
+    )
+
+    participacaoStore.setIdParticipacao(Number(res.mensagem))
+    emit('registered')
+  })
+}
+
+onMounted(() => {
+  document.getElementById('codigo')?.focus()
+})
+</script>
+
+<template>
+  <div class="grid w-full grid-cols-12 gap-8 pb-14 md:pb-25">
+    <div class="col-span-12 md:col-span-6">
+      <AppComicCard>
+        <template #title>Cadastre seu código</template>
+        <template #description>
+          Cadastre o Pin Code encontrado no lacre da sua Pringles®
+        </template>
+
+        <!-- Só aparece no mobile — no desktop a imagem vira o card ao lado. -->
+        <div
+          class="relative  shrink-0 overflow-hidden rounded-xl border-4 border-(--color-brand-outline) shadow-[8px_8px_0px_0px_var(--color-brand-outline)] md:hidden"
+        >
+          <div class="absolute inset-0 bg-(--color-brand-accent-green)" />
+          <div aria-hidden="true" class="card-pattern" />
+          <img
+            src="/images/cadastro-nota-lata-aberta.png"
+            alt="Lata de Pringles aberta mostrando o código PIN impresso na tampa"
+            class="relative size-full max-w-[195px] mx-auto object-cover"
+          />
+        </div>
+
+        <VeeForm
+          :validation-schema="pincodeSchema"
+          class="flex flex-col gap-6"
+          @submit="onSubmit"
+          @invalid-submit="onInvalidSubmit"
+        >
+          <AppInput
+            name="codigo"
+            label="Número Pin Code"
+            :mask-input="MASK_NFE_CODE"
+            placeholder="Insira o Pin Code"
+            input-mode="numeric"
+            is-required
+          />
+          <AppButton
+            type="submit"
+            variant="secondary"
+            block
+            :loading="submitting"
+          >
+            Cadastrar
+          </AppButton>
+        </VeeForm>
+      </AppComicCard>
+    </div>
+
+    <div
+      class="relative col-span-12 hidden overflow-hidden rounded-xl border-4 border-(--color-brand-outline) shadow-[8px_8px_0px_0px_var(--color-brand-outline)] md:col-span-6 md:flex md:items-center md:justify-center"
+    >
+      <div class="absolute inset-0 bg-(--color-brand-accent-green)" />
+      <div aria-hidden="true" class="card-pattern" />
+      <img
+        src="/images/cadastro-nota-lata-aberta.png"
+        alt="Lata de Pringles aberta mostrando o código PIN impresso na tampa"
+        class="relative size-full max-w-[393px] object-cover"
+      />
+    </div>
+  </div>
+</template>

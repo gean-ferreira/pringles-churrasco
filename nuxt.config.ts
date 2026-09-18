@@ -53,17 +53,10 @@ export default defineNuxtConfig({
     '/fale-conosco': { prerender: true },
     '/extrato': { ssr: false },
     '/editar-cadastro': { ssr: false },
-    '/cadastro-nota': { ssr: false },
-    '/abrir-lata': { ssr: false }
+    '/cadastro-nota': { ssr: false }
   },
   sitemap: {
-    exclude: [
-      '/verificacao',
-      '/extrato',
-      '/editar-cadastro',
-      '/cadastro-nota',
-      '/abrir-lata'
-    ]
+    exclude: ['/verificacao', '/extrato', '/editar-cadastro', '/cadastro-nota']
   },
   site: {
     url: url,
