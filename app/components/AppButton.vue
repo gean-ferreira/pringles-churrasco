@@ -46,10 +46,21 @@ const rootClasses = computed(() => [
   sizeClasses[props.size],
   props.block && 'w-full'
 ])
+
+const rootRef = ref<{ $el: HTMLElement } | HTMLElement | null>(null)
+// Permite foco programático (ex.: destacar o CTA ao entrar num step) sem
+// expor todo o componente — NuxtLink só dá acesso ao <a> via $el.
+defineExpose({
+  focus: () => {
+    const el = rootRef.value && '$el' in rootRef.value ? rootRef.value.$el : rootRef.value
+    el?.focus()
+  }
+})
 </script>
 <template>
   <NuxtLink
     v-if="to"
+    ref="rootRef"
     :to="to"
     :aria-disabled="isDisabled || undefined"
     :class="rootClasses"
@@ -59,6 +70,7 @@ const rootClasses = computed(() => [
   </NuxtLink>
   <button
     v-else
+    ref="rootRef"
     :type="type"
     :disabled="isDisabled"
     :aria-disabled="isDisabled || undefined"
