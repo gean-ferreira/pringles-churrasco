@@ -1,15 +1,15 @@
 <template>
   <svg
-    width="32"
-    height="32"
-    viewBox="0 0 32 32"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
     fill="none"
     aria-hidden="true"
   >
     <path
-      d="M16 21V7m0 0-5 5m5-5 5 5M7 25h18"
+      d="M12 13.5V3M15.75 6.75L12 3L8.25 6.75M20.25 13.5V19.5H3.75V13.5"
       stroke="currentColor"
-      stroke-width="1.5"
+      stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
