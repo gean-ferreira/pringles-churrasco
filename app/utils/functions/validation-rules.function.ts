@@ -109,14 +109,6 @@ function registerCellphoneRule() {
   })
 }
 
-function registerCepRule() {
-  defineRule('cep', (value: string) => {
-    return (
-      /^\d{5}-?\d{3}$/.test(String(value)) || 'Por favor, insira um CEP válido'
-    )
-  })
-}
-
 function registerCheckboxRule() {
   defineRule('checkbox', (value: boolean) => {
     return value === true || 'Aceite obrigatório.'
@@ -232,7 +224,6 @@ export function registerValidationRules() {
   registerNoLeadingWhitespaceRule()
   registerCpfRule()
   registerCellphoneRule()
-  registerCepRule()
   registerCheckboxRule()
   registerConfirmedRule()
   registerMinRule()
