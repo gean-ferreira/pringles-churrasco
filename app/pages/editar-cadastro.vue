@@ -88,10 +88,10 @@ async function onAccountDeleted() {
 
 <template>
   <section
-    class="relative overflow-hidden bg-(--color-brand-accent-green) pt-(--header-height) pb-14 md:pb-25"
+    class="relative overflow-hidden bg-(--color-brand-accent-green) py-14 md:py-25"
   >
     <AppBgPattern />
-    <div class="relative container flex flex-col items-center gap-8 pt-14">
+    <div class="relative container flex flex-col items-center gap-8">
       <div class="w-full max-w-[800px]">
         <AppComicCard>
           <template #title>Dados cadastrais</template>
