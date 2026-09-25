@@ -1,57 +1,67 @@
 <script setup lang="ts">
-import { useAuthStore } from '~/stores/auth.store'
 import { usePromotionStatus } from '~/composables/usePromotionStatus'
+import { COMO_PARTICIPAR_DATA } from '~/utils/datas/comoParticipar.data'
 
-const authStore = useAuthStore()
+const { isLoggedIn } = useAuth()
 const { isPromotionFinished } = usePromotionStatus()
-
-const steps = [
-  {
-    title: '1. Compre',
-    description: 'Compre um produto participante Pringles Churrasco.'
-  },
-  {
-    title: '2. Cadastre',
-    description: 'Cadastre seu código e envie a nota fiscal.'
-  },
-  {
-    title: '3. Abra a lata',
-    description:
-      'Abra sua Pringles e descubra na hora se ganhou um prêmio instantâneo.'
-  },
-  { title: '4. Concorra', description: 'Fique de olho no sorteio final.' }
-]
 </script>
 
 <template>
-  <section id="como-participar" class="bg-(--color-brand-primary-dark)">
-    <div class="container py-14 xl:py-18">
-      <h2 class="page-title mb-10 text-center xl:mb-14">
-        Como participar da promoção
-      </h2>
-      <div class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
-        <div
-          v-for="step in steps"
-          :key="step.title"
-          class="rounded-xl bg-white p-6 text-center"
-        >
-          <p class="text-h3 font-bold text-(--color-brand-primary)">
-            {{ step.title }}
-          </p>
-          <p class="text-body-sm mt-2 text-(--color-brand-neutral-700)">
-            {{ step.description }}
-          </p>
-        </div>
+  <section
+    id="como-participar"
+    class="relative overflow-hidden bg-(--color-brand-outline) bg-[url('/images/novos-sabores-kv-bg.jpg')] bg-cover bg-center"
+  >
+    <div class="relative container flex flex-col items-center gap-10 py-14 xl:py-18">
+      <div class="flex items-center gap-8">
+        <IconStar class="hidden size-8 shrink-0 text-white xl:block" />
+        <h2 class="flex flex-col items-center font-bold uppercase">
+          <span
+            class="text-body-sm relative z-10 -mb-1 flex h-[30px] w-[139px] items-center justify-center bg-[url('/images/tarja-home-titulo.png')] bg-size-[100%_100%] text-white [text-shadow:1px_1px_0_var(--color-brand-outline)] xl:text-body-base xl:h-9 xl:w-[168px]"
+          >
+            Saiba como
+          </span>
+          <!-- Figma: no mobile são 2 tarjas de 343×74 empilhadas (sobrepostas
+               28px); no desktop uma de 714×154, com a sombra passando 13px do texto. -->
+          <span
+            class="text-h2 xl:text-h1-lg text-shadow-comic flex h-[120px] w-[343px] items-center justify-center bg-[url('/images/tarja-home-titulo.png'),url('/images/tarja-home-titulo.png')] bg-size-[343px_74px] bg-position-[0_0,0_46px] bg-no-repeat text-center text-(--color-brand-secondary) xl:h-[154px] xl:w-[714px] xl:bg-[url('/images/tarja-home-titulo.png')] xl:bg-size-[714px_154px] xl:bg-position-[0_0] xl:pb-[13px]"
+          >
+            Participar da promoção
+          </span>
+        </h2>
+        <IconStar class="hidden size-8 shrink-0 text-white xl:block" />
       </div>
+
+      <!-- 1 → 2 → 4 colunas (nunca 3, que deixaria um card órfão). -->
+      <ol
+        class="grid w-full grid-cols-1 justify-items-center gap-6 sm:max-w-[600px] sm:grid-cols-2 xl:max-w-none xl:grid-cols-4"
+      >
+        <li
+          v-for="step in COMO_PARTICIPAR_DATA"
+          :key="step.src"
+        >
+          <img
+            :src="step.src"
+            :alt="step.alt"
+            width="278"
+            height="326"
+            loading="lazy"
+          />
+        </li>
+      </ol>
+
+      <p class="text-body-xs text-center font-bold text-white uppercase">
+        *Prêmio entregue em cartão virtual pré-pago, sem a função de saque.
+      </p>
+
       <ClientOnly>
         <AppButton
           v-if="!isPromotionFinished"
-          :to="authStore.isAuthenticated ? '/cadastro-nota' : '/cadastro'"
-          variant="accent"
+          :to="isLoggedIn ? '/cadastro-nota' : '/cadastro'"
+          variant="secondary"
           block
-          class="mx-auto mt-14 max-w-[384px]"
+          class="max-w-[384px]"
         >
-          Participe já!
+          Participe já
         </AppButton>
       </ClientOnly>
     </div>
