@@ -23,8 +23,8 @@ useMobileBarOffset(barraRef)
   <div
     v-if="!isPromotionFinished"
     ref="barraRef"
-    class="animate-slide-up fixed inset-x-0 bottom-0 z-30 flex flex-col items-start gap-2 bg-(--color-brand-secondary) px-4 py-6 motion-reduce:animate-none xl:hidden"
+    class="animate-slide-up fixed inset-x-0 bottom-0 z-30 flex flex-col items-start gap-2 bg-(--color-brand-accent-green) px-4 py-6 motion-reduce:animate-none xl:hidden"
   >
-    <AppButton :to="ctaTo" block>Participe agora mesmo</AppButton>
+    <AppButton :to="ctaTo" variant="secondary" block>Participe agora</AppButton>
   </div>
 </template>

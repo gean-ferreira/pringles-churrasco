@@ -21,6 +21,7 @@ useHead({ link: [{ rel: 'canonical', href: url }] })
     <SectionsHeroBanner />
     <SectionsComoParticipar />
     <SectionsPremios />
+    <SectionsDestaqueHome />
     <SectionsProdutosParticipantes />
     <SectionsBarraCtaMobile />
   </main>
