@@ -104,10 +104,10 @@ useHead({ link: [{ rel: 'canonical', href: `${url}/novos-sabores` }] })
             <img
               :src="flavor.image"
               :alt="`Lata Pringles sabor ${flavor.name} ${flavor.subtitle}`"
-              :width="flavor.imageWidth"
-              :height="flavor.imageHeight"
+              width="140"
+              height="417"
               loading="lazy"
-              class="h-auto w-[162px] -rotate-[15deg] drop-shadow-xl xl:h-[520px] xl:w-[324px]"
+              class="h-auto w-[64px] -rotate-[15deg] drop-shadow-xl xl:w-[140px]"
             />
           </div>
 
