@@ -102,11 +102,15 @@
   /* SSR-safe: CSS puro (não <Transition>) — o fill-mode "both" já vale no
      primeiro paint, sem salto na hidratação. Usada pela BarraCtaMobile. */
   --animate-slide-up: slide-up 300ms ease-out both;
-  /* loop AppInfiniteMarquee */
-  --animate-marquee: marquee 30s linear infinite;
+  /* loop AppInfiniteMarquee — Figma (nó 9204:2816): 1878px em 10s. Meia
+     trilha = 10 × 626px (estrela + texto no xl) → ~33s na mesma velocidade. */
+  --animate-marquee: marquee 33s linear infinite;
   /* Figma (get_motion_context, nós 9874:32133/32153/32173): lata do card de
      novos-sabores "flutua" em loop infinito — timings originais aproximados. */
   --animate-can-bob: can-bob 3s ease-in-out infinite;
+  /* Latas de Prêmios: `translate` (não `transform`) preserva o rotate da lata;
+     amplitude via --float-y. */
+  --animate-can-float: can-float 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   /* Figma (nós 9874:32188/32193): garfos decorativos balançam em loop infinito. */
   --animate-fork-wobble-left: fork-wobble-left 3s ease-in-out infinite;
   --animate-fork-wobble-right: fork-wobble-right 3s ease-in-out infinite;
@@ -196,6 +200,16 @@
   }
   93% {
     transform: translateY(0);
+  }
+}
+
+@keyframes can-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 var(--float-y, -12px);
   }
 }
 
