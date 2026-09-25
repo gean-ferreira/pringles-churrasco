@@ -1,47 +1,46 @@
 <script setup lang="ts">
-import { PRODUCTS_DATA } from '~/utils/datas/products.data'
-
-// Decisão da campanha: seção sem carrossel (grid estático), diferente da
-// variante padrão "home section (carousel)" da skill — ver SKILL.md, Campaign Config.
+import { NOVOS_SABORES_DATA } from '~/utils/datas/novosSabores.data'
 </script>
 
 <template>
-  <section id="produtos" class="bg-(--color-brand-accent-purple)">
-    <div class="container py-14 xl:py-25">
-      <header class="mb-10 xl:mb-12">
-        <h2 class="page-title mb-6 text-center">Produtos participantes</h2>
-        <p class="text-body-lg text-center text-white">
-          <strong class="block text-(--color-brand-secondary)">
-            Atenção: todos os produtos que possuem o código estão participando
-            da promoção.
-          </strong>
-          Então fique atento no lacre da embalagem e boa sorte!
-        </p>
-      </header>
-      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div
-          v-for="product in PRODUCTS_DATA"
-          :key="product.title"
-          class="flex h-[220px] flex-col items-center justify-end gap-2 rounded-xl bg-white p-4"
-        >
-          <div
-            class="text-body-xs flex flex-1 items-center justify-center text-(--color-brand-neutral-400)"
-          >
-            {{ product.title }}
-          </div>
-          <h3
-            class="text-body-sm text-center font-medium text-(--color-brand-neutral-700)"
-          >
-            {{ product.title }}
-          </h3>
-        </div>
+  <section
+    id="produtos"
+    class="relative overflow-hidden bg-(--color-brand-outline-light) bg-[url('/images/novos-sabores-kv-bg.jpg')] bg-cover bg-center"
+  >
+    <AppBgPattern :opacity="40" />
+
+    <div class="relative container flex flex-col items-center gap-10 py-14 xl:gap-18 xl:py-25">
+      <h2 class="text-shadow-comic flex flex-col items-center text-center font-bold uppercase">
+        <span class="text-h3 xl:text-h2 flex items-center gap-2 text-white">
+          <IconStar class="size-4 shrink-0 xl:size-6" />
+          Compre
+          <IconStar class="size-4 shrink-0 xl:size-6" />
+        </span>
+        <span class="text-h3 xl:text-h1-lg text-(--color-brand-secondary)">
+          Os sabores Pringles<sup>®</sup><br />
+          Churras BR
+        </span>
+      </h2>
+
+      <!-- Mesmo scroll-snap no eixo x da votação de sabores (StepVotacao); no
+           xl os 3 cards (1202px) usam também o gutter do container. -->
+      <div
+        class="flex w-full snap-x snap-mandatory gap-4 overflow-x-auto pb-2 xl:-mx-4 xl:w-[calc(100%+2rem)] xl:justify-center xl:overflow-visible xl:pb-0"
+      >
+        <ProdutosCard
+          v-for="flavor in NOVOS_SABORES_DATA"
+          :key="flavor.slug"
+          :flavor="flavor"
+        />
       </div>
+
       <AppButton
         to="/novos-sabores"
         variant="secondary"
-        class="mx-auto mt-10 max-w-[294px]"
+        block
+        class="max-w-[384px]"
       >
-        Conheça os novos sabores
+        Conhecer sabores
       </AppButton>
     </div>
   </section>

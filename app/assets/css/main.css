@@ -18,6 +18,8 @@
   --color-brand-surface: #ffffff;
   /* Figma "Marrom 02" — borda/sombra do estilo "comic" (botões, accordion) e text-shadow dos títulos. */
   --color-brand-outline: #6f1c11;
+  /* Figma: fundo da seção de produtos da home, sob o KV. */
+  --color-brand-outline-light: #80361b;
   /* Figma "Green" — CTA secundário e header aberto do accordion; distinto do feedback-green (#00a355). */
   --color-brand-accent-green: #009f4a;
 
@@ -892,6 +894,14 @@ body {
   background: url('/images/cadastro-nota-card-pattern.jpg') center / cover;
   opacity: 0.2;
   mix-blend-mode: hard-light;
+}
+
+/* Recorte do card de produto da home (Figma nó 9874:28163, 390×560) — cantos
+   "dentados" que a moldura PNG contorna por cima. */
+@utility card-produto-shape {
+  clip-path: path(
+    'M342.752 2C345.876 2 348 6.1676 348 9.29199V31.8008C348 38.0115 353.035 43.0459 359.246 43.0459H378.754C381.748 43.0459 389 46.327 389 49.3216V510.99C389 514.318 383.082 517 379.754 517H360.246C354.035 517 349 522.035 349 528.246V548.754C349 551.867 346.886 556 343.773 556H44.205C41.104 556 39 551.905 39 548.804V528.296C39 522.085 33.9648 517.05 27.7539 517.05H10.2461C6.91825 517.05 1 514.368 1 511.04V49.0563C1 45.7285 6.91827 43.0469 10.2461 43.0469H30.7539C36.9648 43.0469 41.9999 38.0116 42 31.8008V5.29199C41.9999 3.6307 43.1882 2 44.8495 2H342.752Z'
+  );
 }
 
 /* Stacking cards (novos-sabores) — cada card gruda abaixo do header/banner fixos
