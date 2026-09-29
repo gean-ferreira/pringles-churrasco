@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Form } from 'vee-validate'
-import type { VerificationMascaras } from '~/types/verification'
 import { MASK_CPF, MASK_PHONE, MASK_DATE } from '~/utils/masks'
 import { UF_OPTIONS } from '~/utils/ufOptions'
 import { useUserPrefill } from '~/composables/useUserPrefill'
@@ -63,25 +62,31 @@ watch(
   }
 )
 
-const isDeleteModalOpen = ref(false)
-const deleteVerification = ref<VerificationMascaras | null>(null)
-const { loading: generatingCode, run: runGenerateCode } = useAsyncSubmit()
+const { run: runDelete } = useAsyncSubmit()
 
 function onRequestDelete() {
-  runGenerateCode(async () => {
-    // TODO(back): aguardando endpoint de geração/validação do OTP de exclusão.
-    // A API nova (ap.md) só tem DELETE /User/Delete, sem código — o fluxo com
-    // código (Figma) segue nas rotas legadas até o back entregar.
-    const res = await useFetchData<VerificationMascaras>(
-      '/Usuario/GerarCodigoExclusao',
-      { method: 'POST', requiresAuth: true }
-    )
-    deleteVerification.value = res
-    isDeleteModalOpen.value = true
+  notificationModalStore.openModal({
+    title: 'Tem certeza?',
+    description:
+      'A exclusão da conta é permanente e encerra sua participação na promoção.',
+    actions: [
+      { label: 'Continuar na promoção', variant: 'secondary' },
+      {
+        label: 'Sim, excluir meu cadastro',
+        variant: 'link',
+        handler: deleteAccount
+      }
+    ]
   })
 }
 
-async function onAccountDeleted() {
+async function deleteAccount() {
+  const success = await runDelete(async () => {
+    await useFetchData('/User/Delete', { method: 'DELETE', requiresAuth: true })
+  })
+  // Na falha o interceptor já trocou esta modal pela de erro.
+  if (!success) return
+
   // Desloga e sai da rota autenticada ANTES do aviso: a conta já não existe no
   // back, então a sessão não pode sobreviver a um F5 ou ao fechar a modal.
   await logout()
@@ -222,19 +227,12 @@ async function onAccountDeleted() {
         <button
           type="button"
           class="text-body-base cursor-pointer font-bold text-(--color-brand-primary) uppercase hover:underline disabled:cursor-not-allowed disabled:opacity-60"
-          :disabled="!userStore.user || generatingCode"
+          :disabled="!userStore.user"
           @click="onRequestDelete"
         >
-          {{ generatingCode ? 'Enviando código...' : 'Excluir minha conta' }}
+          Excluir minha conta
         </button>
       </div>
     </div>
-
-    <EditarCadastroDeleteAccountModal
-      v-model:open="isDeleteModalOpen"
-      :mask="deleteVerification?.mascara ?? ''"
-      :token="deleteVerification?.token ?? ''"
-      @deleted="onAccountDeleted"
-    />
   </section>
 </template>

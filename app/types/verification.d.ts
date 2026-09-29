@@ -15,12 +15,4 @@ export interface LoginResponse {
   firstLogin: boolean
 }
 
-// TODO: legado do fluxo de exclusão com OTP (/Usuario/GerarCodigoExclusao) —
-// remover quando a exclusão migrar para DELETE /User/Delete.
-export interface VerificationMascaras {
-  mascara: string
-  tempoExpiracao: number
-  token: string
-}
-
 export type VerificationAction = 'login' | 'cadastro'
