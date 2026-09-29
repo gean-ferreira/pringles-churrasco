@@ -15,7 +15,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/fonts',
-    '@nuxt/image',
     '@nuxtjs/sitemap',
     '@nuxtjs/robots',
     '@pinia/nuxt',
@@ -65,9 +64,6 @@ export default defineNuxtConfig({
   gtm: {
     id: import.meta.env.VITE_SITE_ENV === 'development' ? 'GTM-XXXXXXX' : gtm,
     enabled: import.meta.env.VITE_SITE_ENV !== 'development'
-  },
-  image: {
-    dir: 'assets/images'
   },
   app: {
     head: {

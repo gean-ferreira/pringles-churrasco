@@ -40,8 +40,8 @@ async function handleLogout() {
       class="container flex h-full items-start justify-between xl:justify-start xl:gap-14"
     >
       <NuxtLink to="/" class="z-50 pt-4" @click="header.closeMenu">
-        <NuxtImg
-          src="/logo-pringles.png"
+        <img
+          src="/images/logo-pringles.png"
           alt="Pringles"
           width="70"
           height="88"

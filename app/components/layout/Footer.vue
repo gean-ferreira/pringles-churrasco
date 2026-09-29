@@ -29,11 +29,12 @@ function toggleCookiePolicy() {
       <div
         class="mb-8 flex flex-col items-center gap-8 text-center xl:flex-row xl:gap-16"
       >
-        <NuxtImg
-          src="/logo-pringles-footer.png"
+        <img
+          src="/images/logo-pringles-footer.png"
           alt="Pringles"
           width="64"
           height="36"
+          loading="lazy"
           class="shrink-0"
         />
         <nav class="xl:mr-auto">
@@ -68,10 +69,11 @@ function toggleCookiePolicy() {
             </li>
           </ul>
         </nav>
-        <ul class="flex gap-4">
+        <ul class="social_icons flex gap-4">
           <li v-for="item in footerSocial" :key="item.name">
             <a
               :href="item.url"
+              :data-tracking="`socialLinks|linkout|${item.icon.toLowerCase()}`"
               target="_blank"
               rel="noopener noreferrer"
               :aria-label="item.name"
