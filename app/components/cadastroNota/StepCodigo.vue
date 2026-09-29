@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { GenericObject } from 'vee-validate'
-import { pincodeSchema } from '~/schemas/pincode'
-import { MASK_NFE_CODE } from '~/utils/masks'
+import {
+  MASK_PIN_CODE,
+  PIN_CODE_INPUT_MODE,
+  pincodeSchema
+} from '~/schemas/pincode'
 import { toFormData } from '~/utils/functions/formData.function'
 import { useParticipacaoStore } from '~/stores/participacao.store'
 
@@ -67,10 +70,10 @@ onMounted(() => {
         >
           <AppInput
             name="codigo"
-            label="Número Pin Code"
-            :mask-input="MASK_NFE_CODE"
+            label="Pin Code"
+            :mask-input="MASK_PIN_CODE"
             placeholder="Insira o Pin Code"
-            input-mode="numeric"
+            :input-mode="PIN_CODE_INPUT_MODE"
             is-required
           />
           <AppButton
@@ -92,6 +95,8 @@ onMounted(() => {
       <div aria-hidden="true" class="card-pattern" />
       <img
         src="/images/cadastro-nota-lata-aberta.png"
+        width="393"
+        height="528"
         alt="Lata de Pringles aberta mostrando o código PIN impresso na tampa"
         class="relative size-full max-w-[393px] object-cover"
       />
