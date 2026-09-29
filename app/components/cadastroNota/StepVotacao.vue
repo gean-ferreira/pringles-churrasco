@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { toFormData } from '~/utils/functions/formData.function'
 import { NOVOS_SABORES_DATA } from '~/utils/datas/novosSabores.data'
+import { useParticipacaoStore } from '~/stores/participacao.store'
 
 const emit = defineEmits<{ voted: [] }>()
 defineProps<{ disabled?: boolean }>()
 
-const { loading: submitting, run } = useAsyncSubmit()
+const participacaoStore = useParticipacaoStore()
+
 const selecionado = ref<string | null>(null)
 
 const firstCardRef = ref<HTMLButtonElement | null>(null)
@@ -13,19 +14,14 @@ onMounted(() => {
   firstCardRef.value?.focus()
 })
 
+// O voto não tem endpoint próprio: vai junto com o PIN em
+// /Participation/ReceivePinCode. Aqui só guardamos o id do sabor no store.
 function onSubmit() {
-  if (!selecionado.value) return
+  const sabor = NOVOS_SABORES_DATA.find((s) => s.slug === selecionado.value)
+  if (!sabor) return
 
-  run(async () => {
-    // TODO: confirmar rota real do backend para registrar o voto de sabor.
-    await useFetchData('/Votacao/RegistrarVoto', {
-      method: 'POST',
-      body: toFormData({ sabor: selecionado.value }),
-      requiresAuth: true
-    })
-
-    emit('voted')
-  })
+  participacaoStore.setFlavorId(sabor.id)
+  emit('voted')
 }
 </script>
 
@@ -42,15 +38,19 @@ function onSubmit() {
       <button
         v-for="(sabor, index) in NOVOS_SABORES_DATA"
         :key="sabor.slug"
-        :ref="(el) => { if (index === 0) firstCardRef = el as HTMLButtonElement }"
+        :ref="
+          (el) => {
+            if (index === 0) firstCardRef = el as HTMLButtonElement
+          }
+        "
         type="button"
-        class="group comic-chrome-lg relative flex cursor-pointer w-[260px] shrink-0 snap-center flex-col items-center justify-center gap-2 overflow-hidden rounded-xl px-4 py-8 transition-colors disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60 md:w-auto md:shrink"
+        class="group comic-chrome-lg relative flex w-[260px] shrink-0 cursor-pointer snap-center flex-col items-center justify-center gap-2 overflow-hidden rounded-xl px-4 py-8 transition-colors disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60 md:w-auto md:shrink"
         :class="
           selecionado === sabor.slug
             ? 'bg-(--color-brand-outline)'
             : 'bg-(--color-brand-accent-green) hover:bg-(--color-brand-outline)'
         "
-        :disabled="disabled || submitting"
+        :disabled="disabled"
         @click="selecionado = sabor.slug"
       >
         <div aria-hidden="true" class="card-pattern" />
@@ -97,7 +97,6 @@ function onSubmit() {
       variant="success"
       class="w-full max-w-[384px]"
       :disabled="!selecionado || disabled"
-      :loading="submitting"
       @click="onSubmit"
     >
       Votar

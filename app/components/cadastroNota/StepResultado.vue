@@ -2,6 +2,9 @@
 import confetti from 'canvas-confetti'
 import { useParticipacaoStore } from '~/stores/participacao.store'
 import { useExtratoStore } from '~/stores/extrato.store'
+import { toFormData } from '~/utils/functions/formData.function'
+
+const PRIZE_LABEL = 'Cartão Virtual - R$ 500,00'
 
 const participacaoStore = useParticipacaoStore()
 const extratoStore = useExtratoStore()
@@ -76,11 +79,14 @@ function launchConfetti() {
 
 function openLata() {
   runOpen(async () => {
-    const res = await useFetchData<{ premioRetornoDto: { premio: string } }>(
-      `/Premio/Premiar?idParticipacao=${participacaoStore.idParticipacao}`,
-      { method: 'GET', requiresAuth: true }
-    )
-    reward.value = res.premioRetornoDto.premio
+    // Chamar uma única vez por participação — o back registra a interação.
+    const res = await useFetchData<{ haveReward: boolean }>('/Reward/Get', {
+      method: 'POST',
+      body: toFormData({ participationId: participacaoStore.idParticipacao }),
+      requiresAuth: true
+    })
+    // A API só diz se ganhou; o prêmio instantâneo é único na promoção.
+    reward.value = res.haveReward ? PRIZE_LABEL : null
     extratoStore.invalidate()
     settling.value = true
   })
@@ -97,7 +103,7 @@ function onShakeSettleEnd() {
     showBrilho.value = true
     showBgBrilho.value = true
     launchConfetti()
-    if (reward.value !== 'naofoidessavez') {
+    if (reward.value) {
       premioModalTimer = setTimeout(() => {
         isPremioModalOpen.value = true
       }, PREMIO_MODAL_DELAY_MS)

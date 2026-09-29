@@ -2,6 +2,7 @@ import type { Flavor } from '~/types/flavor'
 
 export const NOVOS_SABORES_DATA: Flavor[] = [
   {
+    id: 1,
     slug: 'picanha-no-alho',
     name: 'Picanha',
     subtitle: 'No alho',
@@ -12,6 +13,7 @@ export const NOVOS_SABORES_DATA: Flavor[] = [
     imageHeight: 417
   },
   {
+    id: 2,
     slug: 'costela-na-brasa',
     name: 'Costela',
     subtitle: 'Na brasa',
@@ -22,6 +24,7 @@ export const NOVOS_SABORES_DATA: Flavor[] = [
     imageHeight: 417
   },
   {
+    id: 3,
     slug: 'linguica-com-vinagrete',
     name: 'Linguiça',
     subtitle: 'Com vinagrete',

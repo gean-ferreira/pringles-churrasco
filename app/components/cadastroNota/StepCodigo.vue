@@ -13,10 +13,13 @@ const participacaoStore = useParticipacaoStore()
 
 function onSubmit(values: GenericObject) {
   run(async () => {
-    const payload = { pincode: values.codigo }
+    const payload = {
+      pinCode: values.codigo,
+      flavorId: participacaoStore.flavorId
+    }
 
-    const res = await useFetchData<{ mensagem: string }>(
-      '/Pincode/ValidarPincode',
+    const res = await useFetchData<{ participationId: number }>(
+      '/Participation/ReceivePinCode',
       {
         method: 'POST',
         body: toFormData(payload),
@@ -24,7 +27,7 @@ function onSubmit(values: GenericObject) {
       }
     )
 
-    participacaoStore.setIdParticipacao(Number(res.mensagem))
+    participacaoStore.setIdParticipacao(res.participationId)
     emit('registered')
   })
 }
@@ -45,14 +48,14 @@ onMounted(() => {
 
         <!-- Só aparece no mobile — no desktop a imagem vira o card ao lado. -->
         <div
-          class="relative  shrink-0 overflow-hidden rounded-xl border-4 border-(--color-brand-outline) shadow-[8px_8px_0px_0px_var(--color-brand-outline)] md:hidden"
+          class="relative shrink-0 overflow-hidden rounded-xl border-4 border-(--color-brand-outline) shadow-[8px_8px_0px_0px_var(--color-brand-outline)] md:hidden"
         >
           <div class="absolute inset-0 bg-(--color-brand-accent-green)" />
           <div aria-hidden="true" class="card-pattern" />
           <img
             src="/images/cadastro-nota-lata-aberta.png"
             alt="Lata de Pringles aberta mostrando o código PIN impresso na tampa"
-            class="relative size-full max-w-[195px] mx-auto object-cover"
+            class="relative mx-auto size-full max-w-[195px] object-cover"
           />
         </div>
 

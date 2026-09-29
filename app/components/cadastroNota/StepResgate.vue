@@ -14,11 +14,11 @@ const { loading: submitting, run } = useAsyncSubmit()
 function onSubmit(values: GenericObject) {
   run(async () => {
     const payload = {
-      participacaoId: participacaoStore.idParticipacao?.toString() ?? '',
-      Anexo: values.anexo
+      participationId: participacaoStore.idParticipacao?.toString() ?? '',
+      attachment: values.anexo
     }
 
-    await useFetchData('/Endereco/Cadastrar', {
+    await useFetchData('/Participation/ReceiveAttachment', {
       method: 'POST',
       body: toFormData(payload),
       requiresAuth: true

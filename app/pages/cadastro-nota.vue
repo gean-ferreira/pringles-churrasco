@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { useParticipacaoStore } from '~/stores/participacao.store'
 import { useNotificationModalStore } from '~/stores/modals/notificationModal.store'
+import { useUserPrefill } from '~/composables/useUserPrefill'
+import { toFormData } from '~/utils/functions/formData.function'
+
+interface CheckPendingResponse {
+  responseDto: {
+    pendingReward: boolean
+    rewardParticipationId: number | null
+    pendingAttachment: boolean
+    attachmentParticipationId: number | null
+  }
+}
 
 definePageMeta({
   middleware: ['auth', 'check-promotion'],
@@ -15,6 +26,7 @@ useSeoMeta({
 const { loading: checkingPending, run: runCheckPending } = useAsyncSubmit()
 const participacaoStore = useParticipacaoStore()
 const notificationModalStore = useNotificationModalStore()
+const { loadUser } = useUserPrefill()
 
 // Indicador de step só tem 3 posições (Vote / Cadastre seu PIN / Resultado)
 // — o envio da nota fiscal é uma sub-etapa de "Resultado".
@@ -40,29 +52,42 @@ watch(
 // onde ele parou.
 function onVoted() {
   runCheckPending(async () => {
-    const res = await useFetchData<{
-      idParticipacao: number
-      mensagem: string
-    }>('/Premio/EtapaPremioPendente', {
-      method: 'GET',
-      requiresAuth: true
-    })
+    const user = await loadUser()
+    if (!user) return
 
-    const backendStep = Number(res.mensagem)
-    if (!res.idParticipacao || !backendStep || backendStep <= 1) {
+    // TODO(back): CheckPending deveria usar o usuário do token, não userId no
+    // form (ver ap.md, "Observações e pontos de atenção" item 2).
+    const res = await useFetchData<CheckPendingResponse>(
+      '/Participation/CheckPending',
+      {
+        method: 'POST',
+        body: toFormData({ userId: user.id }),
+        requiresAuth: true
+      }
+    )
+
+    const pending = res.responseDto
+    // Prêmio pendente (lata não aberta) → wizard step 3 | nota fiscal
+    // pendente → wizard step 4.
+    const pendingReward = pending.pendingReward && pending.rewardParticipationId
+    const pendingAttachment =
+      pending.pendingAttachment && pending.attachmentParticipationId
+    if (!pendingReward && !pendingAttachment) {
       participacaoStore.setStep(2)
       return
     }
 
-    participacaoStore.setIdParticipacao(res.idParticipacao)
-    // 2 = abrir lata pendente (wizard step 3) | 3 = envio da nota pendente (wizard step 4)
-    participacaoStore.setStep(backendStep === 2 ? 3 : 4)
+    participacaoStore.setIdParticipacao(
+      (pendingReward
+        ? pending.rewardParticipationId
+        : pending.attachmentParticipationId) as number
+    )
+    participacaoStore.setStep(pendingReward ? 3 : 4)
     notificationModalStore.openModal({
-      title: backendStep === 2 ? 'Abra sua lata' : 'Envie sua nota fiscal',
-      description:
-        backendStep === 2
-          ? 'Parece que você ainda não usou sua chance de abrir a lata.'
-          : 'Parece que você ainda não enviou sua nota fiscal.',
+      title: pendingReward ? 'Abra sua lata' : 'Envie sua nota fiscal',
+      description: pendingReward
+        ? 'Parece que você ainda não usou sua chance de abrir a lata.'
+        : 'Parece que você ainda não enviou sua nota fiscal.',
       actions: [
         {
           label: 'Continuar',
