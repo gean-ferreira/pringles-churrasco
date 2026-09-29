@@ -137,8 +137,5 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: ['maska/vue']
     }
-  },
-  devServer: {
-    port: 3002
   }
 })
