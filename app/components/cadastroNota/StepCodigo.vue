@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import type { GenericObject } from 'vee-validate'
-import {
-  MASK_PIN_CODE,
-  PIN_CODE_INPUT_MODE,
-  pincodeSchema
-} from '~/schemas/pincode'
+import { pincodeSchema } from '~/schemas/pincode'
+import { MASK_PIN_CODE, PIN_CODE_INPUT_MODE } from '~/utils/masks'
 import { toFormData } from '~/utils/functions/formData.function'
 import { useParticipacaoStore } from '~/stores/participacao.store'
 
