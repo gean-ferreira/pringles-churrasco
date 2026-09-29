@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { GenericObject } from 'vee-validate'
+import type { LoginResponse } from '~/types/verification'
 import { codeVerificationSchema } from '~/schemas/codeVerification'
 import { MASK_CODE } from '~/utils/masks'
 import { useAuthStore } from '~/stores/auth.store'
@@ -25,7 +26,6 @@ const email = route.query.email as string | undefined
 const token = route.query.token
   ? (route.query.token as string).replace(/%/g, '+')
   : ''
-const contador = Number(route.query.contador)
 
 // Página só faz sentido via handoff de login/cadastro (query email+token) —
 // guard client-side, ver SKILL.md nota sobre páginas ssr:false flow-gated.
@@ -39,7 +39,7 @@ onMounted(() => {
     navigateTo('/')
     return
   }
-  countdown.start(!isNaN(contador) && contador > 0 ? contador : RESEND_SECONDS)
+  countdown.start(RESEND_SECONDS)
 })
 
 const countdown = useCountdown(RESEND_SECONDS)
@@ -51,34 +51,22 @@ function onSubmit(values: GenericObject) {
   if (!requireConsentIfProd(['C0003'])) return
 
   runSubmit(async () => {
-    const payload = { Token: token, Codigo: values.codigo }
+    const payload = { token, codigo: values.codigo }
 
-    const res = await useFetchData<{ token: string }>(
-      '/Autenticacao/ValidarCodigo',
-      {
-        method: 'POST',
-        body: toFormData(payload)
-      }
-    )
+    const res = await useFetchData<LoginResponse>('/Authentication/Login', {
+      method: 'POST',
+      body: toFormData(payload)
+    })
 
-    if (res.token) {
-      authStore.setToken(res.token)
-      await navigateTo('/')
-    } else {
-      notificationModalStore.openModal({
-        title: 'Cadastro ativado com sucesso',
-        description: 'Faça login para continuar.',
-        actions: [{ label: 'Fechar' }]
-      })
-      await navigateTo('/login')
-    }
+    authStore.setToken(res.token)
+    await navigateTo('/')
   })
 }
 
 function onResend() {
   runResend(async () => {
-    const payload = { Token: token }
-    await useFetchData('/Autenticacao/ReenviarCodigoVerificacao', {
+    const payload = { token }
+    await useFetchData('/Authentication/ResendCode', {
       method: 'POST',
       body: toFormData(payload)
     })

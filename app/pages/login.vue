@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { GenericObject } from 'vee-validate'
+import type { AuthCodeResponse } from '~/types/verification'
 import { loginSchema } from '~/schemas/login'
 import { MASK_CPF } from '~/utils/masks'
 import { onlyDigits } from '~/utils/functions/sanitize.function'
 import { toFormData } from '~/utils/functions/formData.function'
-import { useNotificationModalStore } from '~/stores/modals/notificationModal.store'
 import { usePromotionStatus } from '~/composables/usePromotionStatus'
 import { useVerificationHandoff } from '~/composables/useVerificationHandoff'
 import { useOneTrustConsent } from '~/composables/useOneTrustConsent'
@@ -18,7 +18,6 @@ useSeoMeta({
 
 const { onInvalidSubmit } = useFormError()
 const { loading: submitting, run } = useAsyncSubmit()
-const notificationModalStore = useNotificationModalStore()
 const { isPromotionFinished } = usePromotionStatus()
 const { goToVerification } = useVerificationHandoff()
 const { requireConsentIfProd } = useOneTrustConsent()
@@ -27,26 +26,16 @@ function onSubmit(values: GenericObject) {
   if (!requireConsentIfProd(['C0003'])) return
 
   run(async () => {
-    const payload = { Cpf: onlyDigits(values.cpf) }
+    const payload = { document: onlyDigits(values.cpf) }
 
-    const res = await useFetchData<{
-      mensagem: string
-      token: string
-      confirmacaoCadastro: boolean
-      contador: number
-    }>('/Autenticacao/Autenticar', {
-      method: 'POST',
-      body: toFormData(payload)
-    })
+    const res = await useFetchData<AuthCodeResponse>(
+      '/Authentication/GenerateAuthenticationCode',
+      {
+        method: 'POST',
+        body: toFormData(payload)
+      }
+    )
 
-    if (res.confirmacaoCadastro) {
-      notificationModalStore.openModal({
-        title: 'Atenção!',
-        description:
-          'Enviamos um código de verificação para o seu e-mail. Insira o código na tela a seguir para ativar sua conta e fazer o login.',
-        actions: [{ label: 'Fechar' }]
-      })
-    }
     await goToVerification(res, 'login')
   })
 }

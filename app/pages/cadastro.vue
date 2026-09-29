@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { GenericObject } from 'vee-validate'
+import type { AuthCodeResponse } from '~/types/verification'
 import { registerSchema } from '~/schemas/register'
 import { MASK_CPF, MASK_PHONE, MASK_DATE } from '~/utils/masks'
 import { onlyDigits } from '~/utils/functions/sanitize.function'
-import { formatToISO } from '~/utils/functions/date.function'
 import { toFormData } from '~/utils/functions/formData.function'
 import { UF_OPTIONS } from '~/utils/ufOptions'
 import { useVerificationHandoff } from '~/composables/useVerificationHandoff'
@@ -33,25 +33,22 @@ function onSubmit(values: GenericObject) {
 
   run(async () => {
     const payload = {
-      Cpf: onlyDigits(values.cpf),
-      Nome: values.nome.trim(),
-      Sobrenome: values.sobrenome.trim(),
-      Telefone: onlyDigits(values.telefone),
-      dt_nascimento: formatToISO(values.dt_nascimento),
-      Estado: values.estado,
-      Email: values.email.trim(),
-      Aceite_Regulamento: values.aceite_Regulamento ? 'true' : 'false',
-      Aceite_Politica: values.aceite_Politica ? 'true' : 'false',
-      Aceite_Novidades: values.aceite_Novidades ? 'true' : 'false'
+      cpf: onlyDigits(values.cpf),
+      name: values.nome.trim(),
+      lastName: values.sobrenome.trim(),
+      phoneNumber: onlyDigits(values.telefone),
+      birthDate: values.dt_nascimento,
+      uf: values.estado,
+      email: values.email.trim(),
+      termsAndConditions: values.aceite_Regulamento ? 'true' : 'false',
+      privacyPolicy: values.aceite_Politica ? 'true' : 'false',
+      acceptsMarketingEmails: values.aceite_Novidades ? 'true' : 'false'
     }
 
-    const res = await useFetchData<{ mensagem: string; token: string }>(
-      '/Usuario/Cadastrar',
-      {
-        method: 'POST',
-        body: toFormData(payload)
-      }
-    )
+    const res = await useFetchData<AuthCodeResponse>('/User/Create', {
+      method: 'POST',
+      body: toFormData(payload)
+    })
 
     await goToVerification(res, 'cadastro')
   })
