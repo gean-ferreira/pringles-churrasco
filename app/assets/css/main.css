@@ -870,12 +870,15 @@ body {
   @apply text-h2 text-shadow-comic text-stroke-comic xl:text-h1 font-bold text-white uppercase;
 }
 
-/* Contorno "comic" dos títulos */
+/* Contorno "comic" dos títulos — simula o stroke "Outside" do Figma: o
+   text-stroke é centralizado, então pinta por baixo do fill (paint-order) com
+   o dobro da largura; só a metade externa aparece (1.5px mobile / 2.5px xl). */
 @utility text-stroke-comic {
-  -webkit-text-stroke: 1.5px var(--color-brand-outline);
+  -webkit-text-stroke: 3px var(--color-brand-outline);
+  paint-order: stroke fill;
 
   @media (width >= 48rem) {
-    -webkit-text-stroke-width: 2.5px;
+    -webkit-text-stroke-width: 5px;
   }
 }
 
