@@ -122,8 +122,7 @@
   /* Mesmo balanço, só que roda 3x e para — usado depois que a requisição do
      prêmio termina, antes de assentar. */
   --animate-lata-shake-settle:
-    lata-shake-rotate 2.25s linear 3,
-    lata-shake-translate 2.25s linear 3;
+    lata-shake-rotate 2.25s linear 3, lata-shake-translate 2.25s linear 3;
   /* Figma (nó 9874:32082): tampa arremessada pra fora depois que a lata
      assenta — roda uma vez só (sem infinite). `forwards` trava no último
      frame (girada + deslocada); sem isso, ao terminar ela volta pro estado
@@ -139,14 +138,12 @@
   /* Figma (nó 9874:28480): ticket do prêmio aparecendo com bounce, na mesma
      timeline de 12s da tampa (dispara junto com --animate-tampa-pop). */
   --animate-ticket-pop:
-    ticket-pop-opacity 12s linear,
-    ticket-pop-translate 12s linear,
+    ticket-pop-opacity 12s linear, ticket-pop-translate 12s linear,
     ticket-pop-scale 12s linear;
   /* Figma (nó 9874:28457): "Parabéns!! Você ganhou." aparecendo com bounce,
      na mesma timeline de 12s da tampa/ticket. */
   --animate-parabens-pop:
-    parabens-pop-opacity 12s linear,
-    parabens-pop-translate 12s linear,
+    parabens-pop-opacity 12s linear, parabens-pop-translate 12s linear,
     parabens-pop-scale 12s linear;
   /* Figma (nó 9874:28464): brilho surgindo atrás da tampa, na mesma timeline
      de 12s da tampa/ticket/parabéns. */

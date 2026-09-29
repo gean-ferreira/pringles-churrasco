@@ -46,7 +46,12 @@ const emit = defineEmits<{ 'update:open': [value: boolean]; resgatar: [] }>()
         <p class="text-body-sm text-white">
           Clique no botão abaixo para enviar a sua nota fiscal
         </p>
-        <AppButton type="button" variant="secondary" block @click="emit('resgatar')">
+        <AppButton
+          type="button"
+          variant="secondary"
+          block
+          @click="emit('resgatar')"
+        >
           Enviar nota fiscal
         </AppButton>
       </div>

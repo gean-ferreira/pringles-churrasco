@@ -9,8 +9,12 @@ import { NOVOS_SABORES_DATA } from '~/utils/datas/novosSabores.data'
   >
     <AppBgPattern :opacity="40" />
 
-    <div class="relative container flex flex-col items-center gap-10 py-14 xl:gap-18 xl:py-25">
-      <h2 class="text-shadow-comic flex flex-col items-center text-center font-bold uppercase">
+    <div
+      class="relative container flex flex-col items-center gap-10 py-14 xl:gap-18 xl:py-25"
+    >
+      <h2
+        class="text-shadow-comic flex flex-col items-center text-center font-bold uppercase"
+      >
         <span class="text-h3 xl:text-h2 flex items-center gap-2 text-white">
           <IconStar class="size-4 shrink-0 xl:size-6" />
           Compre

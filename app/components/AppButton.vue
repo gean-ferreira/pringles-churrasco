@@ -52,7 +52,10 @@ const rootRef = ref<{ $el: HTMLElement } | HTMLElement | null>(null)
 // expor todo o componente — NuxtLink só dá acesso ao <a> via $el.
 defineExpose({
   focus: () => {
-    const el = rootRef.value && '$el' in rootRef.value ? rootRef.value.$el : rootRef.value
+    const el =
+      rootRef.value && '$el' in rootRef.value
+        ? rootRef.value.$el
+        : rootRef.value
     el?.focus()
   }
 })

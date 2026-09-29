@@ -67,17 +67,22 @@ const { isPromotionFinished } = usePromotionStatus()
             <p
               class="text-body-xs absolute inset-x-0 bottom-[21px] hidden text-center font-bold text-white uppercase xl:block"
             >
-              *Prêmio entregue em cartão virtual pré-pago, sem a função de saque.
+              *Prêmio entregue em cartão virtual pré-pago, sem a função de
+              saque.
             </p>
           </div>
           <div class="flex items-start justify-center gap-2 xl:gap-5">
-            <IconStar class="size-3 shrink-0 text-(--color-brand-outline) xl:size-7" />
+            <IconStar
+              class="size-3 shrink-0 text-(--color-brand-outline) xl:size-7"
+            />
             <p
               class="text-body-sm xl:text-h3 max-w-[200px] text-center font-bold text-(--color-brand-outline) uppercase xl:max-w-[420px]"
             >
               Pra deixar seu churrasco completo do jeito BR
             </p>
-            <IconStar class="size-3 shrink-0 text-(--color-brand-outline) xl:size-7" />
+            <IconStar
+              class="size-3 shrink-0 text-(--color-brand-outline) xl:size-7"
+            />
           </div>
         </div>
 

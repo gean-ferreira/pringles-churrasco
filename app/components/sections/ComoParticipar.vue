@@ -11,12 +11,14 @@ const { isPromotionFinished } = usePromotionStatus()
     id="como-participar"
     class="relative overflow-hidden bg-(--color-brand-outline) bg-[url('/images/novos-sabores-kv-bg.jpg')] bg-cover bg-center"
   >
-    <div class="relative container flex flex-col items-center gap-10 py-14 xl:py-18">
+    <div
+      class="relative container flex flex-col items-center gap-10 py-14 xl:py-18"
+    >
       <div class="flex items-center gap-8">
         <IconStar class="hidden size-8 shrink-0 text-white xl:block" />
         <h2 class="flex flex-col items-center font-bold uppercase">
           <span
-            class="text-body-sm relative z-10 -mb-1 flex h-[30px] w-[139px] items-center justify-center bg-[url('/images/tarja-home-titulo.png')] bg-size-[100%_100%] text-white [text-shadow:1px_1px_0_var(--color-brand-outline)] xl:text-body-base xl:h-9 xl:w-[168px]"
+            class="text-body-sm xl:text-body-base relative z-10 -mb-1 flex h-[30px] w-[139px] items-center justify-center bg-[url('/images/tarja-home-titulo.png')] bg-size-[100%_100%] text-white [text-shadow:1px_1px_0_var(--color-brand-outline)] xl:h-9 xl:w-[168px]"
           >
             Saiba como
           </span>
@@ -35,10 +37,7 @@ const { isPromotionFinished } = usePromotionStatus()
       <ol
         class="grid w-full grid-cols-1 justify-items-center gap-6 sm:max-w-[600px] sm:grid-cols-2 xl:max-w-none xl:grid-cols-4"
       >
-        <li
-          v-for="step in COMO_PARTICIPAR_DATA"
-          :key="step.src"
-        >
+        <li v-for="step in COMO_PARTICIPAR_DATA" :key="step.src">
           <img
             :src="step.src"
             :alt="step.alt"
