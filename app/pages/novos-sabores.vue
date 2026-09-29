@@ -72,7 +72,7 @@ useHead({ link: [{ rel: 'canonical', href: `${url}/novos-sabores` }] })
     </section>
 
     <section class="relative py-14 xl:py-25">
-      <AppBgPattern />
+      <AppBgPattern sticky />
 
       <div class="relative container flex flex-col gap-8">
         <article
