@@ -26,8 +26,7 @@ import { NOVOS_SABORES_DATA } from '~/utils/datas/novosSabores.data'
         </span>
       </h2>
 
-      <!-- Mesmo scroll-snap no eixo x da votação de sabores (StepVotacao); no
-           xl os 3 cards (1202px) usam também o gutter do container. -->
+      <!-- No xl os 3 cards (1202px) ocupam também o gutter do container. -->
       <div
         class="flex w-full snap-x snap-mandatory gap-4 overflow-x-auto pb-2 xl:-mx-4 xl:w-[calc(100%+2rem)] xl:justify-center xl:overflow-visible xl:pb-0"
       >

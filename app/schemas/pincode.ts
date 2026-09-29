@@ -1,10 +1,5 @@
-// Código impresso na embalagem — step 2 do wizard de prêmio instantâneo em
-// cadastro-nota.vue. O upload da nota fiscal acontece só no resgate
-// (endereço), etapa condicionada a ter ganhado um prêmio.
-
-// Formato do PIN — trocar aqui quando o cliente decidir:
-// 'numeric' (só números), 'alpha' (só letras) ou 'alphanumeric' (os dois).
 export type PinCodeFormat = 'numeric' | 'alpha' | 'alphanumeric'
+// TODO: confirmar o formato do PIN com o cliente.
 export const PIN_CODE_FORMAT: PinCodeFormat = 'alphanumeric'
 export const PIN_CODE_LENGTH = 7
 

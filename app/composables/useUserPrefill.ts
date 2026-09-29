@@ -22,8 +22,6 @@ function toUser(api: ApiUser): User {
   }
 }
 
-// Cache-first: se userStore.user já está populado nesta sessão, devolve direto
-// dele; só busca (/User/Get) quando não está.
 export function useUserPrefill() {
   const authStore = useAuthStore()
   const userStore = useUserStore()

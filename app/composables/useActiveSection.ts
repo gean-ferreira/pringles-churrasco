@@ -1,16 +1,13 @@
 import { useHeaderStore } from '~/stores/header.store'
 import { usePromotionStatus } from '~/composables/usePromotionStatus'
 
-// Toda seção visível na tela fica ativa ao mesmo tempo (não só uma) — o estado
-// é um conjunto no header.store, não um único id "ativo".
+// Todas as seções visíveis ficam ativas ao mesmo tempo, não só uma.
 export function useActiveSection(sectionIds: string[]) {
   const header = useHeaderStore()
   const { totalHeight } = usePromotionStatus()
   const nuxtApp = useNuxtApp()
 
-  // Desconta o que está fixo no topo: uma seção sob o header não conta como
-  // visível. O -1px embaixo evita que a seção seguinte, ainda encostando na
-  // borda, entre junto.
+  // Desconta header/banner fixos; o -1px embaixo ignora a seção que só encosta na borda.
   const margin = computed(() => `-${totalHeight.value + 1}px 0px -1px 0px`)
 
   let observer: IntersectionObserver | null = null
@@ -29,9 +26,8 @@ export function useActiveSection(sectionIds: string[]) {
     header.clearSectionVisibility()
   }
 
-  // Recria tudo do zero a cada chamada: o rootMargin só é lido na construção
-  // do observer, e (ao voltar de outra rota) os elementos antigos já foram
-  // destruídos — reaproveitá-los observaria nós fora do DOM.
+  // Recria o observer: o rootMargin só é lido na construção e, após trocar de
+  // rota, os elementos antigos já saíram do DOM.
   function scan() {
     disconnect()
 
@@ -56,9 +52,7 @@ export function useActiveSection(sectionIds: string[]) {
   onMounted(scan)
   watch(margin, scan)
 
-  // O header vive no layout e não remonta a cada rota: só o mount não basta,
-  // pois chegar na home vindo de outra página criaria as seções sem observer
-  // nenhum ligado. `page:finish` roda depois do render da nova página.
+  // O header vive no layout e não remonta ao trocar de rota.
   const unhook = nuxtApp.hook('page:finish', scan)
 
   onUnmounted(() => {

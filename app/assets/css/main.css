@@ -1,26 +1,18 @@
 @import 'tailwindcss';
 
-/*
- * Paleta extraída do CSS compilado do fbr.kellanova.site (não do tailwind.config.ts dele,
- * que estava desatualizado em relação ao que realmente foi publicado). Repetida por pedido
- * do cliente para a campanha Pringles Churrasco — ainda sem Figma próprio.
- * TODO: revisar/trocar quando o design da nova campanha chegar.
- */
+/* TODO: paleta herdada do kellanova — revisar quando o design próprio da campanha chegar. */
 @theme {
   /* === Brand === */
   --color-brand-primary: #ea002a;
   --color-brand-primary-dark: #c71729;
   --color-brand-primary-light: #ff002e;
-  --color-brand-secondary: #fbc521; /* amarelo — CTAs secundários */
-  --color-brand-accent-purple: #652f9e; /* fluxo de prêmio instantâneo (abrir lata) */
-  --color-brand-complementary: #dc1484; /* decorativo (scrollbar, detalhes) */
+  --color-brand-secondary: #fbc521;
+  --color-brand-accent-purple: #652f9e;
+  --color-brand-complementary: #dc1484;
   --color-brand-background: #ea002a;
   --color-brand-surface: #ffffff;
-  /* Figma "Marrom 02" — borda/sombra do estilo "comic" (botões, accordion) e text-shadow dos títulos. */
   --color-brand-outline: #6f1c11;
-  /* Figma: fundo da seção de produtos da home, sob o KV. */
   --color-brand-outline-light: #80361b;
-  /* Figma "Green" — CTA secundário e header aberto do accordion; distinto do feedback-green (#00a355). */
   --color-brand-accent-green: #009f4a;
 
   /* === Neutral palette === */
@@ -87,7 +79,6 @@
   --text-body-xs: 12px;
   --text-body-xs--line-height: 20px;
 
-  /* página de erro */
   --text-display: 110px;
   --text-display--line-height: 118px;
   --text-display-lg: 200px;
@@ -95,69 +86,46 @@
 
   /* === Efeitos "comic" (títulos) === */
   --text-shadow-comic: -4px 4px 0px var(--color-brand-outline);
-  /* sombra do "404" no desktop */
   --text-shadow-comic-lg: -16px 16px 0px var(--color-brand-outline);
 
   /* === Animações === */
-  /* SSR-safe: CSS puro (não <Transition>) — o fill-mode "both" já vale no
-     primeiro paint, sem salto na hidratação. Usada pela BarraCtaMobile. */
+  /* CSS puro em vez de <Transition>: o fill-mode "both" já vale no primeiro
+     paint, sem salto na hidratação. */
   --animate-slide-up: slide-up 300ms ease-out both;
-  /* loop AppInfiniteMarquee — Figma (nó 9204:2816): 1878px em 10s. Meia
-     trilha = 10 × 626px (estrela + texto no xl) → ~33s na mesma velocidade. */
+  /* Velocidade do Figma (1878px em 10s) aplicada à meia trilha (10 × 626px). */
   --animate-marquee: marquee 33s linear infinite;
-  /* Figma (get_motion_context, nós 9874:32133/32153/32173): lata do card de
-     novos-sabores "flutua" em loop infinito — timings originais aproximados. */
   --animate-can-bob: can-bob 3s ease-in-out infinite;
-  /* Latas de Prêmios: `translate` (não `transform`) preserva o rotate da lata;
-     amplitude via --float-y. */
+  /* `translate` (não `transform`) preserva o rotate da lata; amplitude via --float-y. */
   --animate-can-float: can-float 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  /* Figma (nós 9874:32188/32193): garfos decorativos balançam em loop infinito. */
   --animate-fork-wobble-left: fork-wobble-left 3s ease-in-out infinite;
   --animate-fork-wobble-right: fork-wobble-right 3s ease-in-out infinite;
-  /* Figma (nó 9874:28307, dentro do frame 9874:28420): tampa+lata balançando
-     enquanto o prêmio é apurado, em StepResultado.vue. */
   --animate-lata-shake:
     lata-shake-rotate 2.25s linear infinite,
     lata-shake-translate 2.25s linear infinite;
-  /* Mesmo balanço, só que roda 3x e para — usado depois que a requisição do
-     prêmio termina, antes de assentar. */
   --animate-lata-shake-settle:
     lata-shake-rotate 2.25s linear 3, lata-shake-translate 2.25s linear 3;
-  /* Figma (nó 9874:32082): tampa arremessada pra fora depois que a lata
-     assenta — roda uma vez só (sem infinite). `forwards` trava no último
-     frame (girada + deslocada); sem isso, ao terminar ela volta pro estado
-     sem animação (posição original em cima da lata). Valores de translate
-     ajustados no mobile (lata renderiza menor) — desktop usa os valores
-     originais do Figma. */
+
+  /* Revelação do prêmio: tampa, ticket, parabéns e brilhos disparam juntos na
+     mesma timeline de 12s. `forwards` onde o último frame difere do estado
+     sem animação (senão a peça volta pra posição original). */
   --animate-tampa-pop:
     tampa-pop-rotate 12s linear forwards,
     tampa-pop-translate-mobile 12s linear forwards;
   --animate-tampa-pop-desktop:
     tampa-pop-rotate 12s linear forwards,
     tampa-pop-translate-desktop 12s linear forwards;
-  /* Figma (nó 9874:28480): ticket do prêmio aparecendo com bounce, na mesma
-     timeline de 12s da tampa (dispara junto com --animate-tampa-pop). */
   --animate-ticket-pop:
     ticket-pop-opacity 12s linear, ticket-pop-translate 12s linear,
     ticket-pop-scale 12s linear;
-  /* Figma (nó 9874:28457): "Parabéns!! Você ganhou." aparecendo com bounce,
-     na mesma timeline de 12s da tampa/ticket. */
   --animate-parabens-pop:
     parabens-pop-opacity 12s linear, parabens-pop-translate 12s linear,
     parabens-pop-scale 12s linear;
-  /* Figma (nó 9874:28464): brilho surgindo atrás da tampa, na mesma timeline
-     de 12s da tampa/ticket/parabéns. */
   --animate-brilho-pop: brilho-pop-opacity 12s linear;
-  /* Figma (nó 9874:28437): sunburst de fundo atrás de tudo, entra com fade,
-     gira um pouco e cresce na mesma timeline de 12s. `forwards` porque o
-     estado final (girado + escala 1.05) difere do estado sem animação. */
   --animate-bg-brilho-pop:
     bg-brilho-pop-opacity 12s linear forwards,
     bg-brilho-pop-rotate 12s linear forwards,
     bg-brilho-pop-scale 12s linear forwards;
-  /* "Ooops. Não foi dessa vez!" no vão entre a tampa e a lata quando não há
-     prêmio — só um fade, sem o bounce do "Parabéns" do ganhador. Delay de
-     800ms = tempo da tampa subir (6.667% de 12s), senão ela cruza o texto. */
+  /* Delay = tempo da tampa subir (6.667% de 12s), senão ela cruza o texto. */
   --animate-nao-ganhou-fade: nao-ganhou-fade 600ms ease-out 800ms both;
 }
 
@@ -859,9 +827,7 @@
 }
 
 html {
-  /* --promo-banner-height é publicada por LayoutPromotionEndedBanner (0 quando
-     a faixa está fora da tela) — sem isso, âncoras (/#produtos etc.) landam
-     parcialmente escondidas atrás do header + banner quando a promo encerra. */
+  /* --promo-banner-height vem de LayoutPromotionEndedBanner. */
   scroll-padding-top: calc(
     var(--header-height) + var(--promo-banner-height, 0px)
   );
@@ -883,9 +849,8 @@ body {
   @apply text-h2 text-shadow-comic text-stroke-comic xl:text-h1 font-bold text-white uppercase;
 }
 
-/* Contorno "comic" dos títulos — simula o stroke "Outside" do Figma: o
-   text-stroke é centralizado, então pinta por baixo do fill (paint-order) com
-   o dobro da largura; só a metade externa aparece (1.5px mobile / 2.5px xl). */
+/* Simula stroke externo: o text-stroke é centralizado, então pinta por baixo
+   do fill com o dobro da largura e só a metade de fora aparece. */
 @utility text-stroke-comic {
   -webkit-text-stroke: 3px var(--color-brand-outline);
   paint-order: stroke fill;
@@ -895,7 +860,6 @@ body {
   }
 }
 
-/* Sombra do AppInfiniteMarquee */
 @utility text-shadow-comic-marquee {
   text-shadow: -2px 1px 0px var(--color-brand-outline);
 
@@ -912,8 +876,7 @@ body {
   @apply border-4 border-(--color-brand-outline) shadow-[-8px_8px_0px_0px_var(--color-brand-outline)];
 }
 
-/* Sunburst decorativo dos cards do cadastro-nota. A imagem é cinza: a cor vem
-   do fundo do pai, e o hard-light só deixa o padrão aparecer por cima dela. */
+/* A imagem é cinza: a cor vem do fundo do pai, o hard-light só sobrepõe o padrão. */
 @utility card-pattern {
   position: absolute;
   inset: 0;
@@ -923,16 +886,13 @@ body {
   mix-blend-mode: hard-light;
 }
 
-/* Recorte do card de produto da home (Figma nó 9874:28163, 390×560) — cantos
-   "dentados" que a moldura PNG contorna por cima. */
 @utility card-produto-shape {
   clip-path: path(
     'M342.752 2C345.876 2 348 6.1676 348 9.29199V31.8008C348 38.0115 353.035 43.0459 359.246 43.0459H378.754C381.748 43.0459 389 46.327 389 49.3216V510.99C389 514.318 383.082 517 379.754 517H360.246C354.035 517 349 522.035 349 528.246V548.754C349 551.867 346.886 556 343.773 556H44.205C41.104 556 39 551.905 39 548.804V528.296C39 522.085 33.9648 517.05 27.7539 517.05H10.2461C6.91825 517.05 1 514.368 1 511.04V49.0563C1 45.7285 6.91827 43.0469 10.2461 43.0469H30.7539C36.9648 43.0469 41.9999 38.0116 42 31.8008V5.29199C41.9999 3.6307 43.1882 2 44.8495 2H342.752Z'
   );
 }
 
-/* Stacking cards (novos-sabores) — cada card gruda abaixo do header/banner fixos
-   e o próximo, com z-index maior, cobre o anterior ao alcançar o mesmo top. */
+/* O próximo card (z-index maior) cobre o anterior ao alcançar o mesmo top. */
 @utility stack-card {
   position: sticky;
   top: calc(var(--header-height) + var(--promo-banner-height, 0px) + 16px);
@@ -944,9 +904,7 @@ body {
   }
 }
 
-/* w-1 controla a espessura da barra vertical; h-1 a da horizontal — sem o
-   h-1 a barra horizontal (ex.: scroll do AppTable no mobile) caía no tamanho
-   padrão do navegador, bem mais grossa que a vertical. */
+/* w-1 = espessura da barra vertical; h-1 = da horizontal. */
 ::-webkit-scrollbar {
   @apply h-1 w-1;
 }

@@ -5,7 +5,6 @@ import { useMobileBarOffset } from '~/composables/useMobileBarOffset'
 const { isLoggedIn } = useAuth()
 const { isPromotionFinished } = usePromotionStatus()
 
-// Deslogado -> /cadastro, logado -> /cadastro-nota; ambos gated pelo check-promotion.
 const ctaTo = computed(() =>
   isLoggedIn.value ? '/cadastro-nota' : '/cadastro'
 )
@@ -16,10 +15,7 @@ useMobileBarOffset(barraRef)
 </script>
 
 <template>
-  <!--
-    z-30: abaixo do header (z-50) e do menu mobile (z-40), que precisam cobrir
-    a barra quando abertos; acima do conteúdo da página.
-  -->
+  <!-- z-30: abaixo do header (z-50) e do menu mobile (z-40). -->
   <div
     v-if="!isPromotionFinished"
     ref="barraRef"

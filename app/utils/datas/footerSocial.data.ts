@@ -1,6 +1,5 @@
 import type { FooterSocial } from '~/types/footerSocial'
 
-// Contas oficiais da marca Pringles (não específicas da campanha).
 export const footerSocial: FooterSocial[] = [
   {
     name: 'Instagram',

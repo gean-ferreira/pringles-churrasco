@@ -16,7 +16,6 @@ const anchorSectionIds = headerNavigation
 const { isSectionActive } = useActiveSection(anchorSectionIds)
 
 const route = useRoute()
-// As seções só existem na home; em outras rotas nenhum link de âncora fica ativo.
 const isAnchorActive = (sectionId: string) =>
   route.path === '/' && isSectionActive(sectionId)
 

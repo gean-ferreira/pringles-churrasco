@@ -6,8 +6,7 @@ const { isPromotionFinished } = usePromotionStatus()
 </script>
 
 <template>
-  <!-- isolate: cria o contexto de empilhamento para os garfos (-z-10) ficarem
-       atrás de todo o conteúdo, mas ainda na frente do fundo verde. -->
+  <!-- isolate: garfos (-z-10) atrás do conteúdo, mas na frente do fundo. -->
   <section
     id="premios"
     class="relative isolate overflow-x-clip bg-(--color-brand-accent-green)"
@@ -29,7 +28,7 @@ const { isPromotionFinished } = usePromotionStatus()
       </div>
 
       <!-- TODO: falta a arte home-premios-card-mobile.png (334×559).
-           Background (não <img>): só a arte do breakpoint ativo é baixada. -->
+           Background (não <img>) pra baixar só a arte do breakpoint ativo. -->
       <div
         class="relative mt-[84px] h-[559px] w-[334px] bg-[url('/images/home-premios-card-mobile.png')] bg-size-[100%_100%] bg-no-repeat xl:mt-[106px] xl:h-[500px] xl:w-full xl:bg-[url('/images/home-premios-card-desktop.png')]"
       >
@@ -86,8 +85,7 @@ const { isPromotionFinished } = usePromotionStatus()
           </div>
         </div>
 
-        <!-- Figma (nós 9874:28047/28056/28069), xl escalado ×0.915. PNGs já
-             vêm inclinados ~15°: rotação = Figma − 15°. -->
+        <!-- PNGs já vêm inclinados ~15°: rotação = Figma − 15°. -->
         <img
           src="/images/novos-sabores-costela.png"
           alt="Lata Pringles sabor Costela na brasa"

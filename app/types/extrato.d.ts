@@ -8,11 +8,8 @@ export interface Participacao {
   motivo?: string
 }
 
-// Item de `content.extract` em GET /User/GetExtract. `status` é o id do
-// StatusEnum (1 EM_ANALISE, 2 APROVADO_AUTO, 3 REPROVADO_AUTO, 4 APROVADO,
-// 5 REPROVADO); `createdAt` já vem em dd/MM/yyyy.
 export interface ApiExtractItem {
-  createdAt: string
+  createdAt: string // dd/MM/yyyy
   pinCode: string
   instantWin: string
   status: number
@@ -24,7 +21,6 @@ export interface GetExtractResponse {
   message: string
   content: {
     extract: ApiExtractItem[]
-    // Sempre vazio nesta promoção (sem distribuição de números da sorte).
     luckyNumbers: unknown[]
   }
 }

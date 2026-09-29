@@ -27,8 +27,6 @@ const token = route.query.token
   ? (route.query.token as string).replace(/%/g, '+')
   : ''
 
-// Página só faz sentido via handoff de login/cadastro (query email+token) —
-// guard client-side, ver SKILL.md nota sobre páginas ssr:false flow-gated.
 onMounted(() => {
   if (!email || !token) {
     notificationModalStore.openModal({

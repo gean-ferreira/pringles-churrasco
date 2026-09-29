@@ -1,7 +1,5 @@
 export const useAuthStore = defineStore('auth', () => {
-  // useCookie, não um ref simples — um ref reseta a cada reload completo,
-  // deslogando o usuário sempre que ele atualiza a página ou abre um link
-  // protegido direto em vez de navegar até lá client-side.
+  // Cookie (não ref) pra sessão sobreviver a F5 e a links abertos direto.
   const token = useCookie<string | null>('auth_token', { default: () => null })
   const isAuthenticated = computed(() => !!token.value)
 

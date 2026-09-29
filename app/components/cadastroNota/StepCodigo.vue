@@ -49,7 +49,6 @@ onMounted(() => {
           Cadastre o Pin Code encontrado no lacre da sua Pringles®
         </template>
 
-        <!-- Só aparece no mobile — no desktop a imagem vira o card ao lado. -->
         <div
           class="relative shrink-0 overflow-hidden rounded-xl border-4 border-(--color-brand-outline) shadow-[8px_8px_0px_0px_var(--color-brand-outline)] md:hidden"
         >

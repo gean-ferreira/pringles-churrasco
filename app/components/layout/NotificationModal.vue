@@ -4,9 +4,7 @@ import { useNotificationModalStore } from '~/stores/modals/notificationModal.sto
 const store = useNotificationModalStore()
 const runningIndex = ref<number | null>(null)
 
-// Enquanto uma action assíncrona está em voo, a modal fica totalmente
-// intravável (sem X, ESC ou clique no overlay) — fechar visualmente não
-// cancela a requisição, e travar evita uma UI órfã no meio de uma ação real.
+// Travada durante a action: fechar não cancelaria a requisição em voo.
 const isLocked = computed(() => runningIndex.value !== null)
 
 async function runAction(index: number) {

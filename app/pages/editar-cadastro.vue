@@ -39,8 +39,7 @@ onMounted(() => {
 
 const { run: runEdit } = useAsyncSubmit()
 
-// Página não tem submit: "aceite_Novidades" é o único campo editável, então só
-// observamos essa mudança em vez de esperar um botão salvar.
+// Sem botão salvar: o único campo editável é salvo ao mudar.
 watch(
   () => formRef.value?.values.aceite_Novidades,
   (value, oldValue) => {
@@ -87,8 +86,7 @@ async function deleteAccount() {
   // Na falha o interceptor já trocou esta modal pela de erro.
   if (!success) return
 
-  // Desloga e sai da rota autenticada ANTES do aviso: a conta já não existe no
-  // back, então a sessão não pode sobreviver a um F5 ou ao fechar a modal.
+  // Desloga antes do aviso: a conta já não existe no back.
   await logout()
 
   notificationModalStore.openModal({

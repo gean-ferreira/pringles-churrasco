@@ -15,19 +15,15 @@ const props = withDefaults(
 )
 
 const isDisabled = computed(() => props.disabled || props.loading)
-// Borda + sombra deslocada "comic" (Figma: Type=Primary/Secondary/Destructive) — comum a toda variante colorida.
 const comicChrome = 'comic-chrome-sm'
+// No Figma: primary = "Destructive", secondary = "Primary", success = "Secondary".
 const variantClasses: Record<Variant, string> = {
-  // Figma "Destructive": vermelho + texto branco.
   primary: `bg-(--color-brand-primary) text-white ${comicChrome} hover:brightness-95 active:brightness-90`,
-  // Figma "Primary": amarelo + texto marrom.
   secondary: `bg-(--color-brand-secondary) text-(--color-brand-outline) ${comicChrome} hover:brightness-95 active:brightness-90`,
-  // Figma "Secondary": verde + texto branco.
   success: `bg-(--color-brand-accent-green) text-white ${comicChrome} hover:brightness-95 active:brightness-90`,
   accent: `bg-(--color-brand-accent-purple) text-white ${comicChrome} hover:brightness-110 active:brightness-95`,
   ghost:
     'border border-(--color-brand-neutral-200) text-(--color-brand-neutral-600) hover:bg-(--color-brand-neutral-50)',
-  // Figma: ação secundária em texto vermelho (ex.: "Sim, excluir meu cadastro").
   link: 'text-(--color-brand-primary) hover:underline'
 }
 const sizeClasses: Record<Size, string> = {
@@ -58,8 +54,7 @@ const rootClasses = computed(() => [
 ])
 
 const rootRef = ref<{ $el: HTMLElement } | HTMLElement | null>(null)
-// Permite foco programático (ex.: destacar o CTA ao entrar num step) sem
-// expor todo o componente — NuxtLink só dá acesso ao <a> via $el.
+// NuxtLink só expõe o <a> via $el.
 defineExpose({
   focus: () => {
     const el =

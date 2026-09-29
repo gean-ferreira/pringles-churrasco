@@ -2,8 +2,7 @@
 const props = defineProps<{
   to: string
   external?: boolean
-  // Força o estado ativo. Usado por links de âncora, cuja seção visível é
-  // resolvida por quem chama (useActiveSection). Omitido → estado vem da rota.
+  // Omitido → estado ativo vem da rota.
   active?: boolean
 }>()
 
@@ -16,8 +15,7 @@ const isActive = computed(() => {
   return route.path === props.to
 })
 
-// Âncora aponta para posição dentro da página aberta → aria-current="location".
-// `page` diria ao leitor de tela que o usuário está em outra rota.
+// Âncora é posição na página atual: `location`, não `page`.
 const ariaCurrent = computed(() => {
   if (!isActive.value) return undefined
   return isAnchor.value ? 'location' : 'page'

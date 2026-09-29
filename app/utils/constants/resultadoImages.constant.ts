@@ -1,6 +1,4 @@
-// Imagens do step 3 (StepResultado): a lata/tampa aparecem logo de cara e o
-// resto entra por v-if no meio da animação — sem pré-carregar, o pop
-// começa com a imagem ainda baixando.
+// Pré-carregadas: algumas entram por v-if no meio da animação.
 export const RESULTADO_IMAGES = [
   '/images/lata.png',
   '/images/tampa.png',

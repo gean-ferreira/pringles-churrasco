@@ -12,13 +12,12 @@ export interface User {
   aceite_Novidades: boolean
 }
 
-// Contrato de `content` em GET /User/Get (birthDate já vem em dd/MM/yyyy).
 export interface ApiUser {
   id: number
   cpf: string
   name: string
   lastName: string
-  birthDate: string
+  birthDate: string // dd/MM/yyyy
   phoneNumber: string
   email: string
   uf: string

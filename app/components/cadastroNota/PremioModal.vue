@@ -10,11 +10,8 @@ const emit = defineEmits<{ 'update:open': [value: boolean]; resgatar: [] }>()
     :close-icon="false"
     @update:open="emit('update:open', $event)"
   >
-    <!-- Margem negativa cancela o padding do AppModal (p-6 xl:p-10) pra esse
-         fundo verde + padrão cobrir o card inteiro, igual aos cards de sabor
-         e do PIN — sem precisar de uma prop nova no AppModal só pra isso.
-         `rounded-lg` (8px) = rounded-xl do AppModal (12px) menos a borda de
-         4px; com rounded-xl aqui o branco vazava nos cantos. -->
+    <!-- Margem negativa cancela o padding do AppModal; rounded-lg = raio do
+         AppModal (12px) menos a borda (4px). -->
     <div class="relative -m-6 overflow-hidden rounded-lg xl:-m-10">
       <div class="absolute inset-0 bg-(--color-brand-accent-green)" />
       <div aria-hidden="true" class="card-pattern" />

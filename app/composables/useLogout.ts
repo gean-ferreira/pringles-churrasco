@@ -13,7 +13,7 @@ export function useLogout() {
     authStore.logout()
     userStore.clearUser()
     extratoStore.invalidate()
-    participacaoStore.invalidate() // gap encontrado no kellanova: não limpava no logout
+    participacaoStore.invalidate()
   }
 
   async function logout(redirectTo = '/') {

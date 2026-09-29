@@ -3,14 +3,11 @@ import type { Flavor } from '~/types/flavor'
 
 defineProps<{ flavor: Flavor }>()
 
-// Hover do Figma (Smart Animate 0.3s ease-out) — só no desktop.
 const transition =
   'transition-[translate,scale,background-color] duration-300 ease-out motion-reduce:transition-none'
 </script>
 
 <template>
-  <!-- Mobile: nome em cima + lata centralizada (gap 40px), sem hover.
-       Desktop: coordenadas absolutas do Figma (390×560) + animação no hover. -->
   <article
     class="group relative flex h-[386px] w-[269px] shrink-0 snap-center flex-col items-center justify-center gap-4 overflow-hidden xl:block xl:h-[560px] xl:w-[390px]"
   >

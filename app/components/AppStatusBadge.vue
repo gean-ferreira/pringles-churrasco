@@ -1,9 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{ status: string }>()
 
-// A cor é resolvida pela raiz do texto ("aprova", "reprova", "analise"), então
-// cobre tanto "Aprovada" (Figma) quanto "APROVADO" (API) sem depender de gênero,
-// acento ou caixa.
+// Casa pela raiz do texto: independe de gênero, acento e caixa.
 const statusClass: Record<string, string> = {
   aprova: 'bg-(--color-feedback-green-50) text-(--color-feedback-green-700)',
   analise: 'bg-(--color-feedback-yellow-50) text-(--color-feedback-yellow-700)',

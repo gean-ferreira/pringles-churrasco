@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// Figma (nó 9874:27990): modal "não ganhou prêmio" — sem X nem clique fora,
-// a única saída é o botão pro extrato.
 defineProps<{ open: boolean }>()
 const emit = defineEmits<{ 'update:open': [value: boolean] }>()
 </script>

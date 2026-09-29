@@ -1,6 +1,3 @@
-// Mesma ideia do header/promo-banner (mede altura real via ResizeObserver e
-// publica como CSS var), só que para uma barra fixa no rodapé. No desktop a
-// barra chamadora é `md:hidden` → altura 0 → a var não reserva espaço.
 export function useMobileBarOffset(barRef: Ref<HTMLElement | null>) {
   onMounted(() => {
     const updateOffset = () => {

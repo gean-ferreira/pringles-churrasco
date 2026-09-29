@@ -14,8 +14,7 @@ onMounted(() => {
   firstCardRef.value?.focus()
 })
 
-// O voto não tem endpoint próprio: vai junto com o PIN em
-// /Participation/ReceivePinCode. Aqui só guardamos o id do sabor no store.
+// O voto não tem endpoint próprio: vai junto com o PIN no step seguinte.
 function onSubmit() {
   const sabor = NOVOS_SABORES_DATA.find((s) => s.slug === selecionado.value)
   if (!sabor) return

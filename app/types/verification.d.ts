@@ -1,5 +1,3 @@
-// Resposta de /Authentication/GenerateAuthenticationCode, /ResendCode e
-// /User/Create: e-mail mascarado + token (CPF criptografado) usado no /Login.
 export interface AuthCodeResponse {
   title: string
   message: string

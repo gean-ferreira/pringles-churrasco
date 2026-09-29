@@ -15,9 +15,6 @@ function hasGroup(group: OneTrustGroup) {
   return groups.includes(group)
 }
 
-// Substitui o middleware/CookieModal nativo da skill (ver SKILL.md 3.1): a
-// campanha usa OneTrust como ferramenta de consentimento, então o "gate" checa
-// os grupos ativos do OneTrust em vez de um useCookie('accepted') próprio.
 export const useOneTrustConsent = () => {
   const notificationModalStore = useNotificationModalStore()
 
@@ -37,8 +34,7 @@ export const useOneTrustConsent = () => {
     return true
   }
 
-  // Em ambiente de desenvolvimento/staging o OneTrust nem sempre está
-  // configurado, então o gate de consentimento só é exigido em produção.
+  // Fora de produção o OneTrust nem sempre está configurado.
   const requireConsentIfProd = (groups: OneTrustGroup[]) => {
     if (import.meta.env.VITE_SITE_ENV !== 'production') return true
     return requireConsent(groups)

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// A finalidade muda por tela (Fale conosco, Cadastro, Meu perfil...); o resto do
-// texto é o aviso padrão de LGPD e não varia.
 defineProps<{ purpose: string }>()
 </script>
 <template>

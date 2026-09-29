@@ -4,10 +4,8 @@ import { usePromotionStatus } from '~/composables/usePromotionStatus'
 const { isPromotionFinished, bannerHeight } = usePromotionStatus()
 const bannerRef = ref<HTMLElement | null>(null)
 
-// Mede a altura real renderizada (a mensagem pode quebrar em 2 linhas em telas
-// estreitas) e publica ela de duas formas: como CSS var (layout padding-top +
-// scroll-padding-top) e no store (bannerHeight), para o rootMargin do
-// IntersectionObserver de useActiveSection, que não lê CSS vars.
+// Publica a altura também no state: o rootMargin do IntersectionObserver
+// (useActiveSection) não lê CSS vars.
 onMounted(() => {
   const updateOffset = () => {
     const height = bannerRef.value?.offsetHeight ?? 0

@@ -22,8 +22,7 @@ const { isPromotionFinished } = usePromotionStatus()
           >
             Saiba como
           </span>
-          <!-- Figma: no mobile são 2 tarjas de 343×74 empilhadas (sobrepostas
-               28px); no desktop uma de 714×154, com a sombra passando 13px do texto. -->
+          <!-- Mobile: 2 tarjas empilhadas; desktop: uma só. -->
           <span
             class="text-h2 xl:text-h1-lg text-shadow-comic flex h-[120px] w-[343px] items-center justify-center bg-[url('/images/tarja-home-titulo.png'),url('/images/tarja-home-titulo.png')] bg-size-[343px_74px] bg-position-[0_0,0_46px] bg-no-repeat text-center text-(--color-brand-secondary) xl:h-[154px] xl:w-[714px] xl:bg-[url('/images/tarja-home-titulo.png')] xl:bg-size-[714px_154px] xl:bg-position-[0_0] xl:pb-[13px]"
           >
@@ -33,7 +32,7 @@ const { isPromotionFinished } = usePromotionStatus()
         <IconStar class="hidden size-8 shrink-0 text-white xl:block" />
       </div>
 
-      <!-- 1 → 2 → 4 colunas (nunca 3, que deixaria um card órfão). -->
+      <!-- Nunca 3 colunas: deixaria um card órfão. -->
       <ol
         class="grid w-full grid-cols-1 justify-items-center gap-6 sm:max-w-[600px] sm:grid-cols-2 xl:max-w-none xl:grid-cols-4"
       >

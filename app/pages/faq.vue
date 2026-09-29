@@ -15,7 +15,6 @@ useSeoMeta({
 })
 useHead({ link: [{ rel: 'canonical', href: `${url}/faq` }] })
 
-// Conteúdo fixo (decisão da campanha) — ver app/utils/datas/faq.data.ts.
 const items = FAQ_ITEMS.map((item) => ({
   question: item.pergunta,
   answer: item.resposta

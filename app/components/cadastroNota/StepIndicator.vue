@@ -7,7 +7,6 @@ const STEPS = [
   { step: 3, label: 'Resultado' }
 ] as const
 
-// Steps já concluídos continuam marcados como ativos, não só o atual.
 function isActive(step: number) {
   return step <= props.currentStep
 }

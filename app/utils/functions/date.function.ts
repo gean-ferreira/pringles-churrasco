@@ -1,4 +1,4 @@
-// Converte string de data no formato 'dd/MM/yyyy' para objeto Date
+// 'dd/MM/yyyy' → Date
 export const parseDate = (dateStr: string): Date => {
   const dateParts = dateStr.split('/')
   return new Date(

@@ -1,7 +1,6 @@
 import type { FaqItem } from '~/types/faq'
 
-// Conteúdo fixo (decisão da campanha — sem backend de FAQ dedicado).
-// TODO: perguntas e respostas reais da campanha Pringles Churrasco.
+// TODO: perguntas e respostas reais da campanha.
 export const FAQ_ITEMS: FaqItem[] = [
   {
     pergunta: 'TODO: pergunta 1 da campanha Pringles Churrasco',

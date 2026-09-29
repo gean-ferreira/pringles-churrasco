@@ -3,8 +3,7 @@ import type { Participacao } from '~/types/extrato'
 export const useExtratoStore = defineStore('extrato', () => {
   const participacoes = ref<Participacao[]>([])
 
-  // null = nunca carregado nesta sessão. Diferente de "carregado e vazio",
-  // que não deve disparar novo fetch a cada visita.
+  // null = nunca carregado (diferente de carregado e vazio).
   const loadedAt = ref<number | null>(null)
   const isLoaded = computed(() => loadedAt.value !== null)
 

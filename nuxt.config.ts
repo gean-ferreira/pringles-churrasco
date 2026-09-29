@@ -2,7 +2,7 @@
 import tailwindcss from '@tailwindcss/vite'
 import { url, title, gtm } from './app/utils/constants/seo.constant'
 
-// TODO: URLs reais do Adobe Launch para a campanha Pringles Churrasco (hoje são as do kellanova).
+// TODO: URLs reais do Adobe Launch da campanha.
 const adobeLaunchScripts = {
   development: 'REPLACE_ADOBE_LAUNCH_DEVELOPMENT_URL',
   staging: 'REPLACE_ADOBE_LAUNCH_STAGING_URL',
@@ -95,7 +95,7 @@ export default defineNuxtConfig({
         }
       ],
       script: [
-        // cookies — mantido via OneTrust (decisão da campanha: sem CookieModal nativo, ver SKILL.md 3.1)
+        // OneTrust (consentimento de cookies)
         {
           src: 'https://cdn.cookielaw.org/consent/REPLACE_ONETRUST_ID/OtAutoBlock.js',
           type: 'text/javascript',
@@ -112,7 +112,6 @@ export default defineNuxtConfig({
           type: 'text/javascript',
           tagPriority: 'critical'
         },
-        // fim cookies
         // Adobe Launch
         {
           src: adobeLaunchScripts[
@@ -120,7 +119,6 @@ export default defineNuxtConfig({
           ],
           tagPriority: 'critical'
         },
-        // fim Adobe Launch
         {
           src: '/scripts/datalayer.js',
           defer: true
