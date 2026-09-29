@@ -8,7 +8,9 @@
   >
     <LayoutHeader />
     <LayoutPromotionEndedBanner />
-    <slot />
+    <main id="conteudo" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
     <LayoutFooter />
     <ClientOnly>
       <LayoutNotificationModal />

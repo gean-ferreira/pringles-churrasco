@@ -17,12 +17,12 @@ useHead({ link: [{ rel: 'canonical', href: url }] })
 </script>
 
 <template>
-  <main>
+  <div>
     <SectionsHeroBanner />
     <SectionsComoParticipar />
     <SectionsPremios />
     <SectionsDestaqueHome />
     <SectionsProdutosParticipantes />
     <SectionsBarraCtaMobile />
-  </main>
+  </div>
 </template>

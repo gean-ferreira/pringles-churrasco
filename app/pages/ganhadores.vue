@@ -32,11 +32,11 @@ useHead({ link: [{ rel: 'canonical', href: `${url}/ganhadores` }] })
         </p>
       </header>
 
-      <main
+      <div
         class="flex w-full max-w-[1216px] flex-col gap-8 pb-14 xl:gap-10 xl:pb-25"
       >
         <SectionsWinnersInstantPrize />
-      </main>
+      </div>
     </div>
 
     <AppInfiniteMarquee />

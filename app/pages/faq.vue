@@ -37,9 +37,9 @@ const items = FAQ_ITEMS.map((item) => ({
         <IconStar class="size-4 shrink-0 text-white md:size-8" />
       </header>
 
-      <main class="w-full max-w-[1008px]">
+      <div class="w-full max-w-[1008px]">
         <AppAccordion :items="items" />
-      </main>
+      </div>
 
       <div class="flex w-full flex-col items-center gap-8">
         <h2

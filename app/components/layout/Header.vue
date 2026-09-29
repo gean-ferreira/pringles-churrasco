@@ -25,6 +25,12 @@ function checkIsMobile() {
 }
 onMounted(checkIsMobile)
 
+// Sem mudar a URL: um hash `#conteudo` passaria pelo router.
+function skipToContent() {
+  header.closeMenu()
+  document.getElementById('conteudo')?.focus()
+}
+
 async function handleLogout() {
   header.closeMenu()
   await logout()
@@ -35,6 +41,12 @@ async function handleLogout() {
   <header
     class="fixed inset-x-0 top-0 z-50 h-(--header-height) bg-(--color-brand-primary)"
   >
+    <a
+      href="#conteudo"
+      class="comic-chrome-sm text-body-sm sr-only z-60 rounded-xl bg-(--color-brand-secondary) px-4 py-3 font-bold text-(--color-brand-outline) uppercase focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+      @click.prevent="skipToContent"
+      >Pular para o conteúdo</a
+    >
     <div
       class="container flex h-full items-start justify-between xl:justify-start xl:gap-14"
     >
@@ -51,7 +63,7 @@ async function handleLogout() {
         type="button"
         class="comic-chrome-sm flex items-center justify-center self-center rounded-xl bg-(--color-brand-secondary) p-3 text-(--color-brand-outline) xl:hidden"
         :aria-expanded="header.isOpen"
-        aria-label="Abrir menu"
+        :aria-label="header.isOpen ? 'Fechar menu' : 'Abrir menu'"
         @click="header.toggleMenu"
       >
         <IconClose v-if="header.isOpen" />

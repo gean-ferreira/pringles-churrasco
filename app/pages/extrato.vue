@@ -93,7 +93,7 @@ onMounted(async () => {
         </h1>
       </header>
 
-      <main class="flex w-full flex-col gap-8 pb-14 xl:gap-10 xl:pb-25">
+      <div class="flex w-full flex-col gap-8 pb-14 xl:gap-10 xl:pb-25">
         <div
           v-if="isLoading"
           class="h-18 w-full animate-pulse rounded-lg bg-(--color-brand-neutral-100)"
@@ -130,7 +130,7 @@ onMounted(async () => {
         >
           Cadastrar PIN Code
         </AppButton>
-      </main>
+      </div>
     </div>
 
     <AppInfiniteMarquee />
