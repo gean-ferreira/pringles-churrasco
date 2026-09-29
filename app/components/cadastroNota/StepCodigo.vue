@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GenericObject } from 'vee-validate'
 import { pincodeSchema } from '~/schemas/pincode'
-import { MASK_PIN_CODE, PIN_CODE_INPUT_MODE } from '~/utils/masks'
+import { MASK_PIN_CODE } from '~/utils/masks'
 import { toFormData } from '~/utils/functions/formData.function'
 import { useParticipacaoStore } from '~/stores/participacao.store'
 
@@ -69,7 +69,6 @@ onMounted(() => {
             label="Pin Code"
             :mask-input="MASK_PIN_CODE"
             placeholder="Insira o Pin Code"
-            :input-mode="PIN_CODE_INPUT_MODE"
             is-required
           />
           <AppButton
