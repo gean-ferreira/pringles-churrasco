@@ -155,6 +155,19 @@
     bg-brilho-pop-opacity 12s linear forwards,
     bg-brilho-pop-rotate 12s linear forwards,
     bg-brilho-pop-scale 12s linear forwards;
+  /* "Ooops. Não foi dessa vez!" no vão entre a tampa e a lata quando não há
+     prêmio — só um fade, sem o bounce do "Parabéns" do ganhador. Delay de
+     800ms = tempo da tampa subir (6.667% de 12s), senão ela cruza o texto. */
+  --animate-nao-ganhou-fade: nao-ganhou-fade 600ms ease-out 800ms both;
+}
+
+@keyframes nao-ganhou-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @property --rotate-transform {

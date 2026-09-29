@@ -3,6 +3,8 @@ import { useParticipacaoStore } from '~/stores/participacao.store'
 import { useNotificationModalStore } from '~/stores/modals/notificationModal.store'
 import { useUserPrefill } from '~/composables/useUserPrefill'
 import { toFormData } from '~/utils/functions/formData.function'
+import { preloadImages } from '~/utils/functions/preloadImage.function'
+import { RESULTADO_IMAGES } from '~/utils/constants/resultadoImages.constant'
 
 interface CheckPendingResponse {
   responseDto: {
@@ -35,10 +37,16 @@ const indicatorStep = computed<1 | 2 | 3>(() =>
 )
 
 // Entrar na página sempre volta pro início do wizard (votação) — o único
-// jeito de pular pra frente é a checagem de pendência, disparada só depois
-// de votar (ver onVoted).
+// jeito de pular pra frente é a checagem de pendência, disparada logo na
+// entrada (ver checkPending).
 onMounted(() => {
   participacaoStore.setStep(1)
+  checkPending()
+  // Baixa as imagens do step 3 enquanto o usuário vota/cadastra o PIN, sem
+  // disputar banda com o carregamento inicial da página.
+  const preload = () => preloadImages(RESULTADO_IMAGES)
+  if ('requestIdleCallback' in window) requestIdleCallback(preload)
+  else setTimeout(preload, 1000)
 })
 
 watch(
@@ -46,17 +54,17 @@ watch(
   () => window.scrollTo({ top: 0 })
 )
 
-// Só depois de votar checamos se há um fluxo pendente (ex.: usuário já
+// Checa, antes da votação, se há um fluxo pendente (ex.: usuário já
 // cadastrou o código mas fechou a aba antes de abrir a lata ou enviar a
-// nota fiscal) — nesse caso pulamos o step de código e vamos direto pro step
-// onde ele parou.
-function onVoted() {
+// nota fiscal) — nesse caso pulamos votação e código e vamos direto pro step
+// onde ele parou. O voto da participação pendente já foi gravado junto com o
+// PIN, então votar de novo seria descartado. A votação fica desabilitada
+// enquanto a checagem roda.
+function checkPending() {
   runCheckPending(async () => {
     const user = await loadUser()
     if (!user) return
 
-    // TODO(back): CheckPending deveria usar o usuário do token, não userId no
-    // form (ver ap.md, "Observações e pontos de atenção" item 2).
     const res = await useFetchData<CheckPendingResponse>(
       '/Participation/CheckPending',
       {
@@ -69,13 +77,14 @@ function onVoted() {
     const pending = res.responseDto
     // Prêmio pendente (lata não aberta) → wizard step 3 | nota fiscal
     // pendente → wizard step 4.
+    // TODO(pendencia): se vierem as duas pendências (participações
+    // diferentes), o prêmio ganha prioridade e a nota pendente da outra só
+    // reaparece quando o usuário voltar pra página — encadear o step 4 com
+    // `attachmentParticipationId` depois do resultado.
     const pendingReward = pending.pendingReward && pending.rewardParticipationId
     const pendingAttachment =
       pending.pendingAttachment && pending.attachmentParticipationId
-    if (!pendingReward && !pendingAttachment) {
-      participacaoStore.setStep(2)
-      return
-    }
+    if (!pendingReward && !pendingAttachment) return
 
     participacaoStore.setIdParticipacao(
       (pendingReward
@@ -111,7 +120,7 @@ function onVoted() {
         <CadastroNotaStepVotacao
           v-if="participacaoStore.step === 1"
           :disabled="checkingPending"
-          @voted="onVoted"
+          @voted="participacaoStore.setStep(2)"
         />
         <CadastroNotaStepCodigo
           v-else-if="participacaoStore.step === 2"

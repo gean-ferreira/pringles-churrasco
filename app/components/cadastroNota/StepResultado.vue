@@ -3,6 +3,8 @@ import confetti from 'canvas-confetti'
 import { useParticipacaoStore } from '~/stores/participacao.store'
 import { useExtratoStore } from '~/stores/extrato.store'
 import { toFormData } from '~/utils/functions/formData.function'
+import { preloadImages } from '~/utils/functions/preloadImage.function'
+import { RESULTADO_IMAGES } from '~/utils/constants/resultadoImages.constant'
 
 const PRIZE_LABEL = 'Cartão Virtual - R$ 500,00'
 
@@ -23,6 +25,12 @@ const showTicket = ref(false)
 const showParabens = ref(false)
 const showBrilho = ref(false)
 const showBgBrilho = ref(false)
+// Sem prêmio: só o "Poxa, não foi dessa vez!" com fade, depois a modal.
+const showNaoGanhou = ref(false)
+const isNaoGanhouModalOpen = ref(false)
+// true a partir do momento em que a lata assenta (ganhando ou não) — segura
+// título/botão escondidos daí em diante.
+const revealed = ref(false)
 
 const confettiCanvasRef = ref<HTMLCanvasElement | null>(null)
 const stageRef = ref<HTMLElement | null>(null)
@@ -31,6 +39,9 @@ let confettiTimer: ReturnType<typeof setTimeout> | undefined
 let premioModalTimer: ReturnType<typeof setTimeout> | undefined
 // Tempo pra tampa/ticket/parabéns assentarem antes da modal cobrir a tela.
 const PREMIO_MODAL_DELAY_MS = 3000
+// Sem prêmio: tampa sobe (800ms) + fade do texto (600ms) + tempo pra ler
+// antes da modal.
+const NAO_GANHOU_MODAL_DELAY_MS = 2800
 const CONFETTI_COLORS = ['#fbc521', '#ea002a', '#009f4a', '#ffffff']
 
 // Canvas fixo em tela cheia: o confete sai da posição da tampa (topo do palco)
@@ -80,35 +91,57 @@ function launchConfetti() {
 function openLata() {
   runOpen(async () => {
     // Chamar uma única vez por participação — o back registra a interação.
-    const res = await useFetchData<{ haveReward: boolean }>('/Reward/Get', {
-      method: 'POST',
-      body: toFormData({ participationId: participacaoStore.idParticipacao }),
-      requiresAuth: true
-    })
+    // As imagens da revelação carregam em paralelo com a requisição (a lata
+    // segue balançando), então o pop nunca começa com imagem faltando. Se
+    // a página já pré-carregou, resolve na hora.
+    const [res] = await Promise.all([
+      useFetchData<{ haveReward: boolean }>('/Reward/Get', {
+        method: 'POST',
+        body: toFormData({ participationId: participacaoStore.idParticipacao }),
+        requiresAuth: true
+      }),
+      preloadImages(RESULTADO_IMAGES)
+    ])
     // A API só diz se ganhou; o prêmio instantâneo é único na promoção.
     reward.value = res.haveReward ? PRIZE_LABEL : null
     extratoStore.invalidate()
     settling.value = true
+    // Com movimento reduzido o `motion-reduce:animate-none` tira a animação
+    // de assentar, então `animationend` nunca dispara — sem isso a revelação
+    // e a modal do prêmio nunca aconteciam.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      onShakeSettleEnd()
+    }
   })
 }
 
 // `@animationend` dispara pras duas animações (rotate + translate) ao mesmo
 // tempo, já que têm a mesma duração — o guard evita rodar duas vezes.
 function onShakeSettleEnd() {
-  if (settling.value) {
-    settling.value = false
-    poppingLid.value = true
-    showTicket.value = true
-    showParabens.value = true
-    showBrilho.value = true
-    showBgBrilho.value = true
-    launchConfetti()
-    if (reward.value) {
-      premioModalTimer = setTimeout(() => {
-        isPremioModalOpen.value = true
-      }, PREMIO_MODAL_DELAY_MS)
-    }
+  if (!settling.value) return
+  settling.value = false
+  revealed.value = true
+  poppingLid.value = true
+
+  if (!reward.value) {
+    // Sem prêmio: a tampa sai igual, mas sem confete/brilho/ticket — só o
+    // texto aparecendo no vão entre tampa e lata, e depois a modal com o
+    // caminho pro extrato.
+    showNaoGanhou.value = true
+    premioModalTimer = setTimeout(() => {
+      isNaoGanhouModalOpen.value = true
+    }, NAO_GANHOU_MODAL_DELAY_MS)
+    return
   }
+
+  showTicket.value = true
+  showParabens.value = true
+  showBrilho.value = true
+  showBgBrilho.value = true
+  launchConfetti()
+  premioModalTimer = setTimeout(() => {
+    isPremioModalOpen.value = true
+  }, PREMIO_MODAL_DELAY_MS)
 }
 
 onBeforeUnmount(() => {
@@ -144,13 +177,12 @@ onMounted(() => {
              `settling || poppingLid`: uma vez que a requisição termina, não
              volta mais — `settling` vira `false` assim que a tampa começa a
              sair (poppingLid), então usar só `settling` fazia esse bloco
-             reaparecer nesse momento e empurrar o ticket. -->
+             reaparecer nesse momento e empurrar o ticket. `revealed` cobre
+             também o caso sem prêmio, em que a tampa não sai. -->
       <div
         class="flex w-full flex-col items-center transition-opacity duration-300"
         :class="
-          settling || poppingLid
-            ? 'pointer-events-none opacity-0'
-            : 'opacity-100'
+          settling || revealed ? 'pointer-events-none opacity-0' : 'opacity-100'
         "
       >
         <h1
@@ -171,7 +203,7 @@ onMounted(() => {
           variant="success"
           class="w-full max-w-[384px]"
           :loading="opening"
-          :disabled="settling || poppingLid"
+          :disabled="settling || revealed"
           @click="openLata"
         >
           {{ opening ? 'Abrindo...' : 'Quero descobrir' }}
@@ -215,10 +247,15 @@ onMounted(() => {
             }"
             @animationend="onShakeSettleEnd"
           >
+            <!-- width/height = tamanho real do PNG: reservam o espaço (e a
+                   proporção) antes da imagem carregar. Sem eles o palco
+                   inteiro tem largura/altura 0 até o load e a tela colapsa. -->
             <img
               src="/images/lata.png"
               alt=""
               aria-hidden="true"
+              width="592"
+              height="474"
               class="h-auto w-full object-contain"
             />
             <!-- Brilho no mesmo ponto da tampa (logo acima do pote), mas
@@ -238,6 +275,8 @@ onMounted(() => {
                 src="/images/tampa.png"
                 alt=""
                 aria-hidden="true"
+                width="283"
+                height="73"
                 class="w-full"
                 :class="{
                   'animate-tampa-pop md:animate-tampa-pop-desktop motion-reduce:animate-none':
@@ -246,6 +285,17 @@ onMounted(() => {
               />
             </div>
           </div>
+
+          <!-- Sem prêmio: texto com fade centralizado no vão entre a lata e
+                 a tampa já arremessada. A tampa para ~255px (mobile) / ~484px
+                 (desktop) acima da lata (translate final da keyframe menos a
+                 altura dela) — o -mt leva o centro do texto pra metade disso. -->
+          <p
+            v-if="showNaoGanhou"
+            class="animate-nao-ganhou-fade text-h2 text-shadow-comic text-stroke-comic md:text-h1-lg absolute top-0 left-1/2 -mt-32 w-max -translate-x-1/2 -translate-y-1/2 text-center font-bold text-white uppercase motion-reduce:animate-none md:-mt-60"
+          >
+            Ooops.<br />Não foi dessa<br />vez!
+          </p>
 
           <!-- Camada de efeitos da revelação — fora do grupo rígido de
                  cima, então não balança/gira junto com a lata. `bottom-full`
@@ -268,7 +318,9 @@ onMounted(() => {
               v-if="showTicket"
               src="/images/cadastro-nota-premio-ticket.png"
               alt="Ticket de prêmio Pringles"
-              class="animate-ticket-pop w-[45%] -rotate-[26deg] motion-reduce:animate-none"
+              width="333"
+              height="154"
+              class="animate-ticket-pop h-auto w-[45%] -rotate-[26deg] motion-reduce:animate-none"
             />
           </div>
         </div>
@@ -280,6 +332,10 @@ onMounted(() => {
       :premio="reward ?? ''"
       @update:open="isPremioModalOpen = $event"
       @resgatar="onResgatarPremio"
+    />
+    <CadastroNotaNaoGanhouModal
+      :open="isNaoGanhouModalOpen"
+      @update:open="isNaoGanhouModalOpen = $event"
     />
   </div>
 </template>
