@@ -24,8 +24,46 @@ function onKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape' && props.open && props.dismissible) close()
 }
 
+const titleId = useId()
+const descriptionId = useId()
+const dialogRef = ref<HTMLElement | null>(null)
+let previousFocus: HTMLElement | null = null
+
+// Com a app `inert`, o Tab e o leitor de tela não saem do modal.
+function setAppInert(value: boolean) {
+  openModals += value ? 1 : -1
+  const app = document.getElementById('__nuxt')
+  if (app) app.inert = openModals > 0
+}
+
+watch(
+  () => props.open,
+  async (open, wasOpen) => {
+    if (!import.meta.client || open === !!wasOpen) return
+    setAppInert(open)
+    if (open) {
+      previousFocus = document.activeElement as HTMLElement | null
+      await nextTick()
+      dialogRef.value?.focus()
+    } else if (previousFocus?.isConnected) {
+      previousFocus.focus()
+      previousFocus = null
+    }
+  },
+  { immediate: true }
+)
+
 onMounted(() => document.addEventListener('keydown', onKeydown))
-onUnmounted(() => document.removeEventListener('keydown', onKeydown))
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeydown)
+  if (props.open) setAppInert(false)
+})
+</script>
+
+<script lang="ts">
+// Compartilhado entre instâncias: com modais empilhados, a app só volta
+// a ser interativa quando o último fecha.
+let openModals = 0
 </script>
 <template>
   <Teleport to="body">
@@ -56,10 +94,14 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
         >
           <div
             v-if="open"
-            class="comic-chrome-lg relative flex w-full flex-col gap-2 rounded-xl bg-white p-6 xl:p-10"
+            ref="dialogRef"
+            class="comic-chrome-lg relative flex w-full flex-col gap-2 rounded-xl bg-white p-6 outline-none xl:p-10"
             :style="{ maxWidth }"
             role="dialog"
             aria-modal="true"
+            :aria-labelledby="title ? titleId : undefined"
+            :aria-describedby="description ? descriptionId : undefined"
+            tabindex="-1"
           >
             <button
               v-if="closeIcon"
@@ -78,12 +120,14 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <h2
                   v-if="title"
+                  :id="titleId"
                   class="text-h3 text-shadow-comic text-stroke-comic xl:text-h2 font-bold text-(--color-brand-secondary) uppercase"
                   v-html="title"
                 />
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <p
                   v-if="description"
+                  :id="descriptionId"
                   class="text-body-sm whitespace-pre-line text-(--color-brand-neutral-800)"
                   v-html="description"
                 />
