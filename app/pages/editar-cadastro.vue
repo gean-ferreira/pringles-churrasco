@@ -38,20 +38,28 @@ onMounted(() => {
   }))
 })
 
+const { run: runEdit } = useAsyncSubmit()
+
 // Página não tem submit: "aceite_Novidades" é o único campo editável, então só
 // observamos essa mudança em vez de esperar um botão salvar.
 watch(
   () => formRef.value?.values.aceite_Novidades,
   (value, oldValue) => {
     if (oldValue === undefined || value === undefined) return
-    // TODO: endpoint de atualização do aceite de novidades ainda não definido
-    // (decisão de rota pendente) — por ora só reflete no store local.
-    if (userStore.user) {
-      userStore.setUser({
-        ...userStore.user,
-        aceite_Novidades: value as boolean
+    runEdit(async () => {
+      // Único endpoint da API que recebe JSON no body (não form).
+      await useFetchData('/User/Edit', {
+        method: 'POST',
+        body: { acceptsMarketingEmails: value as boolean },
+        requiresAuth: true
       })
-    }
+      if (userStore.user) {
+        userStore.setUser({
+          ...userStore.user,
+          aceite_Novidades: value as boolean
+        })
+      }
+    })
   }
 )
 
@@ -61,8 +69,9 @@ const { loading: generatingCode, run: runGenerateCode } = useAsyncSubmit()
 
 function onRequestDelete() {
   runGenerateCode(async () => {
-    // TODO: confirmar rota real com o backend — endpoint ainda não existe no
-    // projeto, seguindo a convenção /Usuario/* e o contrato de VerificationMascaras.
+    // TODO(back): aguardando endpoint de geração/validação do OTP de exclusão.
+    // A API nova (ap.md) só tem DELETE /User/Delete, sem código — o fluxo com
+    // código (Figma) segue nas rotas legadas até o back entregar.
     const res = await useFetchData<VerificationMascaras>(
       '/Usuario/GerarCodigoExclusao',
       { method: 'POST', requiresAuth: true }

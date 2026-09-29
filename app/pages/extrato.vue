@@ -1,7 +1,31 @@
 <script setup lang="ts">
-import type { GetExtratoResponse, Participacao } from '~/types/extrato'
+import type {
+  ApiExtractItem,
+  GetExtractResponse,
+  Participacao,
+  ParticipacaoStatus
+} from '~/types/extrato'
 import type { TableColumn } from '~/types/table'
 import { useExtratoStore } from '~/stores/extrato.store'
+
+// StatusEnum da API → label da UI (os status AUTO contam como moderados).
+const STATUS_BY_ID: Record<number, ParticipacaoStatus> = {
+  1: 'EM ANÁLISE',
+  2: 'APROVADO',
+  3: 'REPROVADO',
+  4: 'APROVADO',
+  5: 'REPROVADO'
+}
+
+function toParticipacao(item: ApiExtractItem): Participacao {
+  return {
+    dataCadastro: item.createdAt,
+    pincode: item.pinCode,
+    status: STATUS_BY_ID[item.status] ?? 'EM ANÁLISE',
+    premio: item.instantWin || '-',
+    motivo: item.rejectionReason ?? undefined
+  }
+}
 
 definePageMeta({ middleware: 'auth', name: 'Extrato' })
 
@@ -37,14 +61,11 @@ onMounted(async () => {
     return
   }
   try {
-    const res = await useFetchData<GetExtratoResponse>(
-      '/Participacao/ExtratoCupom',
-      {
-        method: 'GET',
-        requiresAuth: true
-      }
-    )
-    extratoStore.setExtrato(res.extratoCupomDto)
+    const res = await useFetchData<GetExtractResponse>('/User/GetExtract', {
+      method: 'GET',
+      requiresAuth: true
+    })
+    extratoStore.setExtrato(res.content.extract.map(toParticipacao))
   } finally {
     isLoading.value = false
   }

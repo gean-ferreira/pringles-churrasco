@@ -1,46 +1,55 @@
 import type { Form } from 'vee-validate'
 import { useAuthStore } from '~/stores/auth.store'
 import { useUserStore } from '~/stores/user.store'
-import type { User } from '~/types/user'
+import type { ApiUser, User } from '~/types/user'
 import { useFetchData } from '~/composables/useFetchData'
-import { formatDate } from '~/utils/functions/date.function'
 
 type InitialValuesMapper = (user: User) => Record<string, unknown>
 
-// Cache-first: se userStore.user já está populado nesta sessão, resetForm
-// direto dele; só busca (/Usuario/Consultar) quando não está.
+function toUser(api: ApiUser): User {
+  return {
+    id: api.id,
+    cpf: api.cpf,
+    nome: api.name,
+    sobrenome: api.lastName,
+    telefone: api.phoneNumber,
+    email: api.email,
+    dt_nascimento: api.birthDate,
+    estado: api.uf,
+    aceite_Regulamento: api.termsAndConditions,
+    aceite_Politica: api.privacyPolicy,
+    aceite_Novidades: api.acceptsMarketingEmails
+  }
+}
+
+// Cache-first: se userStore.user já está populado nesta sessão, devolve direto
+// dele; só busca (/User/Get) quando não está.
 export function useUserPrefill() {
   const authStore = useAuthStore()
   const userStore = useUserStore()
   const prefilling = ref(false)
 
-  function normalizeUser(user: User): User {
-    return { ...user, dt_nascimento: formatDate(user.dt_nascimento) }
+  async function loadUser(): Promise<User | null> {
+    if (userStore.user) return userStore.user
+    if (!authStore.isAuthenticated) return null
+
+    const res = await useFetchData<{ content: ApiUser }>('/User/Get', {
+      method: 'GET',
+      requiresAuth: true
+    })
+    const user = toUser(res.content)
+    userStore.setUser(user)
+    return user
   }
 
   async function prefill(
     formRef: Ref<typeof Form | null>,
     mapInitialValues: InitialValuesMapper
   ) {
-    if (userStore.user) {
-      formRef.value?.resetForm({
-        values: mapInitialValues(normalizeUser(userStore.user))
-      })
-      return
-    }
-
-    if (!authStore.isAuthenticated) return
-
-    prefilling.value = true
+    prefilling.value = !userStore.user
     try {
-      const res = await useFetchData<{ data: User }>('/Usuario/Consultar', {
-        method: 'GET',
-        requiresAuth: true
-      })
-      userStore.setUser(res.data)
-      formRef.value?.resetForm({
-        values: mapInitialValues(normalizeUser(res.data))
-      })
+      const user = await loadUser()
+      if (user) formRef.value?.resetForm({ values: mapInitialValues(user) })
     } catch {
       // erro já tratado pelo interceptor
     } finally {
@@ -48,5 +57,5 @@ export function useUserPrefill() {
     }
   }
 
-  return { prefilling, prefill }
+  return { prefilling, prefill, loadUser }
 }

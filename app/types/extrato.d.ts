@@ -6,23 +6,25 @@ export interface Participacao {
   status: ParticipacaoStatus
   premio: string
   motivo?: string
-  imagemUrl?: string
 }
 
-export interface NumeroSorte {
-  dataCadastro: string
-  pincode: string
-  numeroSorte: string
-  motivo?: string
-  imagemUrl?: string
+// Item de `content.extract` em GET /User/GetExtract. `status` é o id do
+// StatusEnum (1 EM_ANALISE, 2 APROVADO_AUTO, 3 REPROVADO_AUTO, 4 APROVADO,
+// 5 REPROVADO); `createdAt` já vem em dd/MM/yyyy.
+export interface ApiExtractItem {
+  createdAt: string
+  pinCode: string
+  instantWin: string
+  status: number
+  rejectionReason: string | null
 }
 
-export interface ExtratoDto {
-  participacoes: Participacao[]
-  numerosSorte: NumeroSorte[]
-}
-
-export interface GetExtratoResponse {
-  mensagem: string
-  extratoCupomDto: ExtratoDto
+export interface GetExtractResponse {
+  title: string
+  message: string
+  content: {
+    extract: ApiExtractItem[]
+    // Sempre vazio nesta promoção (sem distribuição de números da sorte).
+    luckyNumbers: unknown[]
+  }
 }
