@@ -3,6 +3,7 @@ import type { GenericObject, Form } from 'vee-validate'
 import { contactSchema } from '~/schemas/contact'
 import { MASK_PHONE } from '~/utils/masks'
 import { onlyDigits } from '~/utils/functions/sanitize.function'
+import { toFormData } from '~/utils/functions/formData.function'
 import { useNotificationModalStore } from '~/stores/modals/notificationModal.store'
 import { useUserPrefill } from '~/composables/useUserPrefill'
 import { url } from '~/utils/constants/seo.constant'
@@ -29,13 +30,16 @@ const formRef = ref<typeof Form | null>(null)
 function onSubmit(values: GenericObject) {
   run(async () => {
     const payload = {
-      nome: values.nome.trim(),
+      name: values.nome.trim(),
       email: values.email.trim(),
-      telefone: onlyDigits(values.telefone),
-      mensagem: values.mensagem.trim()
+      phoneNumber: onlyDigits(values.telefone),
+      message: values.mensagem.trim()
     }
 
-    await useFetchData('/FaleConosco/Enviar', { method: 'POST', body: payload })
+    await useFetchData('/ContactUs/Send', {
+      method: 'POST',
+      body: toFormData(payload)
+    })
 
     notificationModalStore.openModal({
       title:

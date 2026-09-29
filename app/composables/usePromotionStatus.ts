@@ -14,6 +14,8 @@ export function usePromotionStatus() {
     if (!IS_PROMO_CHECK_ACTIVE) return
     try {
       // Fetch silencioso de boot — bypassa o interceptor de propósito.
+      // TODO(back): rota não existe na API nova (ap.md) — definir antes de
+      // ligar IS_PROMO_CHECK_ACTIVE.
       const response = await $fetch<{ flag: boolean }>(
         `${import.meta.env.VITE_BASE_API}/Participacao/InicioPosCampanha`
       )

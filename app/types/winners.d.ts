@@ -1,9 +1,13 @@
+// GET /Winner/List?winnerType={1 = VB | 2 = SORTEIO}
 export interface WinnerResponse<T> {
-  ganhadores: T[]
+  title: string
+  message: string
+  responseDto: T[]
 }
 
 export interface InstantPrizeWinner {
-  nome: string
-  pincode: string
-  premio: string
+  // Iniciais do ganhador (ex.: "J.S")
+  name: string
+  prizeDescription: string
+  createDate: string
 }
