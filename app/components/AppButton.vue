@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type Variant = 'primary' | 'secondary' | 'success' | 'accent' | 'ghost'
+type Variant = 'primary' | 'secondary' | 'success' | 'accent' | 'ghost' | 'link'
 type Size = 'lg' | 'md' | 'sm'
 const props = withDefaults(
   defineProps<{
@@ -26,7 +26,9 @@ const variantClasses: Record<Variant, string> = {
   success: `bg-(--color-brand-accent-green) text-white ${comicChrome} hover:brightness-95 active:brightness-90`,
   accent: `bg-(--color-brand-accent-purple) text-white ${comicChrome} hover:brightness-110 active:brightness-95`,
   ghost:
-    'border border-(--color-brand-neutral-200) text-(--color-brand-neutral-600) hover:bg-(--color-brand-neutral-50)'
+    'border border-(--color-brand-neutral-200) text-(--color-brand-neutral-600) hover:bg-(--color-brand-neutral-50)',
+  // Figma: ação secundária em texto vermelho (ex.: "Sim, excluir meu cadastro").
+  link: 'text-(--color-brand-primary) hover:underline'
 }
 const sizeClasses: Record<Size, string> = {
   lg: 'px-4 py-4 text-body-base xl:py-3.5',
@@ -36,14 +38,22 @@ const sizeClasses: Record<Size, string> = {
 
 const rootClasses = computed(() => [
   'inline-flex items-center justify-center gap-2 rounded-xl font-bold uppercase transition-all',
-  isDisabled.value
+  props.variant === 'link'
     ? [
-        'bg-(--color-brand-neutral-100) text-(--color-brand-neutral-400) cursor-not-allowed',
-        'border-2 border-(--color-brand-neutral-400) drop-shadow-[-1px_3px_0px_var(--color-brand-neutral-400)]',
-        props.to && 'pointer-events-none'
+        variantClasses.link,
+        'text-body-sm',
+        isDisabled.value
+          ? 'cursor-not-allowed opacity-60 hover:no-underline'
+          : 'cursor-pointer'
       ]
-    : [variantClasses[props.variant], 'cursor-pointer'],
-  sizeClasses[props.size],
+    : isDisabled.value
+      ? [
+          'bg-(--color-brand-neutral-100) text-(--color-brand-neutral-400) cursor-not-allowed',
+          'border-2 border-(--color-brand-neutral-400) drop-shadow-[-1px_3px_0px_var(--color-brand-neutral-400)]',
+          props.to && 'pointer-events-none'
+        ]
+      : [variantClasses[props.variant], 'cursor-pointer'],
+  props.variant !== 'link' && sizeClasses[props.size],
   props.block && 'w-full'
 ])
 

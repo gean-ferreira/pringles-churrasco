@@ -89,7 +89,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
                 />
               </div>
               <slot />
-              <div v-if="$slots.actions" class="flex flex-col gap-2">
+              <div v-if="$slots.actions" class="flex flex-col gap-6">
                 <slot name="actions" />
               </div>
             </div>

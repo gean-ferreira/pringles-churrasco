@@ -1,6 +1,6 @@
 export interface NotificationAction {
   label: string
-  variant?: 'primary' | 'secondary' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'link'
   handler?: () => void | Promise<void>
 }
 
