@@ -4,6 +4,22 @@ import { useAuthStore } from '~/stores/auth.store'
 import { useNotificationModalStore } from '~/stores/modals/notificationModal.store'
 import { useLogout } from '~/composables/useLogout'
 
+interface ApiErrorBody {
+  title?: string
+  titulo?: string
+  message?: string
+  mensagem?: string
+}
+
+function readError(data: unknown) {
+  if (!data || typeof data !== 'object') return {}
+  const body = data as ApiErrorBody
+  return {
+    title: body.title ?? body.titulo,
+    message: body.message ?? body.mensagem
+  }
+}
+
 export const useFetchData = async <TResponse, TBody = unknown>(
   endpoint: string,
   options: FetchOptions<TBody>
@@ -42,17 +58,18 @@ export const useFetchData = async <TResponse, TBody = unknown>(
         )
       },
       onResponseError({ response }) {
+        const error = readError(response._data)
         if (response.status === 400) {
           showErrorModal(
-            response._data?.titulo || 'Atenção',
-            response._data?.mensagem || 'Erro ao processar a requisição.'
+            error.title || 'Atenção',
+            error.message || 'Erro ao processar a requisição.'
           )
         } else if (response.status === 401) {
           clearSession()
           router.push('/')
           showErrorModal(
             'Login expirado',
-            'Sua sessão expirou, faça login novamente.'
+            error.message || 'Sua sessão expirou, faça login novamente.'
           )
         } else if (response.status === 404) {
           showErrorModal(
