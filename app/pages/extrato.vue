@@ -8,13 +8,20 @@ import type {
 import type { TableColumn } from '~/types/table'
 import { useExtratoStore } from '~/stores/extrato.store'
 
-// StatusEnum da API → label da UI (os status AUTO contam como moderados).
+const API_STATUS = {
+  EM_ANALISE: 1,
+  APROVADO_AUTO: 2,
+  REPROVADO_AUTO: 3,
+  APROVADO: 4,
+  REPROVADO: 5
+} as const
+
 const STATUS_BY_ID: Record<number, ParticipacaoStatus> = {
-  1: 'EM ANÁLISE',
-  2: 'APROVADO',
-  3: 'REPROVADO',
-  4: 'APROVADO',
-  5: 'REPROVADO'
+  [API_STATUS.EM_ANALISE]: 'EM ANÁLISE',
+  [API_STATUS.APROVADO_AUTO]: 'APROVADO',
+  [API_STATUS.REPROVADO_AUTO]: 'REPROVADO',
+  [API_STATUS.APROVADO]: 'APROVADO',
+  [API_STATUS.REPROVADO]: 'REPROVADO'
 }
 
 function toParticipacao(item: ApiExtractItem): Participacao {

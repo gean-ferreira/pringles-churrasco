@@ -5,6 +5,7 @@ import { useUserPrefill } from '~/composables/useUserPrefill'
 import { toFormData } from '~/utils/functions/formData.function'
 import { preloadImages } from '~/utils/functions/preloadImage.function'
 import { RESULTADO_IMAGES } from '~/utils/constants/resultadoImages.constant'
+import { WIZARD_STEP } from '~/utils/constants/wizardStep.constant'
 
 interface CheckPendingResponse {
   responseDto: {
@@ -30,20 +31,15 @@ const participacaoStore = useParticipacaoStore()
 const notificationModalStore = useNotificationModalStore()
 const { loadUser } = useUserPrefill()
 
-// Indicador de step só tem 3 posições (Vote / Cadastre seu PIN / Resultado)
-// — o envio da nota fiscal é uma sub-etapa de "Resultado".
-const indicatorStep = computed<1 | 2 | 3>(() =>
-  participacaoStore.step >= 3 ? 3 : (participacaoStore.step as 1 | 2)
+// No indicador, a nota fiscal é sub-etapa de "Resultado".
+const indicatorStep = computed(
+  () => Math.min(participacaoStore.step, WIZARD_STEP.RESULTADO) as 1 | 2 | 3
 )
 
-// Entrar na página sempre volta pro início do wizard (votação) — o único
-// jeito de pular pra frente é a checagem de pendência, disparada logo na
-// entrada (ver checkPending).
 onMounted(() => {
-  participacaoStore.setStep(1)
+  participacaoStore.setStep(WIZARD_STEP.VOTACAO)
   checkPending()
-  // Baixa as imagens do step 3 enquanto o usuário vota/cadastra o PIN, sem
-  // disputar banda com o carregamento inicial da página.
+  // Imagens do resultado baixam em idle, sem disputar banda com o load da página.
   const preload = () => preloadImages(RESULTADO_IMAGES)
   if ('requestIdleCallback' in window) requestIdleCallback(preload)
   else setTimeout(preload, 1000)
@@ -54,12 +50,7 @@ watch(
   () => window.scrollTo({ top: 0 })
 )
 
-// Checa, antes da votação, se há um fluxo pendente (ex.: usuário já
-// cadastrou o código mas fechou a aba antes de abrir a lata ou enviar a
-// nota fiscal) — nesse caso pulamos votação e código e vamos direto pro step
-// onde ele parou. O voto da participação pendente já foi gravado junto com o
-// PIN, então votar de novo seria descartado. A votação fica desabilitada
-// enquanto a checagem roda.
+// Retoma o wizard onde o usuário parou (ex.: fechou a aba antes de abrir a lata).
 function checkPending() {
   runCheckPending(async () => {
     const user = await loadUser()
@@ -75,12 +66,8 @@ function checkPending() {
     )
 
     const pending = res.responseDto
-    // Prêmio pendente (lata não aberta) → wizard step 3 | nota fiscal
-    // pendente → wizard step 4.
-    // TODO(pendencia): se vierem as duas pendências (participações
-    // diferentes), o prêmio ganha prioridade e a nota pendente da outra só
-    // reaparece quando o usuário voltar pra página — encadear o step 4 com
-    // `attachmentParticipationId` depois do resultado.
+    // TODO(pendencia): com as duas pendências, a nota só reaparece quando o
+    // usuário voltar à página — encadear NOTA_FISCAL depois do resultado.
     const pendingReward = pending.pendingReward && pending.rewardParticipationId
     const pendingAttachment =
       pending.pendingAttachment && pending.attachmentParticipationId
@@ -91,7 +78,9 @@ function checkPending() {
         ? pending.rewardParticipationId
         : pending.attachmentParticipationId) as number
     )
-    participacaoStore.setStep(pendingReward ? 3 : 4)
+    participacaoStore.setStep(
+      pendingReward ? WIZARD_STEP.RESULTADO : WIZARD_STEP.NOTA_FISCAL
+    )
     notificationModalStore.openModal({
       title: pendingReward ? 'Abra sua lata' : 'Envie sua nota fiscal',
       description: pendingReward
@@ -118,15 +107,17 @@ function checkPending() {
       <AppBgPattern />
       <div class="relative container flex justify-center">
         <CadastroNotaStepVotacao
-          v-if="participacaoStore.step === 1"
+          v-if="participacaoStore.step === WIZARD_STEP.VOTACAO"
           :disabled="checkingPending"
-          @voted="participacaoStore.setStep(2)"
+          @voted="participacaoStore.setStep(WIZARD_STEP.CODIGO)"
         />
         <CadastroNotaStepCodigo
-          v-else-if="participacaoStore.step === 2"
-          @registered="participacaoStore.setStep(3)"
+          v-else-if="participacaoStore.step === WIZARD_STEP.CODIGO"
+          @registered="participacaoStore.setStep(WIZARD_STEP.RESULTADO)"
         />
-        <CadastroNotaStepResultado v-else-if="participacaoStore.step === 3" />
+        <CadastroNotaStepResultado
+          v-else-if="participacaoStore.step === WIZARD_STEP.RESULTADO"
+        />
         <div v-else class="w-full max-w-[592px] pb-14 md:pb-25">
           <AppComicCard align="left">
             <template #title>cadastro de nota fiscal</template>

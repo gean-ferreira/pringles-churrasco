@@ -1,12 +1,13 @@
-// Estado de sessão do wizard de prêmio instantâneo (app/pages/cadastro-nota.vue):
-// 1 = votação, 2 = cadastro do código, 3 = resultado/reveal, 4 = resgate
-// (nota fiscal, só quando premiado).
+import {
+  WIZARD_STEP,
+  type WizardStep
+} from '~/utils/constants/wizardStep.constant'
+
 export const useParticipacaoStore = defineStore('participacao', {
   state: () => ({
     idParticipacao: null as number | null,
-    // Sabor votado no step 1 — enviado junto com o PIN no step 2.
     flavorId: null as number | null,
-    step: 1 as number
+    step: WIZARD_STEP.VOTACAO as WizardStep
   }),
   actions: {
     setIdParticipacao(idParticipacao: number) {
@@ -15,13 +16,13 @@ export const useParticipacaoStore = defineStore('participacao', {
     setFlavorId(flavorId: number) {
       this.flavorId = flavorId
     },
-    setStep(step: number) {
+    setStep(step: WizardStep) {
       this.step = step
     },
     invalidate() {
       this.idParticipacao = null
       this.flavorId = null
-      this.step = 1
+      this.step = WIZARD_STEP.VOTACAO
     }
   }
 })

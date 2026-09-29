@@ -8,13 +8,18 @@ const columns: TableColumn[] = [
   { key: 'prizeDescription', label: 'Prêmio' }
 ]
 
+const WINNER_TYPE_INSTANT_PRIZE = 1
+
 const { status, data: response } = await useFetch<
   WinnerResponse<InstantPrizeWinner>
->(`${import.meta.env.VITE_BASE_API}/Winner/List?winnerType=1`, {
-  key: 'instant-prize-key',
-  lazy: true,
-  server: false
-})
+>(
+  `${import.meta.env.VITE_BASE_API}/Winner/List?winnerType=${WINNER_TYPE_INSTANT_PRIZE}`,
+  {
+    key: 'instant-prize-key',
+    lazy: true,
+    server: false
+  }
+)
 </script>
 
 <template>
