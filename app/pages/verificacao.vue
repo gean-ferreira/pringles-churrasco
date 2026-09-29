@@ -103,6 +103,7 @@ function onResend() {
         placeholder="000000"
         input-mode="numeric"
         is-required
+        autofocus
       />
       <AppButton type="submit" variant="secondary" block :loading="submitting"
         >Validar código</AppButton

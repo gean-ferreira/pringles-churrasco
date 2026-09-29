@@ -19,6 +19,7 @@ const props = withDefaults(
     isRequired?: boolean
     inputMode?: 'text' | 'numeric' | 'decimal' | 'email' | 'tel'
     loading?: boolean
+    autofocus?: boolean
   }>(),
   { type: 'text' }
 )
@@ -28,6 +29,12 @@ const fieldError = useFieldError(props.name)
 const hasError = computed(() => !!fieldError.value)
 const hasValue = computed(() => !!fieldValue.value)
 const isDisabled = computed(() => props.disabled || props.loading)
+
+// O `autofocus` nativo só vale no primeiro load, não em navegação client-side.
+onMounted(() => {
+  if (props.autofocus) document.getElementById(props.name)?.focus()
+})
+
 const showStatusIcon = computed(
   () =>
     props.type !== 'textarea' &&

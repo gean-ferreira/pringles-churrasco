@@ -31,10 +31,6 @@ function onSubmit(values: GenericObject) {
     emit('registered')
   })
 }
-
-onMounted(() => {
-  document.getElementById('codigo')?.focus()
-})
 </script>
 
 <template>
@@ -71,6 +67,7 @@ onMounted(() => {
             placeholder="Insira o Pin Code"
             :input-mode="PIN_CODE_INPUT_MODE"
             is-required
+            autofocus
           />
           <AppButton
             type="submit"

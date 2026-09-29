@@ -58,6 +58,7 @@ function onSubmit(values: GenericObject) {
         placeholder="000.000.000-00"
         input-mode="numeric"
         is-required
+        autofocus
       />
       <AppButton type="submit" variant="secondary" block :loading="submitting"
         >Fazer login</AppButton
